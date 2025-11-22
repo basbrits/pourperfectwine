@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Perfect Pour: Expert Wine Pairing</title>
+    
+    <style>
+        /* --- General Styling & Font --- */
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f7f4; /* Very light, warm background */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Container & Card Design --- */
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        /* --- Headings and Typography --- */
+        h1 {
+            color: #8a032d; /* Primary Wine Red */
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 10px;
+            font-size: 2.8em;
+        }
+
+        h2 {
+            color: #555;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: 300;
+            font-size: 1.2em;
+        }
+
+        /* --- Separator Line --- */
+        hr {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #8a032d, rgba(0, 0, 0, 0));
+            margin: 25px 0;
+        }
+        
+        .intro-text {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* --- Dropdown Controls (Standard) --- */
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .control-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            color: #333;
+            box-sizing: border-box;
+            font-size: 1em;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .control-group select:focus {
+            outline: none;
+            border-color: #8a032d;
+        }
+
+        /* --- Button Group (Emoji Selector) Styling --- */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .emoji-button {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            color: #333;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            line-height: 1.4;
+            min-width: 100px;
+        }
+        
+        .emoji-button span.emoji {
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .emoji-button:hover {
+            border-color: #b3003b;
+            background-color: #f7e0e7;
+        }
+
+        .emoji-button.selected {
+            background-color: #8a032d;
+            color: #ffffff;
+            border-color: #8a032d;
+            box-shadow: 0 4px 8px rgba(138, 3, 45, 0.4);
+        }
+        
+        .emoji-button.selected span.emoji {
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
+
+
+        /* --- Result Area --- */
+        .result-title {
+            color: #8a032d;
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #result {
+            margin-top: 15px;
+            padding: 25px;
+            border: 2px solid #8a032d;
+            border-radius: 10px;
+            background-color: #fcf4f5; /* Very light pink background */
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.6;
+            min-height: 60px;
+            color: #333;
+            transition: all 0.5s ease-in-out;
+        }
+
+        #result strong {
+            color: #8a032d; /* Primary color for wine name emphasis */
+        }
+        
+        .suggestion-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 10px auto;
+            max-width: 90%;
+        }
+        .suggestion-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .suggestion-list li:before {
+            content: "🍷";
+            position: absolute;
+            left: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🍷 The Perfect Pour</h1>
+        <h2>Instantly Match Wine to Your Meal</h2>
+        <p class="intro-text">
+            Tap the emojis to describe your dish's cuisine and dominant flavor, then select your main ingredient for an expert recommendation.
+        </p>
+        <hr>
+
+        <div class="control-group">
+            <label>1. Choose Cuisine Style:</label>
+            <div class="button-group" id="cuisine-group">
+                <button class="emoji-button" data-value="Italian"><span class="emoji">🇮🇹</span> Italian</button>
+                <button class="emoji-button" data-value="French"><span class="emoji">🇫🇷</span> French</button>
+                <button class="emoji-button" data-value="Spanish"><span class="emoji">🇪🇸</span> Spanish</button>
+                <button class="emoji-button" data-value="Asian"><span class="emoji">🇹🇭</span> Asian</button>
+                <button class="emoji-button" data-value="American"><span class="emoji">🇺🇸</span> American</button>
+            </div>
+        </div>
+        <hr>
+
+        <div class="control-group">
+            <label for="protein">2. Choose Main Ingredient/Protein:</label>
+            <select id="protein">
+                <option value="default" disabled selected>-- Select Main Ingredient --</option>
+                <option value="Beef/Lamb">Beef or Lamb (Heavy Red Meat)</option>
+                <option value="Pork/Veal">Pork or Veal (Light Red/White Meat)</option>
+                <option value="Poultry">Poultry (Chicken or Turkey)</option>
+                <option value="Fish_Rich">Rich Fish (Salmon, Tuna, Swordfish)</option>
+                <option value="Fish_Lean">Lean Fish (Cod, Tilapia, Shellfish)</option>
+                <option value="Vegetarian">Vegetarian/Vegan</option>
+            </select>
+        </div>
+        <hr>
+        
+        <div class="control-group">
+            <label>3. Choose Dominant Flavor Note:</label>
+            <div class="button-group" id="flavor-group">
+                <button class="emoji-button" data-value="Acidic"><span class="emoji">🍅</span> Tomato/Acidic</button>
+                <button class="emoji-button" data-value="Rich"><span class="emoji">🧈</span> Cream/Butter</button>
+                <button class="emoji-button" data-value="Spicy"><span class="emoji">🔥</span> Spicy/Sweet</button>
+                <button class="emoji-button" data-value="Earthy"><span class="emoji">🍄</span> Earthy/Grilled</button>
+                <button class="emoji-button" data-value="Herbal"><span class="emoji">🌿</span> Herbal/Fresh</button>
+            </div>
+        </div>
+
+        <div class="result-title">Your Expert Pairing:</div>
+        <div id="result">
+            Please make one selection in all three categories above.
+        </div>
+
+    </div>
+
+    <script>
+        // --- JavaScript Logic ---
+        
+        // Helper function to handle button selection
+        function setupButtonSelection(groupId, inputElementId) {
+            const group = document.getElementById(groupId);
+            group.querySelectorAll('.emoji-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Deselect all others in the group
+                    group.querySelectorAll('.emoji-button').forEach(btn => btn.classList.remove('selected'));
+                    // Select this button
+                    this.classList.add('selected');
+                    // Store the value for pairing logic
+                    document.getElementById(inputElementId).value = this.dataset.value;
+                    updatePairing();
+                });
+            });
+        }
+
+        // --- Wine Pairing Core Function ---
+        function getWinePairing(cuisine, protein, flavor_note) {
+            
+            if (!cuisine || !protein || !flavor_note || protein === "default") {
+                return "Please make one selection in all three categories above.";
+            }
+
+            let suggestions = [];
+            let refinement = "";
+            let prep_sauce = flavor_note; // Use flavor_note to substitute for prep/sauce
+
+            // --- Base Pairing Logic (Protein & Sauce/Flavor) ---
+            if (protein === "Beef/Lamb") {
+                if (prep_sauce === "Acidic" && cuisine === "Italian") {
+                    suggestions.push("High-acid, savory Italian red like **Chianti Classico** or **Barbera**.");
+                    suggestions.push("A youthful Spanish **Tempranillo** (Crianza) with bright red fruit.");
+                    refinement = "Pairing must match the acid in the sauce to prevent the wine from tasting flat.";
+                } else if (prep_sauce === "Rich" || prep_sauce === "Earthy" || cuisine === "French") {
+                    suggestions.push("A bold, tannic **Cabernet Sauvignon** (Napa/Bordeaux Left Bank) to cut through the fat.");
+                    suggestions.push("A peppery, earthy **Syrah** (Northern Rhône) or a heavy **Malbec**.");
+                    refinement = "Choose high tannin and structure to balance the richness of the red meat.";
+                } else if (prep_sauce === "Spicy" || cuisine === "American") {
+                     suggestions.push("A fruity, high-alcohol **Zinfandel** or a powerful, fruit-forward **Shiraz**.");
+                    suggestions.push("A lightly chilled **Cru Beaujolais** (Gamay) if the spice is light.");
+                    refinement = "Match the intensity of the spice with a bold, fruit-driven wine.";
+                } else { // General/American Steakhouse
+                    suggestions.push("Robust **Merlot** or **Cabernet Franc** (Saumur-Champigny).");
+                    refinement = "Look for structure and balance without excessive oak.";
+                }
+            }
+
+            else if (protein === "Pork/Veal") {
+                if (prep_sauce === "Spicy" || cuisine === "Asian") {
+                    suggestions.push("Slightly sweet, aromatic **Off-dry Riesling** (Kabinett) or **Gewürztraminer**.");
+                    suggestions.push("A fruity, off-dry **Rosé** with significant body.");
+                    refinement = "Sweetness in the wine is crucial to neutralize the chili heat.";
+                } else if (prep_sauce === "Rich" || cuisine === "French") {
+                    suggestions.push("Rich, textural **Oaked Chardonnay** (White Burgundy) for white meats.");
+                    suggestions.push("Earthy, light-bodied **Pinot Noir** (Burgundy) or **Gamay** (Beaujolais).");
+                    refinement = "Match the creamy texture of the sauce with the texture of the wine (oak/lees contact).";
+                } else if (prep_sauce === "Acidic" || cuisine === "Italian") {
+                    suggestions.push("High-acid **Rosé** or a light, unoaked **Sangiovese** (Rosso di Montalcino).");
+                    suggestions.push("Crisp **Vermentino** (Italian white) if the pork is lean.");
+                    refinement = "The high acid of the sauce requires a correspondingly high-acid wine.";
+                } else {
+                    suggestions.push("Versatile, light **Pinot Noir** or a vibrant, medium-bodied **Viognier**.");
+                    refinement = "An all-purpose, aromatic wine will complement lighter preparations.";
+                }
+            }
+            
+            else if (protein === "Poultry") {
+                if (prep_sauce === "Rich" || cuisine === "French") {
+                    suggestions.push("Full-bodied, oaked **Chardonnay** (Meursault, California) for richness.");
+                    suggestions.push("A savory, textured **Chenin Blanc** (South Africa or Vouvray Sec).");
+                    refinement = "White wine should have enough body (from oak or lees aging) to match the chicken and rich sauce.";
+                } else if (prep_sauce === "Earthy") {
+                    suggestions.push("Earthy **Pinot Noir** (Oregon/Burgundy) to complement mushrooms or roasting notes.");
+                    suggestions.push("Aromatic **Viognier** or a dry **Fino Sherry** (Spanish) if smoked.");
+                    refinement = "Choose a wine with savory, non-fruit notes to enhance the earthy character.";
+                } else { // Light, Herbal, Acidic
+                    suggestions.push("Zesty **Sauvignon Blanc** (Sancerre) or **Pinot Grigio**.");
+                    suggestions.push("Dry, crisp **Rosé** (Provence) or a lighter style **Albariño**.");
+                    refinement = "High acidity is key to lift the delicate flavor of the poultry.";
+                }
+            }
+
+            else if (protein.startsWith("Fish")) {
+                if (prep_sauce === "Rich" && protein === "Fish_Rich") {
+                    suggestions.push("Textural, oaked **White Rioja** or a premium **Oaked Chardonnay** (California).");
+                    suggestions.push("Lightly chilled, low-tannin red like **Gamay** (for Tuna or Salmon).");
+                    refinement = "The wine must match the fat/oil content of the fish and the sauce.";
+                } else if (prep_sauce === "Acidic" || protein === "Fish_Lean" || cuisine === "Spanish") {
+                    suggestions.push("Bone-dry, high-acid **Albariño** or mineral-driven **Muscadet**.");
+                    suggestions.push("Crisp **Cava** (Spanish Sparkling) or unoaked **Chablis**.");
+                    refinement = "Only high-acid, bone-dry whites can cut through and balance the acidity of the sauce and the delicate fish.";
+                } else { // General/Simple Lean Fish
+                    suggestions.push("Crisp, saline **Vermentino** or a vibrant **Grüner Veltliner**.");
+                    suggestions.push("A dry, pale **Provençal Rosé**.");
+                    refinement = "Focus on freshness, minerality, and clean acidity.";
+                }
+            }
+
+            else if (protein === "Vegetarian") {
+                if (prep_sauce === "Spicy" || cuisine === "Asian") {
+                    suggestions.push("Slightly off-dry **Riesling** (Spatlese) or a fruity **New Zealand Pinot Gris**.");
+                    suggestions.push("Fizzy, fun **Moscato d'Asti** for dessert-like spice.");
+                    refinement = "Sweetness is essential to counteract capsaicin (chili heat).";
+                } else if (prep_sauce === "Earthy") { // Mushroom/truffle
+                    suggestions.push("Earthy, savory **Pinot Noir** (Red Burgundy) or a light, aged **Nebbiolo**.");
+                    suggestions.push("Textural, neutral **Viognier** or an aged, dry **Tokaji** (Hungary).");
+                    refinement = "The wine should complement the umami and savory notes of the dish.";
+                } else if (prep_sauce === "Herbal" || prep_sauce === "Acidic") {
+                    suggestions.push("Herbaceous **Sauvignon Blanc** (Pouilly-Fumé) or crisp **Assyrtiko** (Greek white).");
+                    suggestions.push("Light, slightly tannic **Gamay** (Beaujolais) if dark vegetables are involved.");
+                    refinement = "Match the 'green' notes of the herbs with a similar profile in the wine.";
+                }
+            }
+
+            // --- Final Output Formatting ---
+            let finalOutput = `
+                <div class="result-title">Your Expert Pairing Suggestions:</div>
+                <ul class="suggestion-list">
+                    <li>**Primary Suggestion:** ${suggestions[0]}</li>
+                    <li>**Alternative:** ${suggestions[1] || "A versatile dry Rosé."}</li>
+                </ul>
+                <p style="margin-top: 15px; font-style: italic; color: #555;">
+                    **Sommelier Tip:** ${refinement}
+                </p>
+            `;
+            
+            return finalOutput;
+        }
+
+        // --- Event Listeners and Initialization ---
+        
+        // Helper function to handle button selection
+        function setupButtonSelection(groupId, inputElementId) {
+            const group = document.getElementById(groupId);
+            group.querySelectorAll('.emoji-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Deselect all others in the group
+                    group.querySelectorAll('.emoji-button').forEach(btn => btn.classList.remove('selected'));
+                    // Select this button
+                    this.classList.add('selected');
+                    // Store the value for pairing logic
+                    document.getElementById(inputElementId).value = this.dataset.value;
+                    updatePairing();
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Invisible input fields to hold the button selection values
+            const cuisineInput = document.createElement('input');
+            cuisineInput.type = 'hidden';
+            cuisineInput.id = 'cuisine_val';
+            document.body.appendChild(cuisineInput);
+            
+            const flavorInput = document.createElement('input');
+            flavorInput.type = 'hidden';
+            flavorInput.id = 'flavor_val';
+            document.body.appendChild(flavorInput);
+
+            // Setup button groups
+            setupButtonSelection('cuisine-group', 'cuisine_val');
+            setupButtonSelection('flavor-group', 'flavor_val');
+
+            const proteinSelect = document.getElementById('protein');
+            const resultDiv = document.getElementById('result');
+
+            window.updatePairing = function() {
+                const cuisine = document.getElementById('cuisine_val').value;
+                const protein = proteinSelect.value;
+                const flavor = document.getElementById('flavor_val').value;
+
+                const pairing = getWinePairing(cuisine, protein, flavor);
+                resultDiv.innerHTML = pairing;
+            }
+
+            // Attach updatePairing to the protein dropdown
+            proteinSelect.addEventListener('change', updatePairing);
+
+            // Initial call
+            updatePairing();
+        });
+    </script>
+</body>
+</html>
