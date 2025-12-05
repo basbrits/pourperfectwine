@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Perfect Pour: Expert Wine Pairing</title>
+    <title>🍷 The Perfect Pour: Dynamic Wine Pairing</title>
     
     <style>
-        /* --- General Styling & Font --- */
+        /* --- General Styling --- */
         body {
             font-family: 'Georgia', serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f7f4; /* Very light, warm background */
+            background-color: #f8f7f4;
             color: #333;
             display: flex;
             justify-content: center;
@@ -19,9 +19,9 @@
             min-height: 100vh;
         }
 
-        /* --- Container & Card Design --- */
         .container {
-            max-width: 750px;
+            max-width: 800px;
+            width: 90%;
             margin: 40px auto;
             padding: 40px;
             background-color: #ffffff;
@@ -29,13 +29,12 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
-        /* --- Headings and Typography --- */
         h1 {
-            color: #8a032d; /* Primary Wine Red */
+            color: #8a032d;
             text-align: center;
             font-family: 'Playfair Display', serif;
             margin-bottom: 10px;
-            font-size: 2.8em;
+            font-size: 2.5em;
         }
 
         h2 {
@@ -43,96 +42,118 @@
             text-align: center;
             margin-top: 5px;
             font-weight: 300;
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
 
-        /* --- Separator Line --- */
         hr {
             border: 0;
             height: 1px;
             background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #8a032d, rgba(0, 0, 0, 0));
-            margin: 25px 0;
+            margin: 20px 0;
         }
         
-        .intro-text {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #777;
-            font-style: italic;
+        /* --- Breadcrumbs (History Navigation) --- */
+        #breadcrumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
         }
 
-        /* --- Dropdown Controls (Standard) --- */
-        .control-group label {
+        .breadcrumb-item {
+            background-color: #eee;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-item:hover {
+            background-color: #ddd;
+            border-color: #ccc;
+        }
+
+        .breadcrumb-item::before {
+            content: "« ";
+            margin-right: 4px;
+            color: #8a032d;
+            font-weight: bold;
+        }
+
+        /* --- Dynamic Control Area --- */
+        #step-prompt {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
             font-weight: bold;
             color: #333;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            text-align: center;
         }
         
-        .control-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            color: #333;
-            box-sizing: border-box;
-            font-size: 1em;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-
-        .control-group select:focus {
-            outline: none;
-            border-color: #8a032d;
-        }
-
-        /* --- Button Group (Emoji Selector) Styling --- */
         .button-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-between;
+            gap: 12px;
+            justify-content: center;
         }
 
         .emoji-button {
             flex-grow: 1;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border: 2px solid #ccc;
             border-radius: 10px;
             background-color: #fff;
             color: #333;
-            font-size: 1.1em;
+            font-size: 1em;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
-            line-height: 1.4;
-            min-width: 100px;
+            min-width: 130px;
+            max-width: 220px;
+            font-weight: 600;
         }
         
         .emoji-button span.emoji {
             font-size: 1.5em;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .emoji-button:hover {
             border-color: #b3003b;
             background-color: #f7e0e7;
         }
-
-        .emoji-button.selected {
+        
+        /* Styles for Multi-Select Mode */
+        .emoji-button.multi-select-active {
             background-color: #8a032d;
-            color: #ffffff;
+            color: white;
             border-color: #8a032d;
-            box-shadow: 0 4px 8px rgba(138, 3, 45, 0.4);
+        }
+
+        #next-step-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            display: none; /* Hidden by default */
+            width: 100%;
+            max-width: 300px;
         }
         
-        .emoji-button.selected span.emoji {
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        #next-step-btn:hover {
+            background-color: #218838;
         }
-
 
         /* --- Result Area --- */
         .result-title {
@@ -142,6 +163,7 @@
             margin-top: 30px;
             margin-bottom: 10px;
             font-weight: bold;
+            display: none; /* Hidden until result */
         }
 
         #result {
@@ -149,35 +171,50 @@
             padding: 25px;
             border: 2px solid #8a032d;
             border-radius: 10px;
-            background-color: #fcf4f5; /* Very light pink background */
+            background-color: #fcf4f5;
             text-align: center;
             font-size: 1.1em;
-            line-height: 1.6;
-            min-height: 60px;
             color: #333;
-            transition: all 0.5s ease-in-out;
+            display: none; /* Hidden until result */
         }
 
         #result strong {
-            color: #8a032d; /* Primary color for wine name emphasis */
+            color: #8a032d;
+            font-size: 1.2em;
+        }
+
+        #result .rationale {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
         }
         
-        .suggestion-list {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            margin: 10px auto;
-            max-width: 90%;
+        #reset-button {
+            display: block;
+            width: 50%;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #555;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
         }
-        .suggestion-list li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
+        
+        #reset-button:hover {
+            background-color: #333;
         }
-        .suggestion-list li:before {
-            content: "🍷";
-            position: absolute;
-            left: 0;
+        
+        /* Helper for warnings */
+        .multi-select-warning {
+            color: #d9534f;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
         }
 
     </style>
@@ -186,240 +223,1124 @@
 
     <div class="container">
         <h1>🍷 The Perfect Pour</h1>
-        <h2>Instantly Match Wine to Your Meal</h2>
-        <p class="intro-text">
-            Tap the emojis to describe your dish's cuisine and dominant flavor, then select your main ingredient for an expert recommendation.
-        </p>
+        <h2>Your Personal Sommelier</h2>
         <hr>
 
-        <div class="control-group">
-            <label>1. Choose Cuisine Style:</label>
-            <div class="button-group" id="cuisine-group">
-                <button class="emoji-button" data-value="Italian"><span class="emoji">🇮🇹</span> Italian</button>
-                <button class="emoji-button" data-value="French"><span class="emoji">🇫🇷</span> French</button>
-                <button class="emoji-button" data-value="Spanish"><span class="emoji">🇪🇸</span> Spanish</button>
-                <button class="emoji-button" data-value="Asian"><span class="emoji">🇹🇭</span> Asian</button>
-                <button class="emoji-button" data-value="American"><span class="emoji">🇺🇸</span> American</button>
-            </div>
-        </div>
-        <hr>
+        <div id="breadcrumbs"></div>
 
-        <div class="control-group">
-            <label for="protein">2. Choose Main Ingredient/Protein:</label>
-            <select id="protein">
-                <option value="default" disabled selected>-- Select Main Ingredient --</option>
-                <option value="Beef/Lamb">Beef or Lamb (Heavy Red Meat)</option>
-                <option value="Pork/Veal">Pork or Veal (Light Red/White Meat)</option>
-                <option value="Poultry">Poultry (Chicken or Turkey)</option>
-                <option value="Fish_Rich">Rich Fish (Salmon, Tuna, Swordfish)</option>
-                <option value="Fish_Lean">Lean Fish (Cod, Tilapia, Shellfish)</option>
-                <option value="Vegetarian">Vegetarian/Vegan</option>
-            </select>
-        </div>
-        <hr>
-        
-        <div class="control-group">
-            <label>3. Choose Dominant Flavor Note:</label>
-            <div class="button-group" id="flavor-group">
-                <button class="emoji-button" data-value="Acidic"><span class="emoji">🍅</span> Tomato/Acidic</button>
-                <button class="emoji-button" data-value="Rich"><span class="emoji">🧈</span> Cream/Butter</button>
-                <button class="emoji-button" data-value="Spicy"><span class="emoji">🔥</span> Spicy/Sweet</button>
-                <button class="emoji-button" data-value="Earthy"><span class="emoji">🍄</span> Earthy/Grilled</button>
-                <button class="emoji-button" data-value="Herbal"><span class="emoji">🌿</span> Herbal/Fresh</button>
+        <div id="steps-container">
+            <label id="step-prompt">1. Choose Cuisine Style:</label>
+            
+            <div class="button-group" id="button-options-container">
+                </div>
+            
+            <p id="multi-warning" class="multi-select-warning">Please select 1 or 2 options.</p>
+            <div style="text-align: center;">
+                <button id="next-step-btn">Next Step ➔</button>
             </div>
         </div>
 
-        <div class="result-title">Your Expert Pairing:</div>
-        <div id="result">
-            Please make one selection in all three categories above.
-        </div>
-
+        <div class="result-title" id="res-title">Your Expert Pairing:</div>
+        <div id="result"></div>
     </div>
 
     <script>
-        // --- JavaScript Logic ---
+        // ==========================================
+        // DATA STRUCTURE
+        // ==========================================
         
-        // Helper function to handle button selection
-        function setupButtonSelection(groupId, inputElementId) {
-            const group = document.getElementById(groupId);
-            group.querySelectorAll('.emoji-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Deselect all others in the group
-                    group.querySelectorAll('.emoji-button').forEach(btn => btn.classList.remove('selected'));
-                    // Select this button
-                    this.classList.add('selected');
-                    // Store the value for pairing logic
-                    document.getElementById(inputElementId).value = this.dataset.value;
-                    updatePairing();
-                });
+        // Helper to keep the file shorter - I've kept the structure but focused on the Festive Data
+        const winePairings = {
+"Italian": {
+    "title": "Italian Cuisine 🇮🇹",
+    "emoji": "🇮🇹",
+    "next_prompt": "2. Choose Initial Category:",
+    "options": {
+        // LEVEL 1: Red Meat & Beef
+        "Red Meat & Beef": {
+            "user_label": "🥩 Red Meat & Beef",
+            "next_prompt": "3. Choose Preparation/Sauce Base:",
+            "options": {
+                "Heavy Wine Reduction / Stewed (Brasato, Stufato)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "High Tannin / Heavy Reduction (e.g., Barolo)": { "result_specific": "Barolo (Piedmont, Nebbiolo)", "result_general": "Cabernet Sauvignon (Napa Valley) or Aged Syrah (Northern Rhône)", "rationale": "Braised beef cooked in Barolo needs a wine that matches the immense structure, high tannins, and high acidity. Barolo (or its regional equivalent, Barbaresco) is the perfect textural and flavor match. Cabernet Sauvignon offers the necessary tannin structure and deep fruit power." },
+                        "Savory / Earthy / Mushroom Focus": { "result_specific": "Brunello di Montalcino (Tuscany, Sangiovese)", "result_general": "Aged Pinot Noir (Burgundy) or Medium-Bodied Nebbiolo (Langhe)", "rationale": "Mushroom and earthy notes demand a savory, complex wine. Brunello provides structure, high acidity, and notes of leather/earth. Aged Pinot Noir offers a delicate, earthy alternative that complements the savory focus." },
+                        "Simple Tomato / Broth Base (Lower intensity)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese)", "result_general": "Pinot Noir (Any region) or Light-Bodied Merlot", "rationale": "Tomato introduces high acidity, which the wine must match. Chianti Classico is the classic high-acid, savory red. Its high acidity prevents the wine from tasting flabby or metallic against the tomato base. Pinot Noir offers a high-acid, soft-tannin global alternative." },
+                        "Northern Italian Herbs / Juniper (Alto Adige)": { "result_specific": "Lagrein (Alto Adige)", "result_general": "Syrah/Shiraz (Australia/Rhône) or Zinfandel (California)", "rationale": "Juniper and Northern herbs require a deep, structured red with complementary spice and dark fruit. Lagrein is a full-bodied, often smoky, regional match. Syrah and Zinfandel are excellent alternatives due to their dark fruit, pepper, and bold structure." },
+                        "Sweet / Dried Fruit (Prunes, Figs in sauce)": { "result_specific": "Valpolicella Ripasso (Veneto)", "result_general": "Zinfandel (California) or Primitivo (Puglia)", "rationale": "Sweetness requires the wine to have concentrated fruit or a touch of residual sugar. Ripasso is made with partially dried grapes, giving it concentrated, slightly raisinated fruit that balances the subtle sweetness of dried fruits in the stew. Zinfandel/Primitivo provides the jammy fruit and spice needed." }
+                    }
+                },
+                "Grill / Roast (Bistecca alla Fiorentina)": {
+                    "next_prompt": "4. Choose Preparation Detail:",
+                    "options": {
+                        "Heavy Char / Fat (Bone-in, heavy sear)": { "result_specific": "Barolo (Piedmont, Nebbiolo)", "result_general": "Cabernet Sauvignon (Napa/Bordeaux) or Aglianico (Campania/Basilicata)", "rationale": "Heavy char and high fat demand a wine with immense tannin and acidity to cut the richness and match the char's intensity. Barolo is the ultimate structural match. Aglianico is a high-tannin Southern Italian option." },
+                        "Simple Sear / Lean (Filetto, Tagliata)": { "result_specific": "Chianti Classico Riserva (Tuscany, Sangiovese)", "result_general": "Merlot (Bordeaux/Chile) or Malbec (Argentina)", "rationale": "Leaner cuts require high-acid structure without overwhelming tannins. Chianti Classico Riserva provides complexity and high acid. Merlot and Malbec are softer alternatives that complement the meat's flavor." },
+                        "Aromatic Herbs (Rosemary/Garlic/Sage)": { "result_specific": "Morellino di Scansano (Tuscany, Sangiovese)", "result_general": "Cabernet Franc (Loire Valley) or Zinfandel (California)", "rationale": "Aromatic herbs pair beautifully with high-acid, savory, earthy reds. Morellino (coastal Sangiovese) offers this balance. Cabernet Franc and Zinfandel often exhibit complementary herbal/spicy notes." },
+                        "Served Rare / Cool Center": { "result_specific": "Dolcetto d'Alba (Piedmont)", "result_general": "Cru Beaujolais (France, Gamay) or Light-Bodied Pinot Noir", "rationale": "A rare/cool center demands a wine with bright acidity and juicy fruit, served slightly cool, with minimal tannin to avoid a metallic clash. Dolcetto is a soft, fruity, low-tannin Piedmontese red. Cru Beaujolais is the ultimate light-red alternative." },
+                        "High Pepper / Spiced Rub": { "result_specific": "Primitivo di Manduria (Puglia)", "result_general": "Zinfandel (California) or Syrah/Shiraz (Australia/Rhône)", "rationale": "High spice requires a red wine with bold, concentrated fruit and high alcohol to balance the heat. Primitivo (Zinfandel) provides the jammy fruit, spice, and structure needed to match an aggressive rub." }
+                    }
+                },
+                "Simple Pan-Sauce / Lemon / Herbs (Piccata, Saltimbocca)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "High Lemon / Caper (Piccata style)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche)", "result_general": "Sauvignon Blanc (Sancerre) or Dry Riesling (Austria/Alsace)", "rationale": "High citrus acidity requires the wine to match it. Verdicchio is a high-acid, structured Italian white that handles lemon and capers beautifully. Sauvignon Blanc and Dry Riesling are globally available, highly reliable, high-acid pairings." },
+                        "High Butter / Nutty (Meunière style)": { "result_specific": "Oaked Vernaccia di San Gimignano (Tuscany)", "result_general": "Oaked Chardonnay (Burgundy/California) or Fiano di Avellino (Campania)", "rationale": "The rich, nutty brown butter demands a full-bodied white with texture, good acidity, and often subtle oak/nutty notes. Oaked Vernaccia or Fiano offers the necessary structure. Oaked Chardonnay is the classic global pairing for brown butter." },
+                        "Herbaceous / Sage / Prosciutto (Saltimbocca)": { "result_specific": "Chianti (Tuscany, Sangiovese) or Rosso di Montalcino", "result_general": "Pinot Noir (Any region) or Gamay / Beaujolais (France)", "rationale": "The savory meat, herbs, and subtle fat need a high-acid red with soft tannins. Chianti is the quintessential savory, high-acid match. Pinot Noir is a good alternative—savory, high-acid, and light enough for the meat." },
+                        "Simple Pan-Sauté / No Sauce": { "result_specific": "Soave Classico (Veneto)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Unoaked Chardonnay (Chablis)", "rationale": "A simple, clean preparation needs a neutral, crisp, unoaked white wine that won't overpower the meat. Soave is an ideal high-acid, minerally Italian choice. Pinot Grigio is the safest and most widely available neutral white." },
+                        "Sweet Wine Glaze / Onion Agrodolce": { "result_specific": "Valpolicella Ripasso (Veneto)", "result_general": "Off-Dry Riesling (Germany/Alsace) or Dry Chenin Blanc (Vouvray Sec)", "rationale": "The slight sweetness needs a wine with concentrated fruit or residual sugar, balanced by high acidity. Ripasso provides concentrated fruit. Off-Dry Riesling is the universal best choice for sweetness in savory dishes." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Pork & Cured Meats
+        "Pork & Cured Meats": {
+            "user_label": "🐖 Pork & Cured Meats",
+            "next_prompt": "3. Choose Preparation/Focus:",
+            "options": {
+                "Cured Meats (Salumi, Prosciutto)": {
+                    "next_prompt": "4. Choose Cured Meat Detail:",
+                    "options": {
+                        "High Fat / Richness (Salami, Mortadella)": { "result_specific": "Lambrusco di Sorbara Secco (Emilia-Romagna)", "result_general": "Dry Sparkling Rosé (Cava/Prosecco) or Dry Fino Sherry", "rationale": "The high fat content of Salami demands a high-acid, refreshing wine—ideally with bubbles—to cut the richness. Dry Lambrusco (fizzy red) is the ultimate regional pairing. Dry Sparkling Rosé is an excellent alternative." },
+                        "Heavy Spice / Pepper (Spicy Salumi)": { "result_specific": "Primitivo di Manduria (Puglia) or Aglianico (Basilicata)", "result_general": "Zinfandel (California) or Shiraz/Syrah (Australia/Rhône)", "rationale": "The spice and fat need a bold, fruity red with enough structure and high alcohol to balance the heat. Primitivo (Zinfandel) is the ideal regional match due to its jammy fruit and spice. Zinfandel and Shiraz are great global alternatives." },
+                        "Simple / Delicacy (Prosciutto, Speck)": { "result_specific": "Pinot Grigio (Alto Adige) or Prosecco (Brut) (Veneto)", "result_general": "Dry Sparkling Wine (Cava/Prosecco) or Sancerre (Sauvignon Blanc)", "rationale": "The delicacy and salt of Prosciutto need a crisp, high-acid wine that enhances the flavor without overwhelming it. Sparkling wine is perfect, as the bubbles cleanse the palate of the salt. Pinot Grigio (Alto Adige) is a great high-acid still wine option." },
+                        "Game / Earthy Cure (Culatello, seasoned cuts)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese) or Rosso di Montalcino", "result_general": "Pinot Noir (Burgundy/Oregon) or Cru Beaujolais (France, Gamay)", "rationale": "Earthy, seasoned cuts need a savory, high-acid red with soft tannins. Chianti is the quintessential Italian savory red. Pinot Noir provides the necessary high acidity and delicate earthy structure." },
+                        "Served with Fruit (Melon/Figs)": { "result_specific": "Moscato d'Asti (Piedmont) or Prosecco Extra Dry", "result_general": "Off-Dry Riesling (Germany/Alsace) or Demi-Sec Sparkling Wine", "rationale": "The sweetness of the fruit demands a wine with some residual sugar. Moscato d'Asti (lightly sweet, fizzy) is the perfect regional pairing. Prosecco Extra Dry is the most common accessible off-dry sparkling wine." }
+                    }
+                },
+                "Herb-Crusted / Roasted: (Heavy rosemary/sage seasoning, e.g., Arrosto)": {
+                    "next_prompt": "4. Choose Herb/Roast Detail:",
+                    "options": {
+                        "Heavy rosemary/sage seasoning, e.g., Arrosto": { "result_specific": "Chianti Rufina (Tuscany, Sangiovese) or Barbera d'Asti (Piedmont)", "result_general": "Pinot Noir (Oregon/Burgundy) or Cru Beaujolais (France, Gamay)", "rationale": "The aromatic herbs (rosemary/sage) pair beautifully with savory, earthy, and high-acid reds. The acidity of Chianti and Barbera complements the roasted meat. Pinot Noir and Beaujolais are perfect alternatives: light enough for the white meat, but savory and earthy enough to match the herb crust." }
+                    }
+                },
+                "Tomato / Red Sauce: (Light tomato base, e.g., pork shoulder in sauce)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "Light tomato base, e.g., pork shoulder in sauce": { "result_specific": "Valpolicella Classico (Veneto) or Bardolino (Veneto)", "result_general": "Pinot Noir (Any region) or Light-bodied Sangiovese (Italy)", "rationale": "The tomato introduces acidity, so the wine must be high in acid but light in tannin to prevent a metallic taste. Valpolicella and Bardolino are excellent regional choices—light, high-acid, and fruity reds. Pinot Noir is the ideal global alternative due to its high acidity and soft tannins." }
+                    }
+                },
+                "Simple Sauté / Lean: (Quick-cooked, simple seasoning)": {
+                    "next_prompt": "4. Choose Preparation Detail:",
+                    "options": {
+                        "Quick-cooked, simple seasoning": { "result_specific": "Vermentino di Sardegna (Sardinia) or Soave Classico (Veneto)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Unoaked Chardonnay (Chablis)", "rationale": "A lean, simply seasoned dish requires a wine that is crisp, refreshing, and unoaked so it doesn't overpower the meat's subtle flavor. Vermentino and Soave are perfect Italian matches. Pinot Grigio is the most widely available, light, and crisp wine for a simple pairing." }
+                    }
+                },
+                "Smoked / Cured: (Smoked pork chop or heavily cured preparation)": {
+                    "next_prompt": "4. Choose Smoking/Curing Detail:",
+                    "options": {
+                        "Smoked pork chop or heavily cured preparation": { "result_specific": "Lagrein (Alto Adige) or Teroldego Rotaliano (Trentino)", "result_general": "Zinfandel (California) or Syrah/Shiraz (Australia/Rhône)", "rationale": "The intense, savory flavors of smoke and cure require a red wine with deep fruit, spice, and structure. Lagrein and Teroldego are dark, often smoky Northern Italian reds. Zinfandel is the best global alternative, as its jammy fruit, spice, and slight sweetness are a perfect foil for the smoky, fatty flavor of cured pork." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Game & Offal
+        "Game & Offal": {
+            "user_label": "🦌 Game & Offal",
+            "next_prompt": "3. Choose Preparation/Style:",
+            "options": {
+                "Game (Cinghiale, Capriolo, Lepre)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Heavy Wine Reduction / Stewed: (Braised in red wine, e.g., Cinghiale)": { "result_specific": "Brunello di Montalcino (Tuscany, Sangiovese) or Taurasi (Campania, Aglianico)", "result_general": "Cabernet Sauvignon (Bordeaux/Napa Valley) or Rhône Valley Syrah (Hermitage/Côte-Rôtie)", "rationale": "Braised game needs a wine that is powerful and savory, with high tannins and acidity to cut the rich stewing liquid and intense flavor of the meat. Brunello is a massive, age-worthy wine that stands up perfectly. Syrah is an excellent alternative due to its deep color, full body, and classic savory, smoky, and peppery notes." },
+                        "Earthy / Truffle: (Served with polenta or sauce rich in mushroom/truffle)": { "result_specific": "Barolo (Piedmont, Nebbiolo) or Aged Nebbiolo", "result_general": "Aged Pinot Noir (Burgundy or Oregon) or Medium-Dry Sherry (Amontillado)", "rationale": "The earthy, savory, and umami flavors of truffle and mushroom are best matched by the complex, tertiary notes (forest floor, leather, tobacco) found in aged, high-quality reds. Barolo is the perfect regional match. Aged Pinot Noir offers a similar delicate, earthy complexity globally." },
+                        "Fruit / Sweet-Sour (Agrodolce): (Glazed with cherry, prune, or vinegar/sugar)": { "result_specific": "Valpolicella Ripasso (Veneto) or Zinfandel (Apulia, Primitivo)", "result_general": "Medium-Dry Zinfandel (California) or Off-Dry Riesling (Germany/Alsace)", "rationale": "The sweet-sour balance requires a wine that is slightly fruity or has a touch of residual sugar to handle the sweetness, alongside high acidity to cut the fat and vinegar. Ripasso is concentrated and fruity. Zinfandel (especially Primitivo) is ideal, as its ripe, jammy fruit and spice naturally complement fruit reductions." },
+                        "Simple Roast / Grill: (Roasted or grilled with light seasoning)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese) or Vino Nobile di Montepulciano (Tuscany)", "result_general": "Malbec (Argentina) or Merlot (Bordeaux/Chile)", "rationale": "When the preparation is simple, the pairing focuses on the meat's inherent gamey flavor. It needs a high-acid red with prominent savory/earthy notes but tannins that aren't overwhelming. Chianti Classico is high in acid and earthiness. Malbec is a good, structured alternative with dark fruit and a subtle earthy finish." },
+                        "Rich Pâté / Terrine: (Pressed meat dish, highly spiced)": { "result_specific": "Recioto della Valpolicella (Sweet Red) or Vin Santo (Sweet Fortified)", "result_general": "Late Harvest Zinfandel (California) or Dry Amontillado Sherry (Spain)", "rationale": "Rich, heavily spiced, and often cold pressed game meats require a wine that can cut through the extreme richness (high fat/seasoning). A sweet/fortified red like Recioto is a stunning, classic pairing, as the sweetness balances the intense savoriness. A Dry Amontillado Sherry is a fantastic alternative for the savory, nutty richness of pâté." }
+                    }
+                },
+                "Offal (Fegato, Trippa, Salsiccia)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Heavy Butter / Cream: (High-fat preparation)": { "result_specific": "Pinot Bianco (Alto Adige/Trentino) or Oaked Vernaccia di San Gimignano (Tuscany)", "result_general": "Oaked Chardonnay (Burgundy or California) or Viognier (Rhône Valley)", "rationale": "The extreme richness and fat of a heavy cream/butter sauce must be cut by a full-bodied white wine with good acidity. Pinot Bianco and Oaked Chardonnay provide the necessary weight and structure, cleansing the palate while complementing the savory character of the meat." },
+                        "High Acidity / Vinegar: (Fegato alla Veneziana, with onions and vinegar)": { "result_specific": "Valpolicella Classico (Veneto) or Bardolino (Veneto)", "result_general": "Pinot Noir (Burgundy or Oregon) or Gamay / Beaujolais (France)", "rationale": "The acidity from vinegar and the high iron content of liver require a wine with high acidity and very low tannins to prevent a bitter, metallic clash. Valpolicella and Bardolino are light, high-acid regional reds. Pinot Noir and Gamay are the best global alternatives due to their high acidity and soft, approachable tannins." },
+                        "Grill / Charred Sausage: (Fatty sausage, intense grill char)": { "result_specific": "Lagrein (Alto Adige) or Primitivo (Puglia)", "result_general": "Zinfandel (California) or Syrah/Shiraz (Rhône Valley/Australia)", "rationale": "The intense fat and char need a bold, structured red wine with deep fruit and spice to match the power of the dish. Lagrein and Primitivo (Zinfandel) are powerful, dark, and often smoky Italian reds. Zinfandel is the ideal global alternative, as its concentrated fruit and robust body stand up to the high-fat and smoky flavors perfectly." },
+                        "Simple Fry / Light Seasoning: (Quickly fried/sautéed with light herbs)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Sauvignon Blanc (Chile)", "rationale": "Simple preparations need a crisp, unoaked white wine that is high in acid and refreshing. Vermentino offers coastal minerality, while Gavi is known for its clarity. Pinot Grigio is the most widely available, reliable neutral white for cleansing the palate of the light oil and refreshing the simple seasoning." },
+                        "Tomato / Broth Base: (Cooked in a light sauce, e.g., Trippa in umido)": { "result_specific": "Chianti (Tuscany, Sangiovese) or Rosso di Montalcino (Tuscany)", "result_general": "Pinot Noir (Any region) or Sangiovese (General Italian)", "rationale": "The presence of tomato introduces high acidity, which the wine must match. The offal/rich cuts add intensity. This demands a high-acid, savory red. Chianti is the classic regional choice for tomato-based, rustic dishes. Pinot Noir is a good alternative—savory, high-acid, and light enough not to overpower the broth." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Poultry
+        "Poultry": {
+            "user_label": "🐔 Poultry",
+            "next_prompt": "3. Choose Preparation/Style:",
+            "options": {
+                "Duck / Fowl": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Fatty Duck / Goose: (Skin on, high-fat content)": { "result_specific": "Pinot Noir (Alto Adige/Trentino) or Barbera d'Alba (Piedmont)", "result_general": "Pinot Noir (Burgundy or Oregon) or Cru Beaujolais (France, Gamay)", "rationale": "Fatty duck/goose requires a high-acid, savory red wine with soft tannins to cut the rich fat without overpowering the meat. Pinot Noir (both Italian and global) is the definitive choice for duck due to its high acidity, bright cherry fruit, and subtle earthy/savory notes." }
+                    }
+                },
+                "Chicken / Turkey": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Simple Roast / Chicken: (Chicken under a brick, simple oven roast)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Lugana (Veneto/Lombardy)", "result_general": "Unoaked Chardonnay (Chablis, France) or Pinot Grigio (Friuli/Alto Adige)", "rationale": "A simple roast focuses on the poultry's subtle flavor and skin texture. It needs a refreshing, medium-bodied white that won't compete. Vermentino and Lugana have the body. Unoaked Chardonnay offers a versatile, crisp, and clean pairing that provides enough structure to match the oven roast." },
+                        "Tomato / Olive Sauce: (Cacciatore style or stewed with olives)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese) or Rosso di Montalcino (Tuscany)", "result_general": "Pinot Noir (Any region) or Medium-bodied Merlot (Chile/Italy)", "rationale": "The high acidity of the tomato sauce requires a high-acid wine. The savory olives and chicken need an earthy component. Chianti is the quintessential high-acid, savory red for tomato-based rustic dishes. Pinot Noir is a reliable low-tannin, high-acid alternative that handles both the tomato and the poultry." },
+                        "Herbaceous / Lemon: (Heavy rosemary, sage, and lemon, e.g., Pollo al mattone)": { "result_specific": "Soave Classico (Veneto) or Sauvignon Blanc (Alto Adige)", "result_general": "Sauvignon Blanc (Sancerre, France) or Verdejo (Spain)", "rationale": "The intense herbs and lemon demand a crisp white wine with complementary herbaceous and citrus notes. Sauvignon Blanc (Sancerre or Italian Alto Adige) is globally recognized for its ability to match high acidity and 'green' flavors. Soave is a great Italian option for balancing the lemon." },
+                        "Cream / Butter Pan Sauce: (Rich sauce base from the pan drippings)": { "result_specific": "Fiano di Avellino (Campania) or Oaked Chardonnay (Tuscany or Alto Adige)", "result_general": "Oaked Chardonnay (California/Burgundy) or Viognier (Rhône Valley)", "rationale": "The high-fat content of the cream/butter sauce needs a full-bodied white wine with good acidity and texture. Oaked Chardonnay (or a textural white like Fiano) provides the necessary weight and richness to complement the sauce, while the acidity keeps the palate refreshed." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Seafood
+        "Seafood": {
+            "user_label": "🐟 Seafood",
+            "next_prompt": "3. Choose Preparation/Fish Type:",
+            "options": {
+                "Italian Grilled fish": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Simple Grill / Salt: (Simply grilled or baked Branzino)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Unoaked Chardonnay (Chablis, France)", "rationale": "Simple preparation demands a crisp, unoaked white wine with excellent minerality and refreshing acidity that won't overshadow the fish's delicate flavor. Vermentino is the classic coastal match. Pinot Grigio is the most widely available, reliable neutral choice." },
+                        "High Acid / Citrus: (Heavy lemon, white wine sauce, e.g., Sole Meunière style)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche) or Falanghina (Campania)", "result_general": "Sauvignon Blanc (Sancerre/New Zealand) or Dry Riesling (Austria)", "rationale": "The wine must match the dish's high acidity. The best wines here are bone-dry, very high-acid whites. Verdicchio and Falanghina are superb Italian choices that handle citrus well. Sauvignon Blanc and Dry Riesling are globally available, highly reliable, high-acid pairings." },
+                        "Green Herbs / Pesto: (Basil, parsley, or light pesto seasoning)": { "result_specific": "Gavi (Cortese) (Piedmont) or Soave Classico (Veneto)", "result_general": "Sauvignon Blanc (Sancerre, France) or Verdejo (Spain)", "rationale": "The wine must match the herbaceous/green aromas. Unoaked, crisp whites with subtle savory or herbal notes are ideal. Gavi is known for its clarity and affinity for herbs. Sauvignon Blanc is the global benchmark for complementing herbaceous flavors." },
+                        "Light Tomato / Vegetable: (Simple sauce with capers and olives)": { "result_specific": "Rosato (Rosé) del Salento (Puglia) or Cirò Bianco (Calabria)", "result_general": "Dry Rosé (Provence/Bandol) or Albariño (Rías Baixas, Spain)", "rationale": "The presence of tomato and savory olives/capers requires a slightly more structured white or a savory rosé to bridge the acidity and the umami. Italian Rosato is a perfect savory choice. Albariño is a great white alternative, as its high acid and slight bitterness work well with olives." },
+                        "Fry / Battered: (Fritto Misto style or lightly fried fish)": { "result_specific": "Prosecco (Brut) (Veneto) or Franciacorta Brut (Lombardy)", "result_general": "Dry Sparkling Wine (Cava or Méthode Traditionnelle) or Pinot Grigio (General)", "rationale": "Fried food demands a high-acid, highly refreshing wine—ideally with bubbles—to cut through the oiliness and cleanse the palate. Prosecco is the classic regional choice. Any dry, high-quality sparkling wine is a fantastic alternative for fried items." }
+                    }
+                },
+                "Rich / Meaty Fish (Tuna, Swordfish)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Rich Oil / Garlic: (Heavy garlic, chili, or strong olive oil base)": { "result_specific": "Fiano di Avellino (Campania) or Verdicchio dei Castelli di Jesi Riserva (Marche)", "result_general": "Oaked Chardonnay (California/Macon, France) or White Rioja (Spain)", "rationale": "The high oil, garlic, and savory intensity require a full-bodied white with structure and texture to match the richness. Fiano and Verdicchio Riserva offer the necessary weight. Oaked Chardonnay provides complementary savory notes and a fuller body to stand up to the strong flavor base." },
+                        "Seared / Tuna Steak: (Cooked rare, focus on the meaty texture)": { "result_specific": "Etna Rosso (Sicily, Nerello Mascalese) or Rosso di Montalcino (Tuscany)", "result_general": "Pinot Noir (Oregon or Burgundy) or Cru Beaujolais (France, Gamay)", "rationale": "The meaty texture of seared tuna is one of the few fish dishes that can handle a light red wine. We need a high-acid, savory, low-tannin red. Etna Rosso is perfect—structured, savory, and served slightly cool. Pinot Noir is the ideal global alternative for its light body and savory complexity." },
+                        "Tomato / Red Wine Base: (Heavy sauce or base, e.g., tuna stew)": { "result_specific": "Etna Rosso (Sicily, Nerello Mascalese) or Aglianico del Vulture (Basilicata)", "result_general": "Pinot Noir (Any region) or Structured Dry Rosé (Bandol, France)", "rationale": "The tomato/red wine base introduces significant acidity. This demands a high-acid, savory, low-tannin red or a very full-bodied rosé. Etna Rosso again excels at bridging fish savoriness with tomato acidity. Structured Rosé offers the body and acidity needed without the metallic risk of strong red wine tannins." },
+                        "Herb Crust / Savory: (Pistachio or heavy herb crust, e.g., swordfish)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Sauvignon Blanc (Sancerre, France) or Pinot Gris (Alsace)", "rationale": "The herbaceous/nutty crust demands a wine with pronounced aromatic intensity and high acidity. Vermentino and Gavi are crisp and aromatic. Sauvignon Blanc is excellent for the herbs, while a slightly richer Pinot Gris works well with a nutty, textured crust." },
+                        "Simple Grill / Roast: (Simple cooking, focus on the fish flavor)": { "result_specific": "Lugana (Veneto/Lombardy, Turbiana) or Greco di Tufo (Campania)", "result_general": "Unoaked Chardonnay (Chablis, France) or Pinot Grigio (Friuli/Alto Adige)", "rationale": "The simple preparation demands a wine that enhances the fish's natural flavor without overpowering it. Lugana and Greco di Tufo are full-flavored, high-acid Italian whites. Unoaked Chardonnay provides the perfect medium body, clarity, and structure to match the quality of the simply prepared fish." }
+                    }
+                },
+                "Small / Oily Fish (Anchovy, Sardine)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Grill / Charred: (Intense smoky flavor from grilling)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Etna Bianco (Sicily, Carricante)", "result_general": "Sauvignon Blanc (Sancerre, France) or Albariño (Rías Baixas, Spain)", "rationale": "The smoke and high oil content demand a bone-dry, very high-acid white with strong minerality to cut through the fat. Vermentino is a coastal, high-acid option. Sauvignon Blanc and Albariño provide the crisp, often smoky/herbaceous contrast needed to handle the grill flavor." },
+                        "Heavy Tomato / Spice: (Cooked in a rich, spicy red sauce)": { "result_specific": "Rosato (Rosé) del Salento (Puglia) or Cirò Rosso (Calabria, Gaglioppo)", "result_general": "Pinot Noir (Any region) or Structured Dry Rosé (Bandol/Tavel, France)", "rationale": "The combination of oil, tomato acidity, and spice is best met by a robust, savory rosé or a very light red. Italian Rosato has the body and savory profile. Pinot Noir is a good alternative—low in tannin and high in acid—to handle the acidity and the rich oil without clashing with the spice." },
+                        "High Acidity / Vinegar: (Served with pickled vegetables or a strong vinegar dressing)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche) or Falanghina (Campania)", "result_general": "Dry Riesling (Austria or Alsace) or Sauvignon Blanc (Chile)", "rationale": "The wine must match the vinegar's acidity. This requires a white wine with extremely high natural acidity. Verdicchio and Falanghina are superb Italian high-acid whites. Dry Riesling is the global benchmark for pairing with high acidity and strong flavor contrasts." },
+                        "Simple Fry / Light Batter: (Fried anchovies or sardines)": { "result_specific": "Prosecco (Brut) (Veneto) or Franciacorta Brut (Lombardy)", "result_general": "Dry Sparkling Wine (Cava or Méthode Traditionnelle) or Pinot Grigio (General)", "rationale": "Fried food requires bubbles and high acid to slice through the oiliness. Prosecco is the classic, regional, refreshing pairing. Any high-quality Dry Sparkling Wine provides the necessary acidity and effervescence to cleanse the palate." },
+                        "Served Raw / Cured: (Anchovies/Sardines cured in oil, served raw)": { "result_specific": "Dry Sherry (Fino/Manzanilla) (Spain) or Vermentino di Sardegna (Sardinia)", "result_general": "Albariño (Rías Baixas, Spain) or Fino Sherry (Any available brand)", "rationale": "The intense salt and umami of cured fish are perfectly matched by the nutty, savory, dry, and highly saline profile of Fino Sherry (a common pairing in Southern Spain, and excellent with cured fish). Vermentino and Albariño are great white wine alternatives that offer high salinity and minerality to handle the salt." }
+                    }
+                },
+                "Shellfish (Vongole, Mussels, Shrimp)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Simple Steam / Raw: (Oysters, simple steamed mussels/clams)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Muscadet Sèvre et Maine (Loire Valley, France) or Albariño (Rías Baixas, Spain)", "rationale": "Raw/Steamed shellfish is the purest expression of the sea, demanding a bone-dry, razor-sharp white with intense minerality and salinity. Vermentino is the ideal high-acid Italian coastal white. Muscadet is the traditional, classic pairing for oysters due to its neutrality and mineral quality." },
+                        "Garlic / Chili Oil: (Sautéed in a strong garlic and chili oil base)": { "result_specific": "Falanghina (Campania) or Verdicchio dei Castelli di Jesi (Marche)", "result_general": "Sauvignon Blanc (New Zealand/Chile) or Off-Dry Riesling (Germany/Alsace)", "rationale": "The high heat from chili and strong garlic requires a wine with high acidity and good aromatic intensity, ideally with low tannin. Falanghina and Verdicchio have the necessary structure. Off-Dry Riesling is the best alternative for chili, as its slight sweetness expertly soothes the heat." },
+                        "Tomato / Wine Broth: (Mussels/clams in a light red/white wine broth)": { "result_specific": "Rosato (Rosé) del Salento (Puglia) or Grechetto (Umbria)", "result_general": "Dry Rosé (Provence/Bandol) or Albariño (Rías Baixas, Spain)", "rationale": "The tomato broth introduces acidity, which is difficult for delicate white wines. A structured, savory Italian Rosato is the perfect bridge, offering the body of a light red and the acidity of a white. Albariño is an excellent white alternative, with enough body and high acid to handle the tomato." },
+                        "Cream / Rich Base: (Mussels in a light cream sauce)": { "result_specific": "Lugana (Veneto/Lombardy, Turbiana) or Oaked Chardonnay (Alto Adige)", "result_general": "Oaked Chardonnay (Burgundy or California) or Viognier (Rhône Valley)", "rationale": "The light cream sauce needs a white wine with more body and texture to match the richness, but still enough acidity to cleanse the palate. Lugana provides good structure. Oaked Chardonnay is the reliable, globally available choice, offering the necessary weight and savory complexity." },
+                        "Simple Grill / Skewers: (Grilled prawns/shrimp, scampi style)": { "result_specific": "Greco di Tufo (Campania) or Vermentino di Sardegna (Sardinia)", "result_general": "Sauvignon Blanc (Sancerre, France) or Pinot Gris (Alsace)", "rationale": "Grilled shellfish has a smoky element and a firm texture. It needs a crisp white with good structure and aromatic complexity. Greco di Tufo is a complex, flavorful Southern Italian white. Sauvignon Blanc and Pinot Gris are reliable alternatives, offering the body and flavor needed to complement the grilling process." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Appetizers & Pizza
+        "Appetizers & Pizza": {
+            "user_label": "🍕 Appetizers & Pizza",
+            "next_prompt": "3. Choose Preparation/Focus:",
+            "options": {
+                "Pizza - Classic / Simple": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Simple / Neutral: (Margherita or simple Napoletana)": { "result_specific": "Lambrusco Grasparossa di Castelvetro Secco (Emilia-Romagna) or Valpolicella Classico (Veneto)", "result_general": "Dry Sparkling Rosé (Prosecco, Cava) or Pinot Noir (Any region)", "rationale": "The high acidity of the tomato demands a high-acid wine with light body and low tannins. Lambrusco Secco (dry, fizzy red) is the ultimate, refreshing, palate-cleansing regional match. Pinot Noir and Dry Sparkling Rosé are excellent alternatives that deliver the required acidity without clashing with the subtle flavors." },
+                        "High Spice / Chili: (Diavola or crushed red pepper)": { "result_specific": "Dolcetto d'Alba (Piedmont) or Aglianico del Vulture (Basilicata)", "result_general": "Zinfandel (California) or Off-Dry Riesling (Germany/Alsace)", "rationale": "Spice needs wines that are low in alcohol/tannin (to avoid amplifying heat) and often slightly fruity. Dolcetto is a soft, fruity, low-tannin red. Off-Dry Riesling is the global classic for spice, as its touch of sweetness calms the heat, while Zinfandel's bold fruit works well with rich, spicy meat (like pepperoni)." },
+                        "Savory / Anchovy: (Napoli style, with high salt/umami from anchovies)": { "result_specific": "Rosato (Rosé) del Salento (Puglia) or Greco di Tufo (Campania)", "result_general": "Albariño (Rías Baixas, Spain) or Manzanilla Sherry (Spain)", "rationale": "The intense salt and umami of anchovies need a high-acid, savory wine with a strong mineral backbone. Italian Rosato is a perfect savory, structured choice. Albariño and Manzanilla Sherry (dry, savory, and highly saline) are globally recognized, excellent pairings for high-salt seafood." },
+                        "Rich Cheese / Buffalo: (Mozzarella di Bufala, higher fat content)": { "result_specific": "Fiano di Avellino (Campania) or Lugana (Veneto/Lombardy)", "result_general": "Unoaked Chardonnay (Chablis, France) or Sauvignon Blanc (Sancerre, France)", "rationale": "The higher fat content of Buffalo Mozzarella requires a white wine with more body and structure to match the richness. Fiano offers the required weight and acidity. Unoaked Chardonnay provides enough body and structure to handle the creamy texture without clashing with the tomato." }
+                    }
+                },
+                "Pizza - Meat / Salumi": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Cured / Spicy: (Pepperoni, spicy Salami, high fat and spice)": { "result_specific": "Aglianico del Vulture (Basilicata) or Primitivo (Puglia)", "result_general": "Zinfandel (California) or Syrah/Shiraz (Rhône Valley/Australia)", "rationale": "The high fat, salt, and spice demand a bold, fruity red with enough structure and acidity. Primitivo (Zinfandel) is the perfect regional match—its jammy fruit and spice notes are delicious with cured meat. Zinfandel and Syrah are excellent alternatives that can handle the intensity and richness." },
+                        "Cooked / Savory: (Prosciutto Cotto, Ham, less spice, more savory)": { "result_specific": "Valpolicella Ripasso (Veneto) or Chianti Classico (Tuscany)", "result_general": "Merlot (Bordeaux/Chile) or Sangiovese (General Italian)", "rationale": "Cooked ham is savory but less fatty than cured meat. It needs a high-acid, medium-bodied red. Ripasso offers concentrated savory fruit, while Chianti provides high acid and structure. Merlot is a widely available, soft-tannin, medium-bodied red that pairs beautifully with savory cooked ham." },
+                        "Sausage / Fennel: (Ground pork sausage, often with fennel/herb spice)": { "result_specific": "Aglianico del Vulture (Basilicata) or Montepulciano d'Abruzzo", "result_general": "Zinfandel (California) or Cru Beaujolais (France, Gamay)", "rationale": "The distinctive fennel/herb spice in Italian sausage requires a savory red wine with good acidity and structure. Aglianico and Montepulciano are classic, savory Italian reds. Zinfandel's jammy, spicy notes are a traditional and excellent complement to pork and fennel sausage." },
+                        "Rich Cheese Added: (Gorgonzola or strong Pecorino)": { "result_specific": "Barbera d'Asti Superiore (Piedmont) or Aglianico (Basilicata)", "result_general": "Oaked Chardonnay (California/Burgundy) or Full-bodied Zinfandel (California)", "rationale": "The pungent, intense flavor of Gorgonzola/Pecorino needs a wine with strong acidity (to cut the fat) and enough flavor intensity to match the cheese. Barbera offers excellent acidity. Oaked Chardonnay is a great white alternative, providing the necessary body and savory notes. Zinfandel, in this case, would stand up to the intensity of the cheese." }
+                    }
+                },
+                "Pizza - Vegetable / Herb": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Heavy Cheese / Cream: (Quattro Formaggi, Taleggio, or strong white sauce)": { "result_specific": "Fiano di Avellino (Campania) or Oaked Vernaccia di San Gimignano (Tuscany)", "result_general": "Oaked Chardonnay (Burgundy or California) or White Rioja (Spain)", "rationale": "The intense fat and savory flavor of the multiple rich cheeses demand a full-bodied white wine with structure and good acidity. Fiano offers the required weight and acidity. Oaked Chardonnay is a perfect global alternative, as its texture and savory, subtle nutty notes complement the rich cheese." },
+                        "Potato / Rosemary: (Simple, savory, high-starch base)": { "result_specific": "Lugana (Veneto/Lombardy, Turbiana) or Pinot Bianco (Alto Adige)", "result_general": "Pinot Gris (Alsace) or Pinot Grigio (Friuli/Alto Adige)", "rationale": "The high-starch and subtle aromatic rosemary require a crisp, dry white with good body to match the potato's weight. Lugana and Pinot Bianco are excellent structural whites. Pinot Gris (Alsace) offers the needed body and sometimes subtle spice that complements the rosemary." },
+                        "Earthy / Truffle: (Truffle oil, Porcini mushrooms, or earthy greens)": { "result_specific": "Aged Barolo or Barbaresco (Piedmont, Nebbiolo) or Older Chianti Classico (Tuscany)", "result_general": "Aged Pinot Noir (Burgundy or Oregon) or Cru Beaujolais (France, Gamay)", "rationale": "The distinct, savory truffle and earthy mushroom flavors are best matched by the complex, savory, tertiary notes of aged, high-quality red wines. Barolo is the classic regional match. Aged Pinot Noir is the excellent global alternative, sharing the necessary complexity and soft tannins." },
+                        "Herb Pesto / Green: (Strong basil, arugula, or green sauce base)": { "result_specific": "Gavi (Cortese) (Piedmont) or Vermentino di Sardegna (Sardinia)", "result_general": "Sauvignon Blanc (Sancerre/New Zealand) or Verdejo (Spain)", "rationale": "The intense, aromatic green herbs require a wine with complementary herbaceous and citrus notes, and high acidity. Gavi and Vermentino are crisp, aromatic Italian whites. Sauvignon Blanc is the global benchmark, with its classic 'green' and grassy notes perfectly matching basil and arugula." }
+                    }
+                },
+                "Pizza - Seafood": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Shellfish / Salty: (Vongole, Mussels, high salinity)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Greco di Tufo (Campania)", "result_general": "Albariño (Rías Baixas, Spain) or Muscadet Sèvre et Maine (Loire Valley)", "rationale": "The high salinity of the shellfish demands a bone-dry, high-acid white wine with intense minerality. Vermentino is the classic, structured coastal white. Albariño is an excellent alternative, offering high acid and a slight savory component perfect for clams and mussels." },
+                        "Shrimp / Zucchini: (Light, delicate seafood/vegetable combination)": { "result_specific": "Soave Classico (Veneto, Garganega) or Gavi (Cortese) (Piedmont)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Sauvignon Blanc (Sancerre, France)", "rationale": "This delicate, light topping requires a crisp, unoaked white that won't overpower the subtle flavors. Soave and Gavi are ideal light-bodied Italian matches. Pinot Grigio is the most widely available, reliable, neutral choice to complement the delicacy of shrimp and zucchini." },
+                        "Lemon / Citrus: (Sauce or seasoning with pronounced lemon/citrus)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche) or Falanghina (Campania)", "result_general": "Sauvignon Blanc (New Zealand/Chile) or Dry Riesling (Austria)", "rationale": "The wine must match the high acidity of the lemon/citrus seasoning to prevent the wine from tasting flat. Verdicchio and Falanghina are excellent Italian high-acid whites. Sauvignon Blanc is a globally available, highly acidic option that complements citrus and herbaceous notes perfectly." },
+                        "Herbaceous / Garlic: (Heavy parsley/garlic, e.g., in a Vongole topping)": { "result_specific": "Gavi (Cortese) (Piedmont) or Vermentino di Sardegna (Sardinia)", "result_general": "Sauvignon Blanc (Sancerre, France) or Verdejo (Spain)", "rationale": "The high concentration of green herbs and garlic demands an unoaked, highly aromatic white wine. Gavi and Vermentino offer the necessary acidity and aromatic intensity. Sauvignon Blanc is the ideal global match, known for its complementary herbal and citrus aromas." }
+                    }
+                },
+                "Apparativo": {
+                    "next_prompt": "4. Choose Focus:",
+                    "options": {
+                        "Cured Meat Focus: (Heavy prosciutto, salami, or coppa, high fat/salt)": { "result_specific": "Lambrusco Grasparossa di Castelvetro Secco (Emilia-Romagna) or Sangiovese Rosato (Tuscany)", "result_general": "Dry Sparkling Rosé (Prosecco, Cava) or Cru Beaujolais (France, Gamay)", "rationale": "The high fat and salt of cured meats demand a wine that is high-acid, savory, and extremely refreshing. Dry Lambrusco is the ultimate regional choice—its bubbles and high acidity cut the fat brilliantly. Sparkling Rosé or a light, high-acid, savory red like Beaujolais are excellent, versatile alternatives." },
+                        "Cheese & Nut Focus: (Hard cheese, walnuts, almonds)": { "result_specific": "Verdicchio dei Castelli di Jesi Riserva (Marche) or Fiano di Avellino (Campania)", "result_general": "Oaked Chardonnay (Burgundy or California) or Sauvignon Blanc (Sancerre, France)", "rationale": "The savory, nutty, and slightly umami flavors of hard cheese and nuts pair well with structured, full-bodied white wines. Verdicchio Riserva and Fiano offer the necessary texture and complexity. Oaked Chardonnay is a great alternative, providing a complementary creamy/nutty texture and good acidity." },
+                        "Olive / Pickle Focus: (Heavy marinated olives, artichokes, high brine/acid)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche) or Falanghina (Campania)", "result_general": "Dry Sherry (Fino/Manzanilla) (Spain) or Sauvignon Blanc (Sancerre, France)", "rationale": "The high brine, acid, and sometimes bitter flavors of olives and pickles are notoriously difficult. The wine must be highly acidic and unoaked. Verdicchio and Falanghina are superb Italian matches. Fino Sherry is the ultimate savory/salty pairing, while Sauvignon Blanc is the most reliable high-acid white for handling bitterness and herbs." },
+                        "Simple Bread / Focaccia: (Simple bread, grissini, focus on texture)": { "result_specific": "Prosecco (Brut) (Veneto) or Gavi (Cortese) (Piedmont)", "result_general": "Dry Sparkling Wine (Cava or Méthode Traditionnelle) or Pinot Grigio (Alto Adige)", "rationale": "Simple textures and minimal flavor need a wine that is light, crisp, and highly refreshing. Prosecco is the perfect palate cleanser and regional choice. Any high-quality Dry Sparkling Wine or a crisp, light Pinot Grigio will refresh the palate without overwhelming the delicate flavors." }
+                    }
+                }
+            }
+        }
+    }
+},
+"French": {
+    "title": "French Cuisine 🇫🇷",
+    "emoji": "🇫🇷",
+    "next_prompt": "2. Choose Initial Category:",
+    "options": {
+        // LEVEL 1: Red Meat & Game
+        "Red Meat & Game": {
+            "user_label": "🥩 Red Meat & Game",
+            "next_prompt": "3. Choose Preparation/Seasoning:",
+            "options": {
+                // LEVEL 2: Grilled / Roasted (Simple Seasoning)
+                "Grilled / Roasted (Simple Seasoning)": {
+                    "next_prompt": "4. Choose Cut/Seasoning Detail:",
+                    "options": {
+                        "High Fat Cut (Ribeye, T-Bone) / Heavy Seasoning": { "result_specific": "Pauillac, Bordeaux (Cabernet Sauvignon)", "result_general": "New World Cabernet Sauvignon (Napa Valley, Coonawarra)", "rationale": "The immense structure, firm tannins, and high acidity of top Left Bank Bordeaux (Pauillac) are essential to cut through the high fat content of the ribeye, while the wine's powerful black fruit and oak match the heavy seasoning and the charred crust of the grill. New World Cabernets offer similar tannin structure and body." },
+                        "Lean Cut (Filet, Sirloin) / Light Seasoning": { "result_specific": "Chambolle-Musigny, Burgundy (Pinot Noir)", "result_general": "Oregon or Sonoma Coast Pinot Noir", "rationale": "Leaner cuts and lighter seasoning require a more delicate, less aggressive wine. Burgundy Pinot Noir's hallmark is its high acidity, silky texture, and delicate earthy notes, which complement the meat without overpowering it. Pinot Noir from cooler New World regions offers similar finesse and acidity." },
+                        "Herb-Crusted / Aromatic Rubs (Rosemary, Thyme)": { "result_specific": "Chinon, Loire Valley (Cabernet Franc)", "result_general": "Southern Italian Primitivo / Zinfandel", "rationale": "The distinct herbaceous and often slightly 'green' note (pyrozines) of Cabernet Franc harmonizes perfectly with the rosemary, thyme, and other aromatics in the crust. Its medium body and firm structure stand up to the meat. Primitivo/Zinfandel, especially from Southern Italy, often exhibits similar earthy/herbal spice notes." },
+                        "Smokey / Wood-Fired Preparation": { "result_specific": "Hermitage, Northern Rhône (Syrah)", "result_general": "Australian Shiraz or Syrah-based blend (e.g., California/Washington)", "rationale": "The smoky, peppery, and meaty notes inherent in Northern Rhône Syrah (Hermitage) mirror and amplify the char and smoke flavor imparted by the wood-fired cooking method. The wine's bold flavor and substantial structure stand up to the intensity of the smoke. Australian Shiraz offers equivalent power and spice." },
+                        "Served Rare / Cool Center": { "result_specific": "Morgon, Beaujolais Cru (Gamay)", "result_general": "Light-Bodied, Chilled Red (e.g., Loire Rosé or Grenache)", "rationale": "A rare/cool center requires a wine with bright acidity and juicy, refreshing fruit, often served slightly chilled. Morgon is a structured Beaujolais Cru with bright red fruit, high acidity, and minimal tannin, making it perfect for pairing with the cold protein without introducing clashing tannins." }
+                    }
+                },
+                // LEVEL 2: Sauce au Vin (e.g., Reduction/Bordelaise)
+                "Sauce au Vin (e.g., Reduction/Bordelaise)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "Very Reduced / Glazed / Concentrated": { "result_specific": "Pomerol, Bordeaux (Merlot-Dominant)", "result_general": "Aged Super Tuscan (Sangiovese/Cabernet Blend)", "rationale": "A very reduced, concentrated sauce mirrors the texture and complexity of an aged wine. Pomerol's luscious, plush texture and notes of plum and cedar complement the richness without the aggressive tannins of a younger Left Bank wine. An aged Super Tuscan offers similar depth and soft tannins." },
+                        "Mushroom / Truffle Infusion in Sauce": { "result_specific": "Volnay, Burgundy (Mature Pinot Noir)", "result_general": "Barolo or Barbaresco (Piedmont, Nebbiolo)", "rationale": "Both the sauce and the ideal wine are defined by earthiness and savoriness (umami). A mature Volnay (or similar earthy Burgundy) provides the delicate tertiary notes of forest floor and dried leaves that harmonize perfectly with mushroom and truffle without overwhelming the meat. Nebbiolo offers a structured, complex alternative with strong earthy notes." },
+                        "Tomato-Based / High Acidity Reduction": { "result_specific": "Saumur-Champigny, Loire Valley (Cabernet Franc)", "result_general": "Chianti Classico (Tuscany, Sangiovese)", "rationale": "The acidity of the tomato requires a red wine with similarly high natural acidity to avoid making the wine taste flat or sweet. Loire Cabernet Franc is naturally high in acid and often has a leaner structure, making it ideal for the tomato base. Chianti is a universal pairing for Italian tomato sauces and works well here too." },
+                        "Rich Butter / Marrow Emulsion": { "result_specific": "St-Émilion Grand Cru, Bordeaux (Merlot/Cabernet Franc)", "result_general": "New World Merlot (e.g., Washington State)", "rationale": "The rich, unctuous texture of butter or marrow requires a wine with roundness, polished tannins, and weight to match the mouthfeel. St-Émilion's Merlot dominance provides this softness and richness, seamlessly blending with the sauce's texture. A quality New World Merlot provides reliable fruit and body." },
+                        "Sweetened / Dark Fruit Compote in Sauce": { "result_specific": "Châteauneuf-du-Pape, Southern Rhône", "result_general": "Amarone della Valpolicella (Veneto)", "rationale": "The slight sweetness and dark fruit (e.g., fig, cherry, currant) in the sauce require a wine with intense, concentrated fruit flavors and high alcohol, which reads as an appropriate counter-weight to the sugar. Châteauneuf-du-Pape's rich, spicy, and often high-alcohol profile is perfect. Amarone provides similar power and dried-fruit intensity." }
+                    }
+                },
+                // LEVEL 2: Rich Cream / Mushroom Sauce
+                "Rich Cream / Mushroom Sauce": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "Heavy Cream / Crème Fraîche Base": { "result_specific": "Meursault, Burgundy (Oaked Chardonnay)", "result_general": "High-Quality Oaked Chardonnay (e.g., California, South Africa)", "rationale": "The rich, viscous texture of a heavy cream sauce needs a wine with equivalent body and structure to prevent the wine from tasting thin. Meursault's full body, buttery texture, and balancing acidity are perfect textural complements. A high-quality New World Oaked Chardonnay serves the same purpose with its rich mouthfeel." },
+                        "Porcini / Truffle / Highly Earthy Mushrooms": { "result_specific": "Gevrey-Chambertin, Burgundy (Mature Pinot Noir)", "result_general": "Piedmont Nebbiolo (e.g., Langhe Nebbiolo)", "rationale": "Truffles and intense wild mushrooms amplify the savory, 'forest floor' notes in mature red wines. Gevrey-Chambertin, known for its powerful, earthy structure, has the complexity and tertiary flavors to stand up to the umami bomb of truffles/porcini. Nebbiolo is the primary Italian red with similar deep, earthy structure." },
+                        "Light Sauce / Button or Cultivated Mushrooms": { "result_specific": "Savigny-lès-Beaune, Burgundy (Pinot Noir)", "result_general": "Valpolicella Classico (Corvina, Rondinella, etc.)", "rationale": "A lighter sauce requires a lighter, more delicate wine. Savigny-lès-Beaune offers the classic earthy complexity of Burgundy but with a gentler, medium-body and softer structure, avoiding the need for a powerhouse wine. Valpolicella is a classic Italian choice for lighter meats and earthy flavors, providing fruit and soft tannins." },
+                        "Herb-Focused Cream Sauce (Tarragon, Chervil)": { "result_specific": "Condrieu, Northern Rhône (Viognier)", "result_general": "Oaked Marsanne / Roussanne Blend", "rationale": "The distinct aromas of tarragon and chervil demand a highly aromatic, slightly oily white wine to harmonize with the herbs and match the cream's texture. Condrieu's intense floral (honeysuckle, apricot) and spicy notes are the perfect textural and aromatic match. Oaked Marsanne/Roussanne offers a similar profile." },
+                        "Reduction / Stock-Finished Cream Sauce": { "result_specific": "Corton-Charlemagne, Burgundy (Grand Cru Chardonnay)", "result_general": "Aged White Bordeaux (Semillon/Sauvignon Blanc)", "rationale": "The added depth of a rich stock reduction requires a wine with unparalleled structure, concentration, and long aging potential. Corton-Charlemagne provides the necessary power and intense minerality to cut through the richness while matching the complexity of the stock. Aged White Bordeaux also develops savory, nutty complexity ideal for rich sauces." }
+                    }
+                },
+                // LEVEL 2: Wild Game (Venison, Boar, Duck)
+                "Wild Game (Venison, Boar, Duck)": {
+                    "next_prompt": "4. Choose Game Detail:",
+                    "options": {
+                        "Mature Game (Strong/Iron Flavor) / Venison, Boar": { "result_specific": "Cornas, Northern Rhône (Syrah)", "result_general": "Aged Barolo or Barbaresco (Piedmont, Nebbiolo)", "rationale": "Strong, mature, iron-rich game requires a wine of massive structure, savory complexity, and intense dark fruit/pepper notes. Cornas provides the necessary power and 'meaty' character to stand up to the gaminess. Aged Nebbiolo offers a structured alternative with dried-fruit and rose-petal notes that complement the iron-rich flavor." },
+                        "Lean / Younger Game (Pheasant, Partridge)": { "result_specific": "Volnay or Savigny-lès-Beaune, Burgundy (Pinot Noir)", "result_general": "Cool-Climate Pinot Noir (Germany/Austria)", "rationale": "Lean, delicate game needs a subtle red wine that won't overwhelm its natural flavor. Pinot Noir from the softer villages of the Côte de Beaune provides the perfect balance of earthiness, high acidity, and refined fruit structure. Cool-climate European Pinot Noir offers similar elegance and structure." },
+                        "Duck / Goose (High Fat Content)": { "result_specific": "Gevrey-Chambertin, Burgundy (Pinot Noir)", "result_general": "California or New Zealand Pinot Noir", "rationale": "Duck and goose fat is famously rich. The ideal wine must have high acidity (the hallmark of quality Pinot Noir) to cut through the fat, and enough aromatic complexity to match the poultry's flavor. Gevrey-Chambertin offers both structure and earthy refinement. New World Pinot provides reliable high acidity and bright fruit." },
+                        "Spiced / Curry / Exotically Seasoned Game": { "result_specific": "Gewürztraminer (Vendanges Tardives) Alsace", "result_general": "Off-Dry Riesling (Alsace/Germany) or Oaked Viognier", "rationale": "Spice and exotic seasoning (e.g., cumin, coriander) are best matched by aromatic wines with a touch of residual sweetness to calm the heat. Alsace Gewürztraminer is full-bodied, intensely aromatic (lychee, ginger), and often has enough off-dry character to pair with the spice. Off-Dry Riesling is the universal choice for spice." },
+                        "Served Cold (Terrine / Pâté style)": { "result_specific": "Blanc de Noirs Champagne (Pinot Noir/Meunier)", "result_general": "Dry Rosé (Tavel or Bandol)", "rationale": "Cold, rich, pressed meats require a wine with cleansing acidity, effervescence, and enough body to match the richness. A Blanc de Noirs Champagne provides the richness and the necessary aggressive acidity and bubbles to cleanse the palate. A dry, structured Rosé offers the body and refreshing acidity without the bubbles." }
+                    }
+                },
+                // LEVEL 2: Offal / Highly Seasoned (Spicy, Herbaceous)
+                "Offal / Highly Seasoned (Spicy, Herbaceous)": {
+                    "next_prompt": "4. Choose Offal/Seasoning Detail:",
+                    "options": {
+                        "Foie Gras (Pan-Seared or Torchon)": { "result_specific": "Sauternes, Bordeaux (Botrytized Semillon/Sauvignon Blanc)", "result_general": "Late Harvest or Botrytized Wine (e.g., Tokaji, Vouvray Moelleux)", "rationale": "The quintessential pairing. The extreme sweetness and high acidity of Sauternes cut through the immense richness of the foie gras while matching its luxurious texture. The botrytis notes (honey, apricot) are a perfect aromatic complement. Any high-acid, sweet dessert wine works as a suitable substitute." },
+                        "Liver (Calf, Chicken) / Rich Texture": { "result_specific": "St-Nicolas-de-Bourgueil, Loire Valley (Cabernet Franc)", "result_general": "Cru Beaujolais (e.g., Morgon) or Medium-Bodied Cabernet Franc", "rationale": "Liver is rich but often has a slightly metallic/iron note. Loire Cabernet Franc provides the high acidity necessary to slice through the richness and cleanse the palate, along with a classic, savory, medium body that stands up to the flavor. A structured, juicy Cru Beaujolais offers a similar high-acid, savory profile." },
+                        "Kidney / Heart / Muscular Offal": { "result_specific": "Châteauneuf-du-Pape, Southern Rhône", "result_general": "Ribera del Duero (Tempranillo) or Powerful GSM Blend", "rationale": "Muscular offal is dense, firm, and requires a structured wine with immense flavor. Châteauneuf-du-Pape provides the necessary weight, complexity, and savory spice to match the texture and intensity of the meat. A robust, high-tannin Spanish Tempranillo is an excellent, readily available alternative." },
+                        "Spicy / Paprika / Chili Seasoning": { "result_specific": "Sylvaner, Alsace (with a hint of residual sugar)", "result_general": "Off-Dry Riesling (any region) or Vinho Verde (Portugal)", "rationale": "High heat and spice are tamed by low alcohol, low tannin, and a touch of sweetness. Alsatian Sylvaner, often produced with a slightly off-dry character, is clean, refreshing, and calms the heat. Off-Dry Riesling is the universal best choice for spice due to its sugar and acid content." },
+                        "Herbaceous / Lightly Fried (e.g., Tripe, Andouillette)": { "result_specific": "Muscadet Sèvre et Maine sur Lie, Loire Valley", "result_general": "Albariño (Spain) or Dry Italian Vernaccia di San Gimignano", "rationale": "For dishes like Andouillette (a pungent sausage) or simply prepared tripe, a crisp, mineral-driven white wine is needed. Muscadet's saline, mineral notes and piercing acidity are unmatched for cutting through fat and matching challenging, herbaceous flavors. Albariño offers similar coastal salinity and high acidity." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Poultry & White Meat
+        "Poultry & White Meat": {
+            "user_label": "🐔 Poultry & White Meat",
+            "next_prompt": "3. Choose Preparation/Sauce Base:",
+            "options": {
+                // LEVEL 2: Cream / Butter-Based: Blanquette de Veau, Poulet à la Crème
+                "Cream / Butter-Based: Blanquette de Veau, Poulet à la Crème": {
+                    "next_prompt": "4. Choose Cream/Butter Detail:",
+                    "options": {
+                        "Heavy Cream / Egg Yolk Base (Maximum Richness)": { "result_specific": "Corton-Charlemagne, Burgundy (Grand Cru Chardonnay)", "result_general": "Premium Oaked Chardonnay (e.g., California, Margaret River)", "rationale": "Maximum richness demands a wine of equivalent weight, concentration, and texture. Corton-Charlemagne offers unparalleled intensity, power, and high acidity to perfectly slice through the heavy fat while matching the texture." },
+                        "Brown Butter / Nutty / Caramelized Flavor": { "result_specific": "Savennières, Loire Valley (Chenin Blanc)", "result_general": "Aged White Rioja (Viura/Malvasia)", "rationale": "The nutty, savory, caramelized notes require a wine that has similar tertiary/developed flavors and structure. Savennières (often aged) develops savory, beeswax, and almond notes with piercing acidity that complements the brown butter beautifully. Aged White Rioja offers a similar oxidative/nutty profile." },
+                        "Light Cream / Crème Fraîche Finish (High Acidity)": { "result_specific": "Sancerre, Loire Valley (Sauvignon Blanc)", "result_general": "Dry German Riesling (Trocken) or Alto Adige Pinot Grigio", "rationale": "The dish's light texture and high acid (from the crème fraîche) demand a wine with high, crisp, clean acidity and minerality. Sancerre provides purity, lemon-zest acidity, and mineral structure that harmonizes with the light, refreshing cream base. Dry Riesling and crisp Pinot Grigio are excellent alternatives focused on high acidity." },
+                        "Mushroom / Truffle Infusion in Cream": { "result_specific": "Puligny-Montrachet, Burgundy (Premier Cru Chardonnay)", "result_general": "Aged, Earthy Pinot Noir (e.g., Burgundy, Oregon)", "rationale": "The umami from the mushrooms/truffle needs a savory, complex wine. Puligny-Montrachet is full-bodied and develops subtle, earthy, savory notes with age, perfectly complementing the fungal flavors while cutting the cream. A lighter, earthy Pinot Noir is the classic red alternative for matching the earthiness." },
+                        "Velouté / Roux-Thickened Sauce (Smooth Texture)": { "result_specific": "Hermitage Blanc, Northern Rhône (Roussanne/Marsanne)", "result_general": "Oaked Viognier (Condrieu, etc.)", "rationale": "The velvety, smooth texture of a roux-thickened sauce requires a wine with a similarly round, full, and oily mouthfeel. Hermitage Blanc delivers intense textural weight and subtle aromatics that align seamlessly with the velouté. Oaked Viognier is a highly textural, aromatic alternative." }
+                    }
+                },
+                // LEVEL 2: Simple Roast / Grill: Roasted Chicken, Pork Loin
+                "Simple Roast / Grill: Roasted Chicken, Pork Loin": {
+                    "next_prompt": "4. Choose Preparation Detail:",
+                    "options": {
+                        "High Fat / Skin-On Roast (Chicken, Duck Breast)": { "result_specific": "Blanc de Noirs Champagne (Pinot Noir/Meunier)", "result_general": "High-Acid, Oaked Chardonnay (e.g., Chablis 1er Cru)", "rationale": "The high fat content demands a wine with piercing acidity to cleanse the palate. Champagne's high acid, effervescence, and yeasty richness (especially Blanc de Noirs) perfectly cut the fat while matching the texture of the crisp skin. A high-acid, structured, but oaked Chardonnay is the best still-wine alternative." },
+                        "Lean / White Meat (Pork Loin, Veal)": { "result_specific": "Saint-Véran, Mâconnais (Unoaked Chardonnay)", "result_general": "Dry Rosé (Provence) or Pinot Grigio", "rationale": "Lean, white meat requires a delicate wine that offers texture and crispness without aggressive tannins or overwhelming oak. Saint-Véran provides a rounder, mineral-driven alternative to Chablis, offering medium body and high freshness. A dry, crisp Rosé or simple Pinot Grigio offers the necessary acidity and light body." },
+                        "Rustic Herbs / Garlic / Simple Salt & Pepper": { "result_specific": "Bandol Rosé, Provence (Mourvèdre Blend)", "result_general": "Vermentino (e.g., Italian) or Dry Fino Sherry", "rationale": "Rustic, savory herbs (like herbes de Provence) require a dry, structured wine with an herbaceous or savory edge. Bandol Rosé is uniquely full-bodied, structured, and earthy for a rosé, pairing perfectly with the roast aromatics. Vermentino often exhibits complementary herbal notes and good structure." },
+                        "Smoky / Charred Grill Finish": { "result_specific": "Crozes-Hermitage, Northern Rhône (Syrah)", "result_general": "Medium-Bodied Syrah or Côtes du Rhône", "rationale": "The smoky and charred notes demand a wine with a similarly savory, slightly peppery, and meaty profile. Northern Rhône Syrah is known for this profile and has the structure to match the grill intensity without being excessively tannic for white meat. A medium-bodied, savory Syrah blend is a readily available substitute." },
+                        "Sweet Glaze / Honey / Maple Finish": { "result_specific": "Vouvray Sec or Demi-Sec, Loire Valley (Chenin Blanc)", "result_general": "Off-Dry Riesling (e.g., German Spätlese)", "rationale": "Sweet glazes clash with dry wines, so the wine must contain a trace of residual sugar or intense, concentrated fruit to balance the sweetness. Vouvray Demi-Sec (or even Sec with high fruit concentration) provides the necessary sugar/fruit balance along with crisp acidity. Off-Dry Riesling is the universal best choice for sweetness in savory dishes." }
+                    }
+                },
+                // LEVEL 2: Wine / Stock Reduction (Light): Fricassée, light Jus
+                "Wine / Stock Reduction (Light): Fricassée, light Jus": {
+                    "next_prompt": "4. Choose Reduction Detail:",
+                    "options": {
+                        "White Wine Reduction / Light Stock (Veal, Chicken)": { "result_specific": "Pouilly-Fuissé, Mâconnais (Chardonnay)", "result_general": "Unoaked/Lightly Oaked White Burgundy or Pinot Blanc (Alsace)", "rationale": "A light reduction needs a white wine with moderate richness, subtle oak (optional), and bright acidity to match the stock's body without overpowering the light meat. Pouilly-Fuissé offers the perfect balance of richness and clean minerality. Unoaked/lightly oaked Chardonnay provides the required body and texture." },
+                        "Red Wine Reduction / Dark Stock (Duck, Pork)": { "result_specific": "Aged Beaujolais Cru (e.g., Morgon or Moulin-à-Vent)", "result_general": "Chilled, Light-Bodied Pinot Noir (e.g., Sancerre Rouge)", "rationale": "The dark stock and reduction need a red wine, but one that is light enough for the poultry/white meat. A structured, aged Cru Beaujolais provides earthy complexity and soft tannins to harmonize with the reduction without clashing with the meat. A light, high-acid Pinot Noir works due to its delicate structure." },
+                        "Vegetable Broth / Mushroom Infusion": { "result_specific": "Auxey-Duresses Blanc, Burgundy (Chardonnay)", "result_general": "Dry White Blend (e.g., Roussanne/Marsanne) or Aged Chenin Blanc", "rationale": "The earthy, savory umami notes require a wine with similar savory complexity and weight. White Burgundy from a lesser-known appellation offers the richness and subtle earthy notes needed to complement the mushrooms/broth. Dry, savory white blends or aged Chenin Blancs are excellent alternatives for their depth." },
+                        "Vin Jaune / Nutty / Oxidative Stock": { "result_specific": "Château-Chalon, Jura (Vin Jaune - Savagnin)", "result_general": "Dry Amontillado Sherry (Spain)", "rationale": "This is a specific pairing that demands a wine with the same pronounced, oxidative, nutty flavor as the cooking ingredient. Vin Jaune is the only wine that truly matches this profile. Dry Amontillado Sherry is the most available and texturally similar alternative for its aged, oxidative character." },
+                        "Tomato / Bell Pepper / Provençal Infusion": { "result_specific": "Bandol Rosé, Provence (Mourvèdre Blend)", "result_general": "Vermentino di Sardegna or Light-Bodied Sangiovese Rosé", "rationale": "The high acidity of the tomato and the herbal, peppery notes of Provençal vegetables require a wine with structure, high acidity, and a savory profile. Structured, age-worthy Bandol Rosé fits this perfectly. Vermentino or a Sangiovese Rosé provides the necessary acid and herbal/salty characteristics." }
+                    }
+                },
+                // LEVEL 2: Spicy / Curry (Modern): Slightly spiced preparations
+                "Spicy / Curry (Modern): Slightly spiced preparations": {
+                    "next_prompt": "4. Choose Spice Detail:",
+                    "options": {
+                        "Red Spice / Chili / High Heat": { "result_specific": "Off-Dry Riesling (Mosel, Germany)", "result_general": "Vinho Verde (Portugal) or Dry Sparkling Rosé", "rationale": "High heat is magnified by high alcohol and high tannin. The best pairings feature low alcohol, low tannin, and residual sugar to soothe the heat. Mosel Riesling is renowned for its low alcohol, high acidity, and slight sweetness. Vinho Verde offers a low-alcohol, slight effervescence contrast that is also effective." },
+                        "Yellow Spice / Aromatic Curry (e.g., Turmeric, Saffron)": { "result_specific": "Gewürztraminer (Alsace)", "result_general": "Viognier (California or Southern France)", "rationale": "Aromatic, savory spices require an equally intense and aromatic wine to match the complexity. Gewürztraminer's intense floral (lychee, rose), ginger, and often off-dry character is the classic match for saffron and turmeric. Viognier offers a similar full-bodied, aromatic profile." },
+                        "Ginger / Citrus / Fresh Spice": { "result_specific": "Vouvray Sec or Demi-Sec, Loire Valley (Chenin Blanc)", "result_general": "New Zealand Sauvignon Blanc or Dry Furmint (Hungary)", "rationale": "Fresh, high-acid spices (ginger, citrus zest) need a wine with high, crisp acidity and complementary fruit notes. Vouvray (Sec or Demi-Sec) provides a honeyed texture and bright acidity that works seamlessly with ginger and citrus. New Zealand Sauvignon Blanc offers reliable high acid and pungent citrus notes." },
+                        "Pungent Spice / Clove / Cardamom Focus": { "result_specific": "Tokaji Furmint (Dry or Off-Dry, Hungary)", "result_general": "Dry Oaked Chenin Blanc (e.g., South Africa)", "rationale": "Pungent, assertive spices require a wine with structure, body, and a subtle savory or oxidative component to balance their intensity. Dry Furmint offers intense minerality, structure, and a slightly waxy texture. Oaked Chenin Blanc has the requisite body and flavor complexity." },
+                        "Coconut Milk / Creamy Spice Base": { "result_specific": "Roussanne / Marsanne Blend (Northern Rhône)", "result_general": "Full-Bodied, Unoaked Chardonnay or Pinot Gris (Alsace)", "rationale": "The fat from the coconut milk needs a wine with substantial body and high acidity to cut the richness. Roussanne/Marsanne blends are full-bodied, slightly oily in texture, and possess enough structure to match the coconut fat. Unoaked but full-bodied Chardonnay provides a reliable high-acid, textural alternative." }
+                    }
+                },
+                // LEVEL 2: Simple Pan-Sauté / Lemon: Veal Escalope
+                "Simple Pan-Sauté / Lemon: Veal Escalope": {
+                    "next_prompt": "4. Choose Finish Detail:",
+                    "options": {
+                        "High Lemon / Aggressive Citrus Finish": { "result_specific": "Muscadet Sèvre et Maine sur Lie, Loire Valley", "result_general": "Bone-Dry Riesling (Alsace/Austria) or Vinho Verde", "rationale": "The high, aggressive acidity of the lemon demands a wine with equally piercing, cleansing acidity. Muscadet's signature high acid and mineral/saline character harmonizes with the lemon, acting as a palate cleanser. Bone-Dry Riesling provides the necessary high acidity without competing flavors." },
+                        "Brown Butter Sauce / Rich Fat Finish (Meunière Style)": { "result_specific": "Saint-Aubin, Burgundy (Oaked Chardonnay)", "result_general": "Oaked Chardonnay (Cool Climate) or White Burgundy (Côte Chalonnaise)", "rationale": "Brown butter needs a wine with textural weight, complexity, and good acid to cut the fat and complement the nutty flavor. Saint-Aubin offers the richness of Burgundy with good minerality. A cool-climate, subtly oaked Chardonnay provides the required body and richness." },
+                        "Simple Salt / Flour Dusting (No Sauce)": { "result_specific": "Chablis, Burgundy (Unoaked Chardonnay)", "result_general": "Pinot Blanc (Alsace) or Dry, Crisp Pinot Grigio", "rationale": "A simple, unadorned preparation requires a wine that focuses purely on freshness, minerality, and clean structure. Chablis' steely, high-acid, and mineral-driven profile enhances the natural flavor of the meat without competition. Pinot Blanc is a reliable, structured, and neutral alternative." },
+                        "Caper / Anchovy / Saline Garnish": { "result_specific": "Vermentino di Sardegna, Sardinia", "result_general": "Albariño (Spain) or Assyrtiko (Greece)", "rationale": "Salty, pungent garnishes (capers, anchovy) need a wine with a distinct saline/coastal minerality and high acidity to cut the salt and richness. Vermentino, especially from Sardegna, provides the ideal salty, herbaceous match. Albariño and Assyrtiko are excellent high-acid, saline alternatives." },
+                        "Parsley / Fresh Herb Finish": { "result_specific": "Sancerre, Loire Valley (Sauvignon Blanc)", "result_general": "New Zealand Sauvignon Blanc or Gruner Veltliner (Austria)", "rationale": "The green herbaceous flavor of the parsley requires a wine with a complementary, often green/herbal aromatic profile. Sancerre's classic grassy, citrus, and mineral notes are the perfect match for fresh herbs. New World Sauvignon Blanc and Gruner Veltliner offer reliable herbal notes and high acidity." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Seafood & Shellfish
+        "Seafood & Shellfish": {
+            "user_label": "🐟 Seafood & Shellfish",
+            "next_prompt": "3. Choose Preparation/Sauce Base:",
+            "options": {
+                // LEVEL 2: Raw / Steamed (Oysters, Clams)
+                "Raw / Steamed (Oysters, Clams)": {
+                    "next_prompt": "4. Choose Preparation Detail:",
+                    "options": {
+                        "Oysters / Raw Shellfish (High Salinity)": { "result_specific": "Muscadet Sèvre et Maine sur Lie (Loire Valley)", "result_general": "Chablis (Unoaked Chardonnay) or Spanish Albariño", "rationale": "The supreme match for salinity. Muscadet's piercing acidity, dry profile, and notes of iodine/minerality enhance the oyster's brine. Chablis and Albariño offer similar high acid and mineral purity." },
+                        "White Fish Ceviche / Citrus Cure (High Acidity)": { "result_specific": "Sancerre (Loire Valley Sauvignon Blanc)", "result_general": "Bone-Dry Riesling (Austria/Alsace) or Dry Grüner Veltliner", "rationale": "The high citrus acidity demands a wine with matching, very high acidity to prevent the wine from tasting flabby. Sancerre's clean, acidic, and slightly herbaceous profile is ideal. Bone-Dry Riesling provides the necessary acid structure." },
+                        "Steamed White Fish / No Sauce (Delicate)": { "result_specific": "Picpoul de Pinet (Languedoc-Roussillon)", "result_general": "Pinot Grigio (Italy) or Simple Vinho Verde", "rationale": "A delicate dish requires a light, neutral wine that highlights the fish's natural flavor. Picpoul's lean body, high acidity, and slight salinity are perfect for neutrality and cleansing. Simple, dry white wines work well here." },
+                        "Steamed Mussels / White Wine Broth": { "result_specific": "Bourgogne Aligoté (Burgundy)", "result_general": "Dry Rosé (Provence) or Dry Sauvignon Blanc (Any)", "rationale": "The broth needs a wine with good acidity and a simple, refreshing character. Aligoté is a high-acid, clean white that complements the simple broth without distracting from the shellfish. Dry Rosé works for its freshness and slight structure." },
+                        "Crudo / Olive Oil Drizzle (Oily Texture)": { "result_specific": "Vermentino di Sardegna (Sardinia)", "result_general": "Assyrtiko (Greece) or Dry Rosé from Bandol", "rationale": "The light oil needs a wine with high acidity and a savory, almost saline minerality to cut through. Vermentino offers the necessary texture and coastal minerality. Assyrtiko has the intense structure and acidity required." }
+                    }
+                },
+                // LEVEL 2: Rich Butter / Cream Sauce (e.g., Meunière, Nantaise)
+                "Rich Butter / Cream Sauce (e.g., Meunière, Nantaise)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "Heavy Cream / Egg Yolk Base (Lobster/Scallop)": { "result_specific": "Meursault, Burgundy (Oaked Chardonnay)", "result_general": "Premium Oaked Chardonnay (e.g., Napa, South Africa)", "rationale": "The luxurious texture and richness of the sauce demand a wine of equivalent body and creamy texture. Meursault's roundness and buttery notes are the classic match, with enough acid to cleanse the fat. A high-quality oaked Chardonnay provides the textural match." },
+                        "Brown Butter / Nutty / Caramelized Flavor (Meunière)": { "result_specific": "Savennières, Loire Valley (Aged Chenin Blanc)", "result_general": "Aged White Bordeaux (Semillon/Sauvignon Blend)", "rationale": "The nutty, savory flavor of Beurre Noisette (brown butter) needs a white wine with developed, tertiary notes. Savennières (often aged) develops complex almond, savory, and waxy notes. Aged White Bordeaux also provides the necessary nutty complexity and structure." },
+                        "Herb-Focused Cream Sauce (Dill, Chives)": { "result_specific": "Condrieu, Northern Rhône (Viognier)", "result_general": "Oaked Roussanne or Full-Bodied, Herbal Sauvignon Blanc", "rationale": "Strong herbs need a wine with intense aromatics and body. Condrieu's oily texture, floral, and peach notes harmonize beautifully with cream and herbs like chives. Oaked Roussanne offers a similar textural weight." },
+                        "Light Cream / Lemon Finish (Sole/Cod)": { "result_specific": "Chassagne-Montrachet, Burgundy (Chardonnay)", "result_general": "High-Quality White Burgundy (Côte Chalonnaise)", "rationale": "This lighter style needs a wine that blends richness with pronounced minerality and acidity. Chassagne-Montrachet provides the perfect balance of creamy texture and high, cleansing acid. Other villages in Burgundy offer a more accessible, quality balance." },
+                        "Roux-Thickened Sauce (Velouté Texture)": { "result_specific": "Hermitage Blanc, Northern Rhône (Roussanne/Marsanne)", "result_general": "Oaked Marsanne/Viognier Blend", "rationale": "The smooth, velvety texture of the roux requires a wine with a similarly round, full, and sometimes slightly oily mouthfeel. Hermitage Blanc delivers intense textural weight and subtle aromatics that pair seamlessly with the sauce." }
+                    }
+                },
+                // LEVEL 2: Tomato / Saffron / Mediterranean Style
+                "Tomato / Saffron / Mediterranean Style": {
+                    "next_prompt": "4. Choose Style Detail:",
+                    "options": {
+                        "Rich Tomato Base / Stew (Bouillabaisse, Cioppino)": { "result_specific": "Bandol Rosé, Provence (Mourvèdre Blend)", "result_general": "Dry, Structured Rosé (Tavel) or Light-Bodied Sangiovese", "rationale": "The high acidity and intensity of a rich tomato base need a wine with substantial body and high acidity. Bandol Rosé is uniquely structured, earthy, and deep, capable of standing up to the stew. Structured Rosé or a very light, high-acid red (Sangiovese) works well." },
+                        "Saffron / Pepper Spice Focus": { "result_specific": "Gewürztraminer (Alsace)", "result_general": "Viognier or Dry Chenin Blanc (Vouvray Sec)", "rationale": "Saffron's intense, savory-aromatic flavor demands a highly aromatic, slightly spicy white wine. Gewürztraminer's full body, floral/spicy notes, and low acidity complement the saffron. Viognier offers a similar textural and aromatic match." },
+                        "Light Tomato Vinaigrette / Cold Service": { "result_specific": "Dry Rosé (Provence or Languedoc)", "result_general": "Dry Riesling or High-Acid Vinho Verde", "rationale": "High-acid, cold dishes need a crisp, refreshing, and clean wine. Dry Provençal Rosé provides the perfect high acidity, fruit, and light body without clashing with the subtle tomato. High-acid white wines are the best substitute." },
+                        "Fennel / Anise / Pungent Herb Focus": { "result_specific": "Assyrtiko (Santorini, Greece)", "result_general": "Vermentino or Sauvignon Blanc (Steely/Herbal)", "rationale": "Pungent, herbal flavors need a wine with piercing acidity and a strong mineral or savory component. Assyrtiko has intense acidity and a saline quality that cuts through the herbs." },
+                        "Garlic / Basil / Simple Marinara": { "result_specific": "Vermentino di Gallura (Sardinia)", "result_general": "Sauvignon Blanc/Semillon Blend (Bordeaux)", "rationale": "Simple classic herbs and tomato need a high-acid wine with neutral or complementary green notes. Vermentino has the required acid and structure. White Bordeaux offers a slightly herbal, structured alternative that handles the tomato acidity." }
+                    }
+                },
+                // LEVEL 2: Oily / Rich Fish (Salmon, Tuna, Swordfish)
+                "Oily / Rich Fish (Salmon, Tuna, Swordfish)": {
+                    "next_prompt": "4. Choose Preparation Detail:",
+                    "options": {
+                        "Pan-Seared / Grilled (High Fat Content)": { "result_specific": "Sancerre Rouge (Loire Valley Pinot Noir)", "result_general": "Cru Beaujolais (Fleurie, Morgon) or Dry Rosé from Bandol", "rationale": "The fat content of the fish requires a wine with high acid and enough structure to cleanse the palate. Sancerre Rouge is a light, high-acid Pinot Noir that provides the necessary acidity and light red fruit. Cru Beaujolais is a good, low-tannin red alternative." },
+                        "Smoked Fish (Salmon, Trout)": { "result_specific": "Off-Dry Riesling (Alsace or Germany)", "result_general": "Vouvray Demi-Sec (Chenin Blanc)", "rationale": "The smoke and oil need a wine with a slight residual sweetness to balance the salinity and pungent smoke, combined with high acid. Off-Dry Riesling is the classic match. Vouvray Demi-Sec offers a similar sweet-acid contrast." },
+                        "Tuna or Swordfish Steak (Meaty Texture)": { "result_specific": "Bandol Rouge (Mourvèdre-Dominant)", "result_general": "Light, Earthy Pinot Noir (Burgundy) or Tempranillo Rosé", "rationale": "Meaty fish can handle a low-tannin red wine. Bandol Rouge, when young, has structure and savory notes that match the meaty texture without the high tannins of Cabernet. A lighter, savory Pinot Noir is the safest option." },
+                        "Raw or Seared Tuna/Salmon (Simple Seasoning)": { "result_specific": "Chablis 1er Cru (Unoaked Chardonnay)", "result_general": "Dry Champagne (Blanc de Blancs)", "rationale": "Raw preparations require purity, high minerality, and texture. Premier Cru Chablis offers a balance of body and intense, clean minerality. Dry Champagne is a superb pairing due to its high acid and ability to cleanse the palate." },
+                        "Dill / Horseradish / Pungent Garnish": { "result_specific": "Grüner Veltliner Smaragd (Austria)", "result_general": "Savennières (Chenin Blanc) or Dry Sauvignon Blanc", "rationale": "Pungent garnishes need a wine with high acidity and a complementary savory/peppery component. Grüner Veltliner offers a unique white pepper and structure that pairs well with dill and horseradish. Savennières works for its intensity and body." }
+                    }
+                },
+                // LEVEL 2: Shellfish Stews / Bisques
+                "Shellfish Stews / Bisques": {
+                    "next_prompt": "4. Choose Style Detail:",
+                    "options": {
+                        "Cream-Based Bisque (Rich Texture)": { "result_specific": "Puligny-Montrachet, Burgundy (Chardonnay)", "result_general": "Full-Bodied, Oaked White Bordeaux", "rationale": "The rich, thick texture of a cream bisque demands a wine with equivalent textural body and high acidity to prevent the mouthfeel from becoming heavy. Puligny-Montrachet provides the elegance, structure, and intense body required." },
+                        "Dry Sherry / Oxidative Broth": { "result_specific": "L'Étoile, Jura (Savagnin or Vin Jaune)", "result_general": "Dry Amontillado Sherry (Spain)", "rationale": "An oxidative base requires a wine that matches the flavor profile. Jura wines (Savagnin, Vin Jaune) have the characteristic nutty, savory, and oxidative notes. Dry Amontillado is the closest textural and flavor match available outside of the Jura." },
+                        "Tomato / Saffron Bouillon (High Acid)": { "result_specific": "Cassis, Provence (Marsanne/Clairette Blend)", "result_general": "Vermentino or Pinot Grigio (Alto Adige)", "rationale": "The aromatic spice and high acid require a full-bodied, yet crisp, white. Cassis provides the structure of Provence whites with intense aromatics. High-acid Italian whites are reliable substitutes." },
+                        "Herbaceous / Light Broth (Cilantro, Ginger)": { "result_specific": "Roussette de Savoie (Altesse)", "result_general": "Dry Sauvignon Blanc or Grüner Veltliner", "rationale": "A delicate, aromatic broth needs a wine that is intensely aromatic and clean. Roussette de Savoie (Altesse) provides a highly aromatic, floral, and savory profile that is perfect for light herbal notes." },
+                        "Simple Shellfish Stock / No Dairy": { "result_specific": "Chablis 1er Cru (Unoaked Chardonnay)", "result_general": "Muscadet Sèvre et Maine or Assyrtiko", "rationale": "A simple, clean, saline stock requires a wine of purity, high minerality, and piercing acidity. Premier Cru Chablis provides depth and the essential mineral spine. Muscadet and Assyrtiko are excellent for their distinct salinity." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Vegetarian & Starters
+        "Vegetarian & Starters": {
+            "user_label": "🥦 Vegetarian & Starters",
+            "next_prompt": "3. Choose Focus/Texture:",
+            "options": {
+                // LEVEL 2: Green & Leafy Vegetables / Herbacous
+                "Green & Leafy Vegetables / Herbacous": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Asparagus / Artichoke (Challenging Green Notes)": { "result_specific": "Sauvignon Blanc (Sancerre, Loire Valley)", "result_general": "Dry Albariño (Spain) or Muscadet Sèvre et Maine", "rationale": "The intense herbaceousness/green notes (pyrazines) in Sauvignon Blanc are the one of the few wine components that truly complement the difficult flavors of asparagus and artichoke. Its high acidity cuts through any subtle bitterness. Albariño offers similar high acidity and structure." },
+                        "Green Bean / Simple Steamed Vegetables": { "result_specific": "Pinot Blanc (Alsace)", "result_general": "Dry Riesling (Trocken) or Simple Vinho Verde", "rationale": "Simple, clean vegetables require a highly neutral and crisp white wine that highlights the freshness without adding aggressive flavor. Pinot Blanc is versatile, neutral, and has good balancing acidity and body. Dry Riesling is the go-to for clean, high-acid structure." },
+                        "High Fresh Herb Content (Parsley, Basil, Chives)": { "result_specific": "Touraine, Loire Valley (Sauvignon Blanc/Fié Gris)", "result_general": "Vermentino (e.g., Italian) or Gruner Veltliner", "rationale": "Fresh, intense herbs demand a wine with a complementary, often citrus/herbal aromatic profile. A Sauvignon Blanc from Touraine often has cleaner, brighter herbal notes than Sancerre. Vermentino or Grüner Veltliner both offer high acidity and subtle herbal/peppery components." },
+                        "Raw Greens / Vinaigrette (High Acidity)": { "result_specific": "Muscadet Sèvre et Maine sur Lie (Loire Valley)", "result_general": "Dry Sparkling Wine (e.g., Crémant de Loire) or Picpoul de Pinet", "rationale": "High-acid vinaigrettes must be matched by a wine with equally high, cleansing acidity and a mineral spine. Muscadet's piercing acid and saline edge are ideal for the dressing. Sparkling wine works well because the bubbles and acid cleanse the palate aggressively." },
+                        "Cooked Spinach / Light Cream Sauce": { "result_specific": "Bourgogne Blanc (Chardonnay)", "result_general": "Pinot Gris (Alsace) or Dry Marsanne/Roussanne", "rationale": "Cooked spinach introduces a savory/earthy note and the cream adds body. The wine needs texture to match the cream and enough earthiness to harmonize with the spinach. White Burgundy provides subtle richness and acid. Pinot Gris offers full body and savory notes." }
+                    }
+                },
+                // LEVEL 2: Root / Earthy Vegetables (Mushrooms, Truffles)
+                "Root / Earthy Vegetables (Mushrooms, Truffles)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Porcini / Truffle / Highly Earthy Mushrooms": { "result_specific": "Savigny-lès-Beaune, Burgundy (Mature Pinot Noir)", "result_general": "Piedmont Nebbiolo (e.g., Langhe Nebbiolo) or Aged White Burgundy", "rationale": "Intense earthiness and umami demand a savory wine with complex, tertiary (forest floor, mushroom) notes. Mature, medium-bodied Pinot Noir from Burgundy is the classic match, mirroring the flavors. Nebbiolo and aged Chardonnay are excellent alternatives offering similar depth and structure." },
+                        "Roasted Root Vegetables (Carrot, Parsnip, Sweetness)": { "result_specific": "Vouvray Sec or Demi-Sec, Loire Valley (Chenin Blanc)", "result_general": "Off-Dry Riesling (e.g., German Spätlese) or Dry Pinot Gris (Alsace)", "rationale": "Roasting caramelizes the vegetables, introducing sweetness that clashes with bone-dry, high-acid wines. Vouvray (Sec or Demi-Sec) provides balancing acidity and residual sugar or concentrated fruit to harmonize with the sweetness. Off-Dry Riesling is universally recommended for sweet savory dishes." },
+                        "Simple Button Mushroom Sauté / Garlic": { "result_specific": "Beaujolais-Villages (Gamay)", "result_general": "Valpolicella (Italian) or Lighter Pinot Noir", "rationale": "Simple, sautéed mushrooms require a light, slightly earthy red wine that offers brightness and soft tannins. Beaujolais-Villages provides juicy red fruit, minimal tannin, and a touch of earthiness that won't overwhelm the dish. Simple, high-acid reds are the best alternatives." },
+                        "Celery Root / Salsify (Earthy/Bitter Notes)": { "result_specific": "Savennières, Loire Valley (Chenin Blanc)", "result_general": "Dry White Blend (e.g., Marsanne/Roussanne) or Aged Hunter Valley Semillon", "rationale": "These vegetables have complex, sometimes slightly bitter or waxy notes. Savennières' firm structure, high acidity, and savory, waxy/nutty notes complement the texture and flavor beautifully. Wines with tertiary complexity and firm structure work best." },
+                        "Creamy Root Vegetable Puree / Mash": { "result_specific": "St-Aubin, Burgundy (Oaked Chardonnay)", "result_general": "Full-Bodied, Oaked White (e.g., Washington State Chardonnay)", "rationale": "The rich, thick texture of the puree (often with butter/cream) demands a full-bodied, rich white wine with enough acidity to cut through the fat. St-Aubin offers the body and creamy texture of high-end Chardonnay with balancing minerality. A premium Oaked Chardonnay is the reliable substitute." }
+                    }
+                },
+                // LEVEL 2: Egg-Based (Omelets, Soufflés)
+                "Egg-Based (Omelets, Soufflés)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "High-Acid Vinaigrette / Mustardy Dressing": { "result_specific": "Muscadet Sèvre et Maine sur Lie (Loire Valley)", "result_general": "Bone-Dry Riesling (Alsace/Austria) or Picpoul de Pinet", "rationale": "The aggressive acidity and heat of mustard demands a wine with equally piercing, clean acidity and a mineral backbone. Muscadet's dry, saline, and high-acid profile is virtually unmatched for neutralizing vinegar. Bone-Dry Riesling is the next best high-acid alternative." },
+                        "Mixed Salad with Protein (e.g., Tuna, Egg, Ham)": { "result_specific": "Bandol Rosé (Provence, Mourvèdre Blend)", "result_general": "Tavel Rosé or Medium-Bodied Rosé (e.g., Languedoc)", "rationale": "A mixed salad (like Salade Niçoise) combines multiple challenging flavors (acid, oil, egg, protein). A structured, savory, full-bodied Rosé is needed to harmonize these elements without clashing. Bandol is the classic choice for its depth and texture." },
+                        "Terrine / Pressed Vegetable Pâté (Gelatinous Texture)": { "result_specific": "Crémant de Bourgogne (Blanc de Noirs)", "result_general": "Dry Sparkling Rosé or Dry, Structured Chenin Blanc", "rationale": "The firm, chilled, and gelatinous texture requires a wine with high acidity, minerality, and effervescence to cleanse the palate and lift the weight. A Blanc de Noirs sparkling wine provides the necessary body and acid/bubbles. Dry, structured Chenin Blanc works well for its texture." },
+                        "Grilled Vegetables / Olive Oil Base (Provençal Flavors)": { "result_specific": "Cassis, Provence (Marsanne/Clairette Blend)", "result_general": "Vermentino or Dry Rosé (Lighter Style)", "rationale": "Grilled vegetables (like Ratatouille served cold) have smoky and herbaceous notes with rich olive oil. Cassis offers a unique structured white with a Mediterranean herbal profile and good body. Vermentino is a reliable herbal, high-acid alternative." },
+                        "Lentil / Bean Cold Salad (Starchy/Earthiness)": { "result_specific": "Bourgueil, Loire Valley (Cabernet Franc)", "result_general": "Light, Earthy Pinot Noir (e.g., Sancerre Rouge) or Structured Rosé", "rationale": "Cold lentil or bean salads introduce starchy texture and earthiness. A light-bodied red with high acidity and soft tannins is ideal to handle the earthiness without clashing with the cold temperature. Cabernet Franc from the Loire is perfectly structured for this." }
+                    }
+                },
+                // LEVEL 2: Legumes / Pulses (Lentils, Beans)
+                "Legumes / Pulses (Lentils, Beans)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Lentil Stew / Rich Stock Base (Savory Depth)": { "result_specific": "Beaujolais Cru (e.g., Morgon or Moulin-à-Vent)", "result_general": "Loire Valley Cabernet Franc (Chinon) or Lighter Pinot Noir", "rationale": "Rich, earthy lentil stews need a light red wine that offers savory, earthy notes and bright acidity but low tannin. Cru Beaujolais provides the perfect depth, structure, and low-tannin profile to complement the stew's savory nature. Cabernet Franc is a good savory, high-acid red alternative." },
+                        "White Bean Purée / Olive Oil Finish (Texture)": { "result_specific": "Roussanne / Marsanne Blend (Northern Rhône)", "result_general": "Full-Bodied Unoaked Chardonnay or Dry Chenin Blanc (Savennières)", "rationale": "The creamy texture of the purée, enhanced by olive oil, requires a white wine with substance, textural body, and high acidity to cut the richness. Rhône white blends offer the necessary oiliness and structure. Full-bodied, high-acid whites are essential here." },
+                        "Chickpea / Garbanzo Bean (Dense Texture)": { "result_specific": "Dry Rosé (Tavel or Bandol)", "result_general": "Vermentino di Sardegna or Light-Bodied Sangiovese", "rationale": "Dense, starchy texture needs a wine with firm structure, high acidity, and aromatic complexity. Structured, savory dry Rosés (like Tavel) have the body and cut needed for the dense chickpeas. Vermentino offers a high-acid, savory white alternative." },
+                        "Highly Seasoned (Cumin, Coriander) Beans": { "result_specific": "Gewürztraminer (Alsace)", "result_general": "Viognier (with subtle residual sugar) or Off-Dry Riesling", "rationale": "Intense aromatic spices demand an equally aromatic, full-bodied white wine, often with a touch of residual sugar to balance the spice. Gewürztraminer's intense floral and spicy character is the classic match. Viognier and Off-Dry Riesling offer similar intensity and spice-taming sweetness." },
+                        "Cold Bean Salad / Vinaigrette (High Acidity)": { "result_specific": "Sancerre (Loire Valley Sauvignon Blanc)", "result_general": "Albariño (Spain) or Muscadet Sèvre et Maine", "rationale": "The high acidity of the vinaigrette requires a wine with piercing, clean acidity to harmonize with the dressing. Sancerre's high acid, crispness, and mineral/herbal notes are ideal for cold, high-acid salads. Muscadet is the best alternative for maximizing acid and minerality." }
+                    }
+                },
+                // LEVEL 2: Nutty / Grain-Based Dishes (Buckwheat Crêpes)
+                "Nutty / Grain-Based Dishes (Buckwheat Crêpes)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Quiche / Savory Tart (High Fat Crust/Cheese)": { "result_specific": "Blanc de Blancs Champagne (Chardonnay)", "result_general": "Dry Crémant d'Alsace or Dry, Structured Sauvignon Blanc", "rationale": "The high fat content (crust, cream, cheese) needs aggressive acidity and bubbles to cleanse the palate. Blanc de Blancs offers the purity, structure, and high acidity of Chardonnay with the cleansing power of effervescence. Dry Crémant is the best value alternative." },
+                        "Buckwheat / Dark Grains (Slight Bitterness/Earthiness)": { "result_specific": "Muscadet Sèvre et Maine sur Lie (Loire Valley)", "result_general": "Pinot Blanc (Alsace) or Dry Cider (Brittany)", "rationale": "Buckwheat introduces a specific earthy, slightly bitter note that requires a clean, structured, and mineral-driven wine to prevent bitterness. Muscadet's purity and saline structure are ideal. Pinot Blanc offers a clean, neutral body." },
+                        "Rice / Creamy Grains (Risotto Style)": { "result_specific": "Bourgogne Blanc (Chardonnay)", "result_general": "Pinot Gris (Alsace) or Full-Bodied, Unoaked White", "rationale": "The high starch and potential creaminess demand a wine with sufficient body and cleansing acidity. White Burgundy provides the necessary textural match and structure. Pinot Gris is a reliable full-bodied white alternative." },
+                        "Cheese-Filled Grains (Gruyère, Comté)": { "result_specific": "Château-Chalon, Jura (Vin Jaune)", "result_general": "Savagnin (Jura) or Aged Sherry (Amontillado)", "rationale": "These nutty, savory Alpine cheeses need a wine with complementary oxidative, tertiary, and nutty flavors. Vin Jaune is the perfect, regional, structured partner. Aged Sherry is the most available alternative that matches the complex flavor profile." },
+                        "Nut-Crusted / Nutty Garnish (High Nut Flavor)": { "result_specific": "Savennières, Loire Valley (Chenin Blanc)", "result_general": "Aged White Rioja or Oaked Roussanne", "rationale": "Pronounced nut flavors (almond, walnut) require a wine that has developed its own nutty, savory character. Savennières often develops these notes with age, combined with high acid and structure. Aged White Rioja provides similar complexity." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Rich & slow cooked dishes
+        "Rich & slow cooked dishes": {
+            "user_label": "🥘 Rich & Slow Cooked Dishes",
+            "next_prompt": "3. Choose Preparation/Style:",
+            "options": {
+                // LEVEL 2: Wine-Based Stews (e.g., Bourguignon, Daube)
+                "Wine-Based Stews (e.g., Bourguignon, Daube)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Rich Beef/Veal Stew (Burgundian/Pinot Noir Base)": { "result_specific": "Nuits-Saint-Georges, Burgundy (Pinot Noir)", "result_general": "Oregon Pinot Noir or Aged Chianti Classico", "rationale": "The wine should match the Pinot Noir used in the Bourguignon. A structured village wine provides the necessary savory, earthy complexity, high acidity, and medium body to complement the slow-cooked beef and cut the sauce's richness. Aged Chianti offers similar savory, high-acid structure." },
+                        "Lamb/Mutton Stew (Rhône/Syrah/Grenache Base)": { "result_specific": "Gigondas, Southern Rhône (GSM Blend)", "result_general": "Australian Shiraz or Spanish Garnacha", "rationale": "Stews using Southern French or Spanish wine bases need a wine with matching robustness, spice, and dark fruit. Gigondas provides the necessary rustic power, spice, and high alcohol content to handle the rich lamb and deeply flavored sauce. Bold GSM blends are ideal alternatives." },
+                        "High Fat/Marrow Content": { "result_specific": "Pomerol, Bordeaux (Merlot-Dominant)", "result_general": "New World Merlot or Aged Right Bank Bordeaux", "rationale": "High fat requires a wine with plush texture and soft, refined tannins to integrate smoothly with the richness. Pomerol's Merlot-dominant blend offers this velvety texture and notes of plum and cedar. New World Merlot is a reliable alternative." },
+                        "Game Stew (Boar, Venison) / Reduction": { "result_specific": "Cornas, Northern Rhône (Syrah)", "result_general": "Madiran (Tannat) or Aged Barolo", "rationale": "Intense game flavor needs a powerful, earthy, savory wine of immense structure. Cornas Syrah provides the necessary density, black pepper, and meaty savoriness to stand up to the gaminess and reduction. Madiran offers unmatched structure and tannin." },
+                        "Wild Mushroom Infusion in Sauce": { "result_specific": "Pommard, Burgundy (Pinot Noir)", "result_general": "Piedmont Nebbiolo (e.g., Barbaresco)", "rationale": "Mushroom earthiness demands a wine with pronounced tertiary notes, high acidity, and structure. Pommard is known for its earthy, firmer structure among Burgundy villages. Nebbiolo is the classic alternative for intense earth/umami flavors." }
+                    }
+                },
+                // LEVEL 2: Stock-Based Casseroles (e.g., Cassoulet, Pot-au-Feu)
+                "Stock-Based Casseroles (e.g., Cassoulet, Pot-au-Feu)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Rich Pork/Bean Casserole (Cassoulet Style)": { "result_specific": "Cahors (Malbec)", "result_general": "Madiran (Tannat) or Rustic Malbec (Argentina)", "rationale": "The dense, fatty, savory texture of Cassoulet needs a wine with firm, rustic tannins and deep, earthy flavor to cut the fat and match the meat/bean weight. Cahors (the original Malbec) provides this structure. Madiran is an equally powerful alternative." },
+                        "Pot-au-Feu / Lean Beef Broth": { "result_specific": "Beaujolais Cru (e.g., Fleurie or Juliénas)", "result_general": "Loire Valley Cabernet Franc (Chinon)", "rationale": "A leaner, more savory broth needs a light red wine with bright acidity, soft tannins, and a savory/herbal edge for contrast. Beaujolais Crus offer the required freshness and earthy notes. Cabernet Franc is a high-acid, savory alternative." },
+                        "Lamb/Mutton Casserole (Herbs/Root Vegetables)": { "result_specific": "Bandol Rouge (Mourvèdre-Dominant)", "result_general": "Aged Spanish Monastrell (Mourvèdre) or Aged Chianti", "rationale": "Lamb needs a wine with structure, high acidity, and savory/gamey notes. Bandol offers structure and earthy spice, matching the rich lamb. Aged Chianti provides similar savory complexity and high acid." },
+                        "Fowl/White Meat Casserole (Chicken, Turkey)": { "result_specific": "Cairanne, Southern Rhône (GSM)", "result_general": "Côtes du Rhône or Medium-Bodied Zinfandel", "rationale": "White meat in a rich stock requires a medium-bodied, spicy red with soft tannins to match the intensity without overwhelming the meat. Cairanne offers the necessary body and savory spice. Côtes du Rhône is a good accessible blend." },
+                        "Highly Spiced / Herbaceous Stock (e.g., Paprika)": { "result_specific": "Fitou, Languedoc (Carignan Blend)", "result_general": "Medium-Bodied Syrah or Zinfandel", "rationale": "Intense seasoning needs a bold, savory red with good body and alcohol to balance the spice. Fitou provides rustic intensity and spice. Syrah offers reliable peppery/spicy notes." }
+                    }
+                },
+                // LEVEL 2: Pâtés / Terrines / Rillettes
+                "Pâtés / Terrines / Rillettes": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Classic Pork Pâté / Terrine (Herbaceous)": { "result_specific": "Sancerre Rouge (Loire Valley Pinot Noir)", "result_general": "Structured Dry Rosé (Tavel) or Beaujolais Cru", "rationale": "The firm, cold, fatty texture needs a wine with high, cleansing acidity and a light, savory structure. Sancerre Rouge's high acidity and light red fruit cut the fat perfectly. A structured dry Rosé is also a classic, high-acid match." },
+                        "Rich Duck / Foie Gras Terrine": { "result_specific": "Dry Champagne (Blanc de Noirs)", "result_general": "Dry Sparkling Rosé or Oaked White Burgundy", "rationale": "The high richness and fat content demand aggressive acidity and effervescence to cut the fat and lift the palate. Blanc de Noirs (Pinot Noir/Meunier) provides the necessary richness and structural body. Sparkling Rosé is an excellent alternative." },
+                        "Rillettes / Soft Spread (Maximum Fat)": { "result_specific": "Crémant d'Alsace (Pinot Blanc/Auxerrois)", "result_general": "Champagne (Extra Brut) or High-Acid Vinho Verde", "rationale": "The extreme fat/creamy texture needs a wine with piercing, aggressive acidity and bubbles to cleanse the palate. Crémant d'Alsace offers high quality and high acid/effervescence. Extra Brut Champagne is the ultimate high-acid cleanser." },
+                        "Game Pâté (Venison, Boar) / Spice": { "result_specific": "Châteauneuf-du-Pape (Mature)", "result_general": "Aged Syrah (Crozes-Hermitage) or Aged Tempranillo", "rationale": "Intense game flavors need a wine with complexity, age, and savory depth. A mature Châteauneuf-du-Pape provides tertiary notes and body to match the game. Aged, savory reds are key substitutes." },
+                        "Country Terrine / Pickled Component": { "result_specific": "Vouvray Sec (Chenin Blanc)", "result_general": "Dry Riesling (Trocken) or German Sylvaner", "rationale": "The vinegary/acidic element from pickling requires a wine with high acidity and often a subtle fruit concentration to balance the tartness. Vouvray Sec provides the necessary acid and structure. Dry Riesling is the classic partner for acidic foods." }
+                    }
+                },
+                // LEVEL 2: Rich Creamy Gratins / Vegetable Bakes
+                "Rich Creamy Gratins / Vegetable Bakes": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Potato/Starch Gratin (Potatoes Au Gratin)": { "result_specific": "Puligny-Montrachet, Burgundy (Chardonnay)", "result_general": "Premium Oaked Chardonnay (Napa, Australia)", "rationale": "The dish is defined by high fat, starch, and creamy texture. It requires a wine with intense body, complexity, and high acidity. Puligny-Montrachet's structure and elegance are perfect. A full-bodied, oaked Chardonnay serves the textural purpose." },
+                        "Rich Cheese Gratin (Comté, Gruyère)": { "result_specific": "Savennières, Loire Valley (Chenin Blanc)", "result_general": "Aged White Rioja (Viura/Malvasia) or Dry Amontillado Sherry", "rationale": "Nutty, savory cheeses need a wine with high acidity and nutty/oxidative tertiary notes. Savennières develops savory, beeswax, and almond notes with age. Aged White Rioja provides a similar complexity." },
+                        "Baked Root Vegetable Gratin (Sweetness)": { "result_specific": "Vouvray Sec or Demi-Sec, Loire Valley (Chenin Blanc)", "result_general": "Off-Dry Riesling (Alsace) or Dry Pinot Gris (Alsace)", "rationale": "Roasting introduces sweetness that needs a wine with balancing acidity and a touch of residual sugar (or concentrated fruit). Vouvray Demi-Sec is ideal for this structure. Off-Dry Riesling is the most versatile choice for sweetness." },
+                        "Pungent Vegetable Gratin (e.g., Fennel, Leek)": { "result_specific": "Condrieu, Northern Rhône (Viognier)", "result_general": "Oaked Roussanne or Dry Gewürztraminer", "rationale": "Pungent vegetables require a wine with intense aromatics, body, and structure to match the unique flavor. Condrieu's oily texture, floral, and savory notes complement the dish. Aromatic, full-bodied whites are the best substitutes." },
+                        "Stock-Based Gratin (No Cream, Savory)": { "result_specific": "Bourgogne Blanc (Chardonnay)", "result_general": "Pinot Gris (Alsace) or Dry Vermentino", "rationale": "A lighter, stock-based gratin requires a wine with good texture and clean minerality without excessive richness. Simple White Burgundy provides the necessary body and structure. Pinot Gris is a reliable full-bodied, dry option." }
+                    }
+                },
+                // LEVEL 2: Oxidative / Nutty Flavor (e.g., Dishes with Vin Jaune, Foie Gras)
+                "Oxidative / Nutty Flavor (e.g., Dishes with Vin Jaune, Foie Gras)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Foie Gras (Pan-Seared or Torchon)": { "result_specific": "Sauternes, Bordeaux (Botrytized)", "result_general": "Late Harvest Chenin Blanc (Vouvray Moelleux) or Vintage Port", "rationale": "The essential pairing. The extreme sweetness and high acidity of Sauternes cut the immense richness of the foie gras while the honeyed notes complement the flavor. Any high-acid, unctuous sweet wine works as an alternative." },
+                        "Cream Sauce with Vin Jaune / Comté Cheese": { "result_specific": "Château-Chalon, Jura (Vin Jaune)", "result_general": "Savagnin (Jura) or Dry Amontillado Sherry", "rationale": "The unique nutty, curry-like flavor of Vin Jaune demands a wine that is intentionally oxidative and shares the same flavor profile. Vin Jaune is the only true match. Dry Amontillado Sherry offers the closest flavor and textural structure." },
+                        "Nut-Crusted / Nutty Garnish (High Nut Flavor)": { "result_specific": "Savennières (Aged Chenin Blanc)", "result_general": "Aged White Rioja or Oaked Roussanne", "rationale": "Pronounced nut flavors require a wine that has developed its own nutty, tertiary character through aging. Savennières gains these savory notes while retaining high acidity. Aged White Rioja offers similar complexity." },
+                        "Oxidative Red Wine Sauce (Port or Madeira)": { "result_specific": "Banyuls (Vin Doux Naturel)", "result_general": "Ruby Port or Late Harvest Zinfandel", "rationale": "Dishes with highly reduced, oxidized, and slightly sweet fortified wine sauces need a wine that matches the sweetness and has similar oxidation notes. Banyuls is a fortified wine that offers this intensity and depth. Ruby Port is a good, accessible substitute." },
+                        "Aged/Strong Cheese Base (Morbier, Old Comté)": { "result_specific": "Crémant du Jura (Blanc de Noirs)", "result_general": "Dry Sparkling Rosé or Dry Fino Sherry", "rationale": "Aged/pungent cheeses need a wine with high acidity, minerality, and structural firmness to cleanse the palate. Crémant du Jura's bubbles and high acid are superb. Dry Fino Sherry is another excellent, high-acid, savory pairing." }
+                    }
+                }
+            }
+        }
+    }
+},
+"Festive": {
+    "title": "Festive Meals 🎄",
+    "emoji": "🎄",
+    "next_prompt": "2. Choose Meal Style:",
+    "options": {
+        "Spread (Thanksgiving)": {
+            "user_label": "🦃 Holiday Spread (One Plate)",
+            "next_prompt": "3. Choose Main Protein:",
+            "options": {
+                // --- ROAST TURKEY ---
+                "Roast Turkey (Traditional)": {
+                    "next_prompt": "4. Select Side Dish Profiles (Pick 1 or 2):",
+                    "type": "multi_select",
+                    "choices": {
+                        "A": "Sweet & Tart (Cranberry)",
+                        "B": "Rich & Creamy (Gravy/Mash)",
+                        "C": "Earthy & Savory (Stuffing)",
+                        "D": "Sweet & Spiced (Yams)"
+                    },
+                    "next_prompt_after_multi": "5. Choose Preparation Style:",
+                    "options": {
+                        // Single Side Options (Level 2)
+                        "A": { "options": { "Heavy": {"result_specific": "Off-Dry Riesling OR Dry Rosé", "result_general": "Chenin Blanc", "rationale": "High acidity and balanced residual sugar handle tartness and richness."}, "Light": {"result_specific": "Dry Riesling OR High Acidity Rosé", "result_general": "Albariño", "rationale": "Wine must still combat high acidity and sugar, but without the need for a heavy body."} } },
+                        "B": { "options": { "Heavy": {"result_specific": "Oaked Chardonnay OR Traditional Sparkling", "result_general": "White Rhône Blend", "rationale": "Acidity is the ultimate cleanser for rich, fatty sauces."}, "Light": {"result_specific": "Unoaked Chardonnay OR Crémant", "result_general": "Pinot Grigio", "rationale": "High acidity cuts through lighter fat/cream without the weight of oak."} } },
+                        "C": { "options": { "Heavy": {"result_specific": "Pinot Noir OR Cru Beaujolais", "result_general": "Sangiovese (Chianti Classico)", "rationale": "Low-tannin reds are ideal for savory/umami flavors like mushrooms and sage."}, "Light": {"result_specific": "Sancerre Rouge OR Gamay (Light Cru)", "result_general": "Valpolicella (Classico)", "rationale": "Look for lighter, more delicate expressions of low-tannin reds for subtle earthiness."} } },
+                        "D": { "options": { "Heavy": {"result_specific": "Gewürztraminer OR Zinfandel", "result_general": "Viognier", "rationale": "Aromatic wines are needed to meet the intensity of baking spices."}, "Light": {"result_specific": "Pinot Gris OR Vermentino", "result_general": "Grüner Veltliner", "rationale": "An aromatic white is still key for the spices, but lighter in body."} } },
+                        // Combination Side Options (Level 2 Combos)
+                        "A+B": { "options": { "Heavy": {"result_specific": "Off-Dry Riesling OR Oaked Chardonnay", "result_general": "Dry Chenin Blanc", "rationale": "Classic challenge: requires both acidity (for tartness/richness) and body (for seasoning)."}, "Light": {"result_specific": "Dry Rosé OR Slightly Off-Dry Chenin Blanc", "result_general": "Dry Rosé Cava", "rationale": "Requires a highly versatile wine that is still light."} } },
+                        "A+C": { "options": { "Heavy": {"result_specific": "Cru Beaujolais OR Pinot Noir", "result_general": "Gamay", "rationale": "Needs a red wine light in tannin, high in acidity, and bright fruit."}, "Light": {"result_specific": "Pinot Noir OR Beaujolais-Villages", "result_general": "Sancerre Rouge", "rationale": "A lighter red is needed to be versatile—high acid, low tannin."} } },
+                        "A+D": { "options": { "Heavy": {"result_specific": "Gewürztraminer OR Off-Dry Rosé", "result_general": "Torrontés", "rationale": "Mix of sweetness levels and high spices demands an Aromatic wine."}, "Light": {"result_specific": "Riesling Kabinett OR Dry Gewürztraminer", "result_general": "Moscato d'Asti", "rationale": "Aromatic, slightly sweet wine is needed to harmonize these intense flavors."} } },
+                        "B+C": { "options": { "Heavy": {"result_specific": "Pinot Noir OR Zinfandel", "result_general": "Grenache/GSM Blend", "rationale": "Medium body, low tannin, and juicy fruit to cut through richness while complementing savory stuffing."}, "Light": {"result_specific": "Unoaked Chardonnay (Chablis) OR Gamay", "result_general": "Bourgogne Aligoté", "rationale": "Goal is to cleanse the cream while complementing the earthiness."} } },
+                        "B+D": { "options": { "Heavy": {"result_specific": "Oaked Chardonnay OR Pinot Gris (Alsace)", "result_general": "Viognier", "rationale": "Requires a rich, textural wine that is full-bodied enough for the fat, with aromatic fruit to handle the spice."}, "Light": {"result_specific": "Pinot Gris OR Viognier", "result_general": "Pinot Blanc", "rationale": "Needs a white with body to handle the light fat, with aromatic fruit for the spice."} } },
+                        "C+D": { "options": { "Heavy": {"result_specific": "Zinfandel OR Gamay", "result_general": "Primitivo", "rationale": "Must balance the earthy/savory with the bold spices; Zinfandel provides fruit and pepper notes."}, "Light": {"result_specific": "Beaujolais-Villages OR Lighter Zinfandel", "result_general": "Dolcetto", "rationale": "Red wine needs to be juicy and low in tannin to bridge savory and spiced elements."} } }
+                    }
+                },
+                // --- FRIED TURKEY / GOOSE / DUCK ---
+                "Fried Turkey / Goose / Duck": {
+                    "next_prompt": "4. Select Side Dish Profiles (Pick 1 or 2):",
+                    "type": "multi_select",
+                    "choices": { "A": "Sweet & Tart", "B": "Rich & Creamy", "C": "Earthy & Savory", "D": "Sweet & Spiced" },
+                    "next_prompt_after_multi": "5. Choose Preparation Style:",
+                    "options": {
+                        // Using a simple fallback for this example, the user can paste the remaining 38 specific pairings later.
+                        "default": { "result_specific": "Extra Brut Champagne", "result_general": "High Acid Sparkling Wine", "rationale": "High acidity and bubbles are essential to cleanse the palate of the intense fat from frying." }
+                    }
+                },
+                // --- HAM / ALTERNATIVE (BEEF) ---
+                "Ham / Alternative (Beef/Roast)": {
+                    "next_prompt": "4. Select Side Dish Profiles (Pick 1 or 2):",
+                    "type": "multi_select",
+                    "choices": { "A": "Sweet & Tart", "B": "Rich & Creamy", "C": "Earthy & Savory", "D": "Sweet & Spiced" },
+                    "next_prompt_after_multi": "5. Choose Preparation Style:",
+                    "options": {
+                        "default": { "result_specific": "Zinfandel OR Off-Dry Riesling", "result_general": "Dry Rosé", "rationale": "Needs bold fruit for beef, or sweetness/acid for ham glaze." }
+                    }
+                },
+                // --- VEGETARIAN / SIDES ONLY ---
+                "Vegetarian / Sides Only": {
+                    "next_prompt": "4. Select Side Dish Profiles (Pick 1 or 2):",
+                    "type": "multi_select",
+                    "choices": { "A": "Sweet & Tart", "B": "Rich & Creamy", "C": "Earthy & Savory", "D": "Sweet & Spiced" },
+                    "next_prompt_after_multi": "5. Choose Preparation Style:",
+                    "options": {
+                        "default": { "result_specific": "Pinot Noir OR Oaked Chardonnay", "result_general": "Sauvignon Blanc", "rationale": "Depends heavily on the primary vegetable flavor; high acidity is key." }
+                    }
+                }
+            }
+        },
+        // --- MULTIPLE COURSES ---
+        "Multiple Courses (Christmas)": {
+            "user_label": "🍽️ Multi-Course Meal",
+            "next_prompt": "3. Choose Course:",
+            "options": {
+                // COURSE 1: AMUSE-BOUCHE
+                "Amuse-Bouche / First Course": {
+                    "next_prompt": "4. Choose Category:",
+                    "options": {
+                        "Shellfish / Raw Fish": {
+                            "next_prompt": "5. Preparation:",
+                            "options": {
+                                "Served Raw/Briny": { "result_specific": "Dry Champagne (Brut Nature) OR Muscadet Sèvre et Maine", "result_general": "Dry Cava/Prosecco (Extra Brut)", "rationale": "High acidity and minerality enhance raw, salty nature." },
+                                "Zesty/Citrus-Marinated": { "result_specific": "Sauvignon Blanc (Sancerre) OR Albariño", "result_general": "Pinot Grigio", "rationale": "High-acid, aromatic whites match zest/citrus." },
+                                "Sweet/Fruity Sauce": { "result_specific": "Riesling Kabinett OR Gewürztraminer", "result_general": "Off-Dry Rosé", "rationale": "Slight sweetness balances the sauce." },
+                                "Creamy/Rich": { "result_specific": "Blanc de Blancs Champagne OR Dry Fino Sherry", "result_general": "Dry Prosecco", "rationale": "Bubbles or sharp, dry Sherry cut the fat." }
+                            }
+                        },
+                        "Cooked Seafood / Fish": {
+                            "next_prompt": "5. Preparation:",
+                            "options": {
+                                "Simply Seared/Grilled": { "result_specific": "Dry Rosé (Provence/Fuller) OR Vermentino", "result_general": "Sauvignon Blanc", "rationale": "Rosé or aromatic whites match texture." },
+                                "Creamy/Butter Sauce": { "result_specific": "Unoaked Chablis OR Dry Crémant", "result_general": "Pinot Blanc", "rationale": "High-acid, unoaked whites cut the fat." },
+                                "Spiced/Peppery": { "result_specific": "Grüner Veltliner OR Dry Off-Dry Riesling", "result_general": "Off-Dry Rosé", "rationale": "Grüner's peppery notes complement spice." },
+                                "Savory/Herbal": { "result_specific": "Pinot Noir (Very Light, Chilled) OR Sauvignon Blanc", "result_general": "Gamay (Beaujolais-Villages)", "rationale": "Light red or structured white with subtle earthiness." }
+                            }
+                        },
+                        "Cured / Fatty Meat": {
+                            "next_prompt": "5. Preparation:",
+                            "options": {
+                                "Sliced/Cured": { "result_specific": "Dry Lambrusco Secco OR Traditional Sparkling", "result_general": "Dry Cava", "rationale": "Effervescence and high acidity cut through salt and fat." },
+                                "Creamy/Pâté": { "result_specific": "Pinot Noir (Light-Bodied) OR Dry Chenin Blanc", "result_general": "Dry Rosé", "rationale": "Low-tannin reds or structured whites handle richness." },
+                                "Sweet/Glazed": { "result_specific": "Off-Dry Riesling (Spätlese) OR Zinfandel", "result_general": "Dry Rosé of Zinfandel", "rationale": "Fruit and residual sugar handle the sweetness/fat." },
+                                "Savory/Smoked": { "result_specific": "Cru Beaujolais (Morgon) OR Dry Rosé (Bandol/Tavel)", "result_general": "Pinot Noir (Basic, High Acid)", "rationale": "Earthy, savory reds or structured rosés handle gamey/smoked flavors." }
+                            }
+                        },
+                        "Light Meat / Poultry": {
+                            "next_prompt": "5. Preparation:",
+                            "options": {
+                                "Light/Herbal": { "result_specific": "Sauvignon Blanc (Sancerre/NZ) OR Pinot Grigio", "result_general": "Verdejo", "rationale": "Herbaceous whites complement poultry and fresh herbs." },
+                                "Creamy/Sauced": { "result_specific": "Viognier (Cooler Climate) OR Dry Sparkling Wine", "result_general": "Unoaked Chardonnay", "rationale": "Viognier provides body/texture; Unoaked Chardonnay cuts creaminess." },
+                                "Sweet/Fruity": { "result_specific": "Off-Dry Rosé OR Pinot Gris (Alsace)", "result_general": "Riesling (Dry/Very Off-Dry)", "rationale": "Sweet/fruity profile complements glazes." },
+                                "Savory/Cooked": { "result_specific": "Pinot Noir (Sancerre Rouge) OR Beaujolais-Villages", "result_general": "Dolcetto", "rationale": "Light, fruity reds are versatile for savory base." }
+                            }
+                        },
+                        "Cheese / Dairy": {
+                            "next_prompt": "5. Preparation:",
+                            "options": {
+                                "Fresh/Goat/Feta": { "result_specific": "Sauvignon Blanc (Sancerre) OR Dry Sparkling Wine", "result_general": "Cava", "rationale": "Sauvignon Blanc's acidity is the classic match for high-acid cheese." },
+                                "Soft/Creamy": { "result_specific": "Oaked Chardonnay OR Dry Champagne", "result_general": "Pinot Blanc", "rationale": "Acidity and texture are key." },
+                                "Hard/Aged": { "result_specific": "Dry Sherry (Fino/Manzanilla) OR Cru Beaujolais", "result_general": "Dry Cider (Artisanal)", "rationale": "Sherry is the best match for aged cheese." },
+                                "Sweet/Fruity": { "result_specific": "Moscato d'Asti OR Off-Dry Rosé", "result_general": "Brachetto d'Acqui", "rationale": "Lightly sweet, low-alcohol wines complement sweet garnish." }
+                            }
+                        },
+                        "Vegetable / Herb Focused": {
+                            "next_prompt": "5. Preparation:",
+                            "options": {
+                                "Pickled/Vinegary": { "result_specific": "Sauvignon Blanc (NZ) OR Sparkling Wine (Dry Cava)", "result_general": "Dry Rosé (Crisp)", "rationale": "The wine must meet the vinegar's high acid, or sparkling wine will cleanse." },
+                                "Savory/Earthy": { "result_specific": "Dry Fino Sherry OR Pinot Noir (Light)", "result_general": "Cru Beaujolais (Simple)", "rationale": "Sherry and light Pinot Noir excel with umami." },
+                                "Sweet/Glazed": { "result_specific": "Riesling Kabinett OR Pinot Gris (Off-Dry)", "result_general": "Moscato d'Asti", "rationale": "The slight sweetness is necessary to match the fruit/sweet component." },
+                                "Spicy/Peppery": { "result_specific": "Grüner Veltliner OR Off-Dry Riesling", "result_general": "Dry Rosé (Fruity)", "rationale": "Grüner Veltliner is the best choice for vegetable dishes with a kick." }
+                            }
+                        }
+                    }
+                },
+                // COURSE 2: APPETIZER
+                "Appetizer / Second Course": {
+                    "next_prompt": "4. Choose Category:",
+                    "options": {
+                        "Rich Terrine / Pâté": {
+                            "next_prompt": "5. Flavor Profile:",
+                            "options": {
+                                "Classic / Earthy (Truffle, herbs, liver focus)": { "result_specific": "Pinot Noir (Burgundy) OR Cru Beaujolais (Morgon)", "result_general": "Cabernet Franc", "rationale": "Earthy, savory notes need low tannin and good acidity to cut the fat." },
+                                "Sweet / Fruity (Served with fig jam, cranberry)": { "result_specific": "Pinot Gris (Alsace) OR Chenin Blanc (Demi-Sec)", "result_general": "Gewürztraminer", "rationale": "A rich white with residual sugar matches the sweetness of the fruit/jam." },
+                                "Spiced / Peppery (Country pâté with peppercorns)": { "result_specific": "Syrah (Northern Rhône) OR Grüner Veltliner (Smaragd)", "result_general": "Grenache/Garnacha", "rationale": "Syrah’s savory, peppery notes mirror the spices; Grüner offers a white alternative with a signature pepper kick." }
+                            }
+                        },
+                        "Lean Meat / Poultry": {
+                            "next_prompt": "5. Flavor Profile:",
+                            "options": {
+                                "Cold / Cured (Prosciutto, Cold Roast slices)": { "result_specific": "Dry Sparkling Rosé OR Dry Rosé (Bandol)", "result_general": "Dry Lambrusco", "rationale": "High acidity and bubbles scrub the palate of salt and cured fat." },
+                                "Warm / Creamy Sauce": { "result_specific": "Oaked Chardonnay OR Viognier", "result_general": "Unoaked Chardonnay", "rationale": "Wine needs body and texture to match the creamy sauce, with enough acidity." },
+                                "Sweet / Fruity Sauce": { "result_specific": "Pinot Noir (New World) OR Cru Beaujolais (Fleurie)", "result_general": "Zinfandel (Lighter style)", "rationale": "Bright red fruit and low tannins complement the sweet fruit." },
+                                "Acidic / Citrus / Vinaigrette": { "result_specific": "Sauvignon Blanc (Sancerre) OR Albariño", "result_general": "Verdejo", "rationale": "If dressed in lemon or vinegar, the wine must be high-acid and crisp." },
+                                "Simple / Herbaceous": { "result_specific": "Sangiovese (Chianti) OR Pinot Noir (Sancerre Rouge)", "result_general": "Dolcetto", "rationale": "Savory, herbal, high-acid reds complement the herbs and protein." }
+                            }
+                        },
+                        "Seafood (All Types)": {
+                            "next_prompt": "5. Flavor Profile:",
+                            "options": {
+                                "Smoked / Cured / Salty": { "result_specific": "Dry Champagne (Blanc de Blancs) OR Chablis", "result_general": "Dry Cava (Brut Nature)", "rationale": "Salt and smoke require high acidity and bubbles to cleanse the palate and cut oiliness." },
+                                "Rich / Buttery / Cream Sauce": { "result_specific": "Oaked Chardonnay OR White Rhône Blend", "result_general": "Viognier", "rationale": "Rich seafood needs a wine with weight and texture to match the sauce, plus acid." },
+                                "Fresh / Raw / Zesty": { "result_specific": "Muscadet Sèvre et Maine OR Sancerre", "result_general": "Picpoul de Pinet", "rationale": "High minerality and acidity are non-negotiable to match the brine and citrus." },
+                                "Sweet / Glazed / Spicy": { "result_specific": "Riesling (Feinherb/Off-Dry) OR Chenin Blanc (Demi-Sec)", "result_general": "Pinot Gris", "rationale": "Residual sugar balances the glaze's sweetness and soothes any spice." }
+                            }
+                        },
+                        "Soup (Any)": {
+                            "next_prompt": "5. Flavor Profile:",
+                            "options": {
+                                "Clear / Consommé": { "result_specific": "Dry Sherry (Fino or Manzanilla) OR Vermentino", "result_general": "Pinot Grigio", "rationale": "Needs savory, nutty nuances or very neutral, crisp fruit." },
+                                "Creamy / Bisque": { "result_specific": "Pinot Gris (Alsace - Richer) OR Oaked Chardonnay", "result_general": "Viognier", "rationale": "The weight of the wine must match the weight of the soup." },
+                                "Earthy / Vegetable": { "result_specific": "Pinot Noir (Earthy/Old World) OR Oaked Chardonnay", "result_general": "Côtes du Rhône (White or Red)", "rationale": "Earthy vegetables need wines with savory notes." }
+                            }
+                        },
+                        "Fresh / Salads": {
+                            "next_prompt": "5. Flavor Profile:",
+                            "options": {
+                                "Vinaigrette / Citrus Focus": { "result_specific": "Sauvignon Blanc (Marlborough) OR Albariño", "result_general": "Verdejo", "rationale": "If the dressing is acidic, the wine must be MORE acidic." },
+                                "Creamy / Dairy Dressing": { "result_specific": "Sancerre OR Dry Rosé (Provence)", "result_general": "Pinot Grigio", "rationale": "High acid cuts the fat of the cheese/dressing." },
+                                "Fruit / Nut / Sweet Focus": { "result_specific": "Pinot Gris (Alsace) OR Off-Dry Riesling", "result_general": "Moscato d'Asti", "rationale": "Wine needs enough fruitiness and body to bridge the sweet/savory gap." }
+                            }
+                        },
+                        "Vegetarian / Earthy": {
+                            "next_prompt": "5. Flavor Profile:",
+                            "options": {
+                                "Mushroom / Truffle Focus": { "result_specific": "Pinot Noir (Burgundy) OR Nebbiolo (Langhe)", "result_general": "Rioja Crianza", "rationale": "Umami pairs perfectly with the earthy, savory notes of Pinot Noir or Nebbiolo." },
+                                "Roasted / Sweet Veg (Pumpkin, Beets)": { "result_specific": "Chenin Blanc (South Africa) OR Viognier", "result_general": "Torrontés", "rationale": "Aromatic whites with body and fruit notes complement this sweetness." },
+                                "Creamy / Cheese Sauce (Soufflé, Gratin)": { "result_specific": "Chablis OR Chenin Blanc (Dry)", "result_general": "Unoaked Chardonnay", "rationale": "High acid is needed to cut the warm cheese fat." },
+                                "Acidic / Tomato / Vinaigrette (Artichoke)": { "result_specific": "Sauvignon Blanc (New Zealand) OR Vermentino", "result_general": "Pinot Grigio", "rationale": "Tomatoes and artichokes are high-acid; you need a crisp, zesty white to match." }
+                            }
+                        }
+                    }
+                },
+                // COURSE 3: MAIN COURSE
+                "Main Course": {
+                    "next_prompt": "4. Choose Main Protein:",
+                    "options": {
+                        "Beef, Venison & Red Game": {
+                            "next_prompt": "5. Preparation / Sauce:",
+                            "options": {
+                                "Wellington / Pâté (Rich Gravy / Jus)": { "result_specific": "Pinot Noir (Earthy) OR Merlot (Right Bank)", "result_general": "Sangiovese", "rationale": "Softer tannins respect the pastry and mushroom; earthiness complements richness." },
+                                "Simple Roast / Steak (Rich Gravy / Jus)": { "result_specific": "Cabernet Sauvignon OR Tempranillo", "result_general": "Shiraz/Syrah", "rationale": "High tannin is crucial to cut through the fat and protein." },
+                                "Stew / Slow Cooked (Cream / Mushroom)": { "result_specific": "Syrah (Cool Climate) OR Zinfandel", "result_general": "Aglianico", "rationale": "Needs concentrated fruit and structure to match intense, long-cooked flavors." }
+                            }
+                        },
+                        "Turkey & Chicken (Poultry)": {
+                            "next_prompt": "5. Preparation / Sauce:",
+                            "options": {
+                                "Whole / Stuffed (Classic Herb Gravy)": { "result_specific": "Pinot Noir (Versatile) OR Chardonnay (Cool Climate, Light Oak)", "result_general": "Gamay", "rationale": "Medium body and earthy notes complement the herbs and poultry; high acidity keeps the palate fresh." },
+                                "Simple Roast / Lean Cut (Cranberry / Fruit Sauce)": { "result_specific": "Dry Rosé (Full-Bodied) OR Gewürztraminer", "result_general": "Dry Riesling (High Acid)", "rationale": "Wine needs enough fruit and acidity to bridge the gap between lean meat and sweet/tart sauce." },
+                                "Simple Roast / Lean Cut (Cream / Velouté)": { "result_specific": "Oaked Chardonnay OR White Rhône Blend", "result_general": "Pinot Blanc", "rationale": "Creamy sauce requires a full-bodied white with sufficient acidity and texture." }
+                            }
+                        },
+                        "Duck, Goose & Game Birds": {
+                            "next_prompt": "5. Preparation / Sauce:",
+                            "options": {
+                                "Classic Fruit Sauce (Cherry, Plum, Orange)": { "result_specific": "Pinot Noir (High Acid/Old World) OR Riesling (Off-Dry/Feinherb)", "result_general": "Cru Beaujolais", "rationale": "High acidity is mandatory to cut the intense fat of the bird; fruit notes complement the classic sauces." },
+                                "Rich Jus / Reduction (Port, Madeira)": { "result_specific": "Barolo/Barbaresco (Mature) OR Sangiovese", "result_general": "Aglianico", "rationale": "Wine needs savory complexity and structure to stand up to the concentrated richness of the sauce and game meat." },
+                                "Spicy / Asian Glaze": { "result_specific": "Pinot Gris (Alsace) OR Gewürztraminer", "result_general": "Dry Rosé (Fuller Style)", "rationale": "Aromatic wines with an expressive flavor profile are the best complement to Asian/spicy notes." }
+                            }
+                        },
+                        "Ham & Pork": {
+                            "next_prompt": "5. Preparation / Sauce:",
+                            "options": {
+                                "Sweet / Maple Glaze": { "result_specific": "Off-Dry Riesling (Spätlese) OR Zinfandel", "result_general": "Rosé (Fruity/Off-Dry)", "rationale": "Wine must be sweeter than the glaze and high in acidity to cut through the saltiness." },
+                                "Mustard / Spice Glaze": { "result_specific": "Dry Rosé (Full-Bodied) OR Grüner Veltliner", "result_general": "Dry Riesling", "rationale": "High acid is necessary to match the spice/mustard; Grüner Veltliner complements spice well." },
+                                "Acidic / Brine Focus": { "result_specific": "Dry Sherry (Amontillado) OR High Acid White Blend", "result_general": "Dry Madeira (Sercial)", "rationale": "High acidity is necessary to match the brine/vinegar." }
+                            }
+                        },
+                        "Fish & Seafood Centerpieces": {
+                            "next_prompt": "5. Preparation / Sauce:",
+                            "options": {
+                                "En Croûte / Pastry (Rich Cream / Butter Sauce)": { "result_specific": "Oaked Chardonnay (Burgundy) OR White Rhône Blend", "result_general": "Pinot Gris (Rich Style)", "rationale": "Texture is key; needs body to stand up to the pastry and fat, but high acidity to cut the rich sauce." },
+                                "Simple Roasted / Seared (Simple / Oil / Citrus)": { "result_specific": "Vermentino OR Assyrtiko", "result_general": "Dry Rosé (Provence)", "rationale": "Light, simple preparation requires mineral-driven, zesty whites." },
+                                "Rich / Shellfish Dish (Rich Cream / Butter Sauce)": { "result_specific": "Blanc de Blancs Champagne OR Chablis Premier Cru", "result_general": "Dry Sparkling Wine (Cava)", "rationale": "Needs extremely high acid and/or bubbles to cleanse the palate from rich cream/butter coating shellfish." }
+                            }
+                        },
+                        "Vegetarian Centerpieces": {
+                            "next_prompt": "5. Preparation / Sauce:",
+                            "options": {
+                                "Wellington / Nut Roast (Umami / Mushroom Gravy)": { "result_specific": "Pinot Noir (Earthy/Old World) OR Merlot", "result_general": "Cru Beaujolais", "rationale": "Earthy nuts/mushrooms and savory gravy pair best with low-tannin, earthy reds." },
+                                "Stuffed / Baked Vegetables (Cream / Cheese Sauce)": { "result_specific": "Chenin Blanc (Dry, High Acid) OR Oaked Chardonnay", "result_general": "Verdejo", "rationale": "High-acid white wines with a savory edge cut the creaminess." },
+                                "Stuffed / Baked Vegetables (Acidic / Tomato Sauce)": { "result_specific": "Sangiovese (Young) OR Sauvignon Blanc (Sancerre)", "result_general": "Dry Rosé (Italian)", "rationale": "Tomato requires high acidity; choose a light red or structured white." }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+            }
+        };
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        let currentPath = []; // Array of objects: { id: 'key', label: 'User Label', data: reference }
+        let currentOptions = winePairings; 
+        
+        // Multi-select state
+        let multiSelectMode = false;
+        let selectedMultiOptions = [];
+
+        // DOM Elements
+        const breadcrumbsDiv = document.getElementById('breadcrumbs');
+        const optionsContainer = document.getElementById('button-options-container');
+        const stepPrompt = document.getElementById('step-prompt');
+        const nextBtn = document.getElementById('next-step-btn');
+        const warningMsg = document.getElementById('multi-warning');
+        const resultDiv = document.getElementById('result');
+        const resultTitle = document.getElementById('res-title');
+        const stepsContainer = document.getElementById('steps-container');
+
+        // ==========================================
+        // FUNCTIONS
+        // ==========================================
+
+        function init() {
+            renderOptions(winePairings, "1. Choose Cuisine Style:");
+        }
+
+        // --- Breadcrumbs ---
+        function updateBreadcrumbs() {
+            breadcrumbsDiv.innerHTML = '';
+            
+            // Create "Home" button
+            const homeBtn = document.createElement('div');
+            homeBtn.className = 'breadcrumb-item';
+            homeBtn.innerHTML = '🏠 Start';
+            homeBtn.onclick = () => resetApp();
+            breadcrumbsDiv.appendChild(homeBtn);
+
+            // Create items for path
+            currentPath.forEach((step, index) => {
+                const badge = document.createElement('div');
+                badge.className = 'breadcrumb-item';
+                badge.textContent = step.label;
+                badge.onclick = () => handleBreadcrumbClick(index);
+                breadcrumbsDiv.appendChild(badge);
             });
         }
 
-        // --- Wine Pairing Core Function ---
-        function getWinePairing(cuisine, protein, flavor_note) {
+        function handleBreadcrumbClick(index) {
+            // Slice path to go back to that state
+            // The item clicked is the one we want to KEEP being inside of? 
+            // Actually, usually clicking a breadcrumb means "Go back to the state where I made this choice"
+            // But visually, if I click "Italian", I expect to see the "Italian" options?
+            // Let's make it: Click breadcrumb -> Go back to the step *after* that choice was made.
             
-            if (!cuisine || !protein || !flavor_note || protein === "default") {
-                return "Please make one selection in all three categories above.";
-            }
-
-            let suggestions = [];
-            let refinement = "";
-            let prep_sauce = flavor_note; // Use flavor_note to substitute for prep/sauce
-
-            // --- Base Pairing Logic (Protein & Sauce/Flavor) ---
-            if (protein === "Beef/Lamb") {
-                if (prep_sauce === "Acidic" && cuisine === "Italian") {
-                    suggestions.push("High-acid, savory Italian red like **Chianti Classico** or **Barbera**.");
-                    suggestions.push("A youthful Spanish **Tempranillo** (Crianza) with bright red fruit.");
-                    refinement = "Pairing must match the acid in the sauce to prevent the wine from tasting flat.";
-                } else if (prep_sauce === "Rich" || prep_sauce === "Earthy" || cuisine === "French") {
-                    suggestions.push("A bold, tannic **Cabernet Sauvignon** (Napa/Bordeaux Left Bank) to cut through the fat.");
-                    suggestions.push("A peppery, earthy **Syrah** (Northern Rhône) or a heavy **Malbec**.");
-                    refinement = "Choose high tannin and structure to balance the richness of the red meat.";
-                } else if (prep_sauce === "Spicy" || cuisine === "American") {
-                     suggestions.push("A fruity, high-alcohol **Zinfandel** or a powerful, fruit-forward **Shiraz**.");
-                    suggestions.push("A lightly chilled **Cru Beaujolais** (Gamay) if the spice is light.");
-                    refinement = "Match the intensity of the spice with a bold, fruit-driven wine.";
-                } else { // General/American Steakhouse
-                    suggestions.push("Robust **Merlot** or **Cabernet Franc** (Saumur-Champigny).");
-                    refinement = "Look for structure and balance without excessive oak.";
+            // Logic: Re-traverse from root up to index
+            let ptr = winePairings;
+            for(let i=0; i<=index; i++) {
+                let key = currentPath[i].id;
+                // handle special traversal for mapped multi-select keys (complex, simplifying for now)
+                if(ptr.options && ptr.options[key]) {
+                    ptr = ptr.options[key];
+                } else if (ptr.type === 'multi_select') {
+                    // special handling if we are traversing BACK into a result of a multi-select
+                    ptr = ptr.options[key]; 
                 }
             }
 
-            else if (protein === "Pork/Veal") {
-                if (prep_sauce === "Spicy" || cuisine === "Asian") {
-                    suggestions.push("Slightly sweet, aromatic **Off-dry Riesling** (Kabinett) or **Gewürztraminer**.");
-                    suggestions.push("A fruity, off-dry **Rosé** with significant body.");
-                    refinement = "Sweetness in the wine is crucial to neutralize the chili heat.";
-                } else if (prep_sauce === "Rich" || cuisine === "French") {
-                    suggestions.push("Rich, textural **Oaked Chardonnay** (White Burgundy) for white meats.");
-                    suggestions.push("Earthy, light-bodied **Pinot Noir** (Burgundy) or **Gamay** (Beaujolais).");
-                    refinement = "Match the creamy texture of the sauce with the texture of the wine (oak/lees contact).";
-                } else if (prep_sauce === "Acidic" || cuisine === "Italian") {
-                    suggestions.push("High-acid **Rosé** or a light, unoaked **Sangiovese** (Rosso di Montalcino).");
-                    suggestions.push("Crisp **Vermentino** (Italian white) if the pork is lean.");
-                    refinement = "The high acid of the sauce requires a correspondingly high-acid wine.";
+            // Reset path
+            currentPath = currentPath.slice(0, index + 1);
+            currentOptions = ptr;
+            
+            // Hide results
+            resultDiv.style.display = 'none';
+            resultTitle.style.display = 'none';
+            stepsContainer.style.display = 'block';
+
+            // Check if we are at a result or options
+            if(currentOptions.result_specific) {
+                displayResult(currentOptions);
+            } else {
+                renderOptions(currentOptions.options || currentOptions, currentOptions.next_prompt || "Choose:");
+            }
+        }
+
+        function resetApp() {
+            currentPath = [];
+            currentOptions = winePairings;
+            resultDiv.style.display = 'none';
+            resultTitle.style.display = 'none';
+            stepsContainer.style.display = 'block';
+            
+            // Remove specific reset button if present inside container (old logic)
+            const oldReset = document.getElementById('reset-button');
+            if(oldReset) oldReset.remove();
+
+            renderOptions(winePairings, "1. Choose Cuisine Style:");
+        }
+
+        // --- Render Logic ---
+        function renderOptions(optionsObj, promptText) {
+            updateBreadcrumbs();
+            optionsContainer.innerHTML = '';
+            stepPrompt.textContent = promptText;
+            
+            // Reset Multi-select UI
+            multiSelectMode = false;
+            selectedMultiOptions = [];
+            nextBtn.style.display = 'none';
+            warningMsg.style.display = 'none';
+
+            // Check if this step is a "Multi-Select" special step (for Festive Sides)
+            // The parent object passed in might have the 'type' property
+            // We need to check if currentOptions has 'type': 'multi_select'
+            
+            if (currentOptions.type === 'multi_select') {
+                renderMultiSelect(currentOptions);
+                return;
+            }
+
+            // Standard render
+            const keys = Object.keys(optionsObj).filter(k => k !== 'type' && k !== 'next_prompt' && k !== 'next_prompt_after_multi' && k !== 'choices');
+
+            keys.forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = 'emoji-button';
+                
+                let data = optionsObj[key];
+                let label = data.user_label || key;
+                let emoji = data.emoji || getEmoji(key); // Helper for emojis
+
+                btn.innerHTML = `<span class="emoji">${emoji}</span> ${label}`;
+                btn.onclick = () => handleSelection(key, label);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function renderMultiSelect(data) {
+            multiSelectMode = true;
+            stepPrompt.textContent = data.next_prompt;
+            
+            const choices = data.choices; // { A: "Label", B: "Label" }
+            Object.keys(choices).forEach(code => {
+                const btn = document.createElement('button');
+                btn.className = 'emoji-button';
+                btn.innerHTML = `<span class="emoji">🍲</span> ${choices[code]}`;
+                btn.dataset.code = code;
+                
+                btn.onclick = () => {
+                    // Toggle selection
+                    if (selectedMultiOptions.includes(code)) {
+                        selectedMultiOptions = selectedMultiOptions.filter(c => c !== code);
+                        btn.classList.remove('multi-select-active');
+                    } else {
+                        if (selectedMultiOptions.length < 2) {
+                            selectedMultiOptions.push(code);
+                            btn.classList.add('multi-select-active');
+                        } else {
+                            // Swap the last one if they click a 3rd? Or just block.
+                            // Let's block 3rd click, maybe alert user visually
+                            warningMsg.style.display = 'block';
+                            setTimeout(() => warningMsg.style.display = 'none', 2000);
+                        }
+                    }
+                };
+                optionsContainer.appendChild(btn);
+            });
+
+            nextBtn.style.display = 'inline-block';
+            nextBtn.onclick = handleMultiSelectSubmit;
+        }
+
+        // --- Handler Logic ---
+        function handleSelection(key, label) {
+            // Traverse
+            let nextNode = currentOptions.options ? currentOptions.options[key] : currentOptions[key];
+            
+            // Handle missing data
+            if (!nextNode || nextNode.user_label === "Not Implemented Yet") {
+                alert("Data coming soon for this path!");
+                return;
+            }
+
+            // Update State
+            currentPath.push({ id: key, label: label });
+            currentOptions = nextNode;
+
+            // Check Result
+            if (currentOptions.result_specific) {
+                displayResult(currentOptions);
+            } else {
+                // If the next node is a Multi-Select definition wrapper
+                if (currentOptions.type === 'multi_select') {
+                     renderMultiSelect(currentOptions);
                 } else {
-                    suggestions.push("Versatile, light **Pinot Noir** or a vibrant, medium-bodied **Viognier**.");
-                    refinement = "An all-purpose, aromatic wine will complement lighter preparations.";
+                    // Standard next step
+                    renderOptions(currentOptions.options || currentOptions, currentOptions.next_prompt);
                 }
+            }
+        }
+
+        function handleMultiSelectSubmit() {
+            if (selectedMultiOptions.length === 0) {
+                warningMsg.style.display = 'block';
+                return;
+            }
+
+            // Generate Key (Sort alphabetically: A+B, not B+A)
+            selectedMultiOptions.sort();
+            let comboKey = selectedMultiOptions.join('+');
+            
+            // Check if specific combination exists in options, else try single, else default
+            let nextNode = currentOptions.options[comboKey];
+            
+            // Fallback logic for complex trees: if A+B doesn't exist, try just A
+            if (!nextNode && selectedMultiOptions.length > 0) {
+                 nextNode = currentOptions.options[selectedMultiOptions[0]];
             }
             
-            else if (protein === "Poultry") {
-                if (prep_sauce === "Rich" || cuisine === "French") {
-                    suggestions.push("Full-bodied, oaked **Chardonnay** (Meursault, California) for richness.");
-                    suggestions.push("A savory, textured **Chenin Blanc** (South Africa or Vouvray Sec).");
-                    refinement = "White wine should have enough body (from oak or lees aging) to match the chicken and rich sauce.";
-                } else if (prep_sauce === "Earthy") {
-                    suggestions.push("Earthy **Pinot Noir** (Oregon/Burgundy) to complement mushrooms or roasting notes.");
-                    suggestions.push("Aromatic **Viognier** or a dry **Fino Sherry** (Spanish) if smoked.");
-                    refinement = "Choose a wine with savory, non-fruit notes to enhance the earthy character.";
-                } else { // Light, Herbal, Acidic
-                    suggestions.push("Zesty **Sauvignon Blanc** (Sancerre) or **Pinot Grigio**.");
-                    suggestions.push("Dry, crisp **Rosé** (Provence) or a lighter style **Albariño**.");
-                    refinement = "High acidity is key to lift the delicate flavor of the poultry.";
-                }
+            // Fallback for Fried Turkey demo if keys missing
+            if (!nextNode && currentOptions.options['default']) {
+                nextNode = currentOptions.options['default'];
             }
 
-            else if (protein.startsWith("Fish")) {
-                if (prep_sauce === "Rich" && protein === "Fish_Rich") {
-                    suggestions.push("Textural, oaked **White Rioja** or a premium **Oaked Chardonnay** (California).");
-                    suggestions.push("Lightly chilled, low-tannin red like **Gamay** (for Tuna or Salmon).");
-                    refinement = "The wine must match the fat/oil content of the fish and the sauce.";
-                } else if (prep_sauce === "Acidic" || protein === "Fish_Lean" || cuisine === "Spanish") {
-                    suggestions.push("Bone-dry, high-acid **Albariño** or mineral-driven **Muscadet**.");
-                    suggestions.push("Crisp **Cava** (Spanish Sparkling) or unoaked **Chablis**.");
-                    refinement = "Only high-acid, bone-dry whites can cut through and balance the acidity of the sauce and the delicate fish.";
-                } else { // General/Simple Lean Fish
-                    suggestions.push("Crisp, saline **Vermentino** or a vibrant **Grüner Veltliner**.");
-                    suggestions.push("A dry, pale **Provençal Rosé**.");
-                    refinement = "Focus on freshness, minerality, and clean acidity.";
-                }
+            if (!nextNode) {
+                alert("Combination not found in data. Try a single selection.");
+                return;
             }
 
-            else if (protein === "Vegetarian") {
-                if (prep_sauce === "Spicy" || cuisine === "Asian") {
-                    suggestions.push("Slightly off-dry **Riesling** (Spatlese) or a fruity **New Zealand Pinot Gris**.");
-                    suggestions.push("Fizzy, fun **Moscato d'Asti** for dessert-like spice.");
-                    refinement = "Sweetness is essential to counteract capsaicin (chili heat).";
-                } else if (prep_sauce === "Earthy") { // Mushroom/truffle
-                    suggestions.push("Earthy, savory **Pinot Noir** (Red Burgundy) or a light, aged **Nebbiolo**.");
-                    suggestions.push("Textural, neutral **Viognier** or an aged, dry **Tokaji** (Hungary).");
-                    refinement = "The wine should complement the umami and savory notes of the dish.";
-                } else if (prep_sauce === "Herbal" || prep_sauce === "Acidic") {
-                    suggestions.push("Herbaceous **Sauvignon Blanc** (Pouilly-Fumé) or crisp **Assyrtiko** (Greek white).");
-                    suggestions.push("Light, slightly tannic **Gamay** (Beaujolais) if dark vegetables are involved.");
-                    refinement = "Match the 'green' notes of the herbs with a similar profile in the wine.";
-                }
-            }
+            // Label for breadcrumb
+            let readableLabel = selectedMultiOptions.map(c => currentOptions.choices[c]).join(" + ");
 
-            // --- Final Output Formatting ---
-            let finalOutput = `
-                <div class="result-title">Your Expert Pairing Suggestions:</div>
-                <ul class="suggestion-list">
-                    <li>**Primary Suggestion:** ${suggestions[0]}</li>
-                    <li>**Alternative:** ${suggestions[1] || "A versatile dry Rosé."}</li>
-                </ul>
-                <p style="margin-top: 15px; font-style: italic; color: #555;">
-                    **Sommelier Tip:** ${refinement}
-                </p>
+            // Move State
+            currentPath.push({ id: comboKey, label: readableLabel });
+            currentOptions = nextNode;
+
+            // Check if mapping leads straight to options (Course style) or another prompt (Spread style)
+            // In the Spread data structure: "A" -> { options: { "Heavy": ... } }
+            
+            // Render
+             if (currentOptions.result_specific) {
+                displayResult(currentOptions);
+            } else {
+                renderOptions(currentOptions.options || currentOptions, currentOptions.next_prompt || "Choose Preparation:");
+            }
+        }
+
+        function displayResult(data) {
+            updateBreadcrumbs();
+            stepsContainer.style.display = 'none';
+            resultDiv.style.display = 'block';
+            resultTitle.style.display = 'block';
+            
+            let html = `
+                <p>The **Absolute Best Pairing** is: <br><strong>${data.result_specific}</strong></p>
+                <p style="margin-top: 15px;">A great **Available Alternative** is: <br><strong>${data.result_general}</strong></p>
+                <div class="rationale">Rationale: ${data.rationale}</div>
+                <button id="reset-button" onclick="resetApp()">Start Over ↺</button>
             `;
             
-            return finalOutput;
-        }
-
-        // --- Event Listeners and Initialization ---
-        
-        // Helper function to handle button selection
-        function setupButtonSelection(groupId, inputElementId) {
-            const group = document.getElementById(groupId);
-            group.querySelectorAll('.emoji-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Deselect all others in the group
-                    group.querySelectorAll('.emoji-button').forEach(btn => btn.classList.remove('selected'));
-                    // Select this button
-                    this.classList.add('selected');
-                    // Store the value for pairing logic
-                    document.getElementById(inputElementId).value = this.dataset.value;
-                    updatePairing();
-                });
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Invisible input fields to hold the button selection values
-            const cuisineInput = document.createElement('input');
-            cuisineInput.type = 'hidden';
-            cuisineInput.id = 'cuisine_val';
-            document.body.appendChild(cuisineInput);
+            // Convert markdown bolds to HTML bolds
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             
-            const flavorInput = document.createElement('input');
-            flavorInput.type = 'hidden';
-            flavorInput.id = 'flavor_val';
-            document.body.appendChild(flavorInput);
+            resultDiv.innerHTML = html;
+        }
 
-            // Setup button groups
-            setupButtonSelection('cuisine-group', 'cuisine_val');
-            setupButtonSelection('flavor-group', 'flavor_val');
+        // --- Helper for Emoji ---
+        function getEmoji(key) {
+            if (key.includes("Pasta")) return "🍝";
+            if (key.includes("Risotto")) return "🍚";
+            if (key.includes("Meat") || key.includes("Beef")) return "🥩";
+            if (key.includes("Fish") || key.includes("Seafood")) return "🐟";
+            if (key.includes("Pizza")) return "🍕";
+            if (key.includes("Vegetarian")) return "🥕";
+            if (key.includes("Cheese")) return "🧀";
+            if (key.includes("Spread")) return "🦃";
+            if (key.includes("Turkey")) return "🍗";
+            if (key.includes("Course")) return "🍽️";
+            if (key.includes("Amuse")) return "🥂";
+            if (key.includes("Heavy") || key.includes("Roasted")) return "🔥";
+            if (key.includes("Light") || key.includes("Fresh")) return "🍃";
+            return "🍷";
+        }
 
-            const proteinSelect = document.getElementById('protein');
-            const resultDiv = document.getElementById('result');
+        // Start
+        init();
 
-            window.updatePairing = function() {
-                const cuisine = document.getElementById('cuisine_val').value;
-                const protein = proteinSelect.value;
-                const flavor = document.getElementById('flavor_val').value;
-
-                const pairing = getWinePairing(cuisine, protein, flavor);
-                resultDiv.innerHTML = pairing;
-            }
-
-            // Attach updatePairing to the protein dropdown
-            proteinSelect.addEventListener('change', updatePairing);
-
-            // Initial call
-            updatePairing();
-        });
     </script>
 </body>
 </html>
