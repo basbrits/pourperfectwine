@@ -3,373 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wine Pairing App - Quick Match</title>
+    <title>The Perfect Pour: Emoji Wine Pairing</title>
+    
     <style>
-        /* BASIC STYLING */
-        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
-        
-        /* TAB NAVIGATION STYLES */
-        .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
-        
-        /* Style for the active tab (Quick) */
-        .tab-button {
-            padding: 10px 20px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            border-bottom: none;
-            font-weight: bold;
+        /* --- General Styling & Font --- */
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f7f4; /* Very light, warm background */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Container & Card Design --- */
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
+        }
+
+        /* --- Headings and Typography --- */
+        h1 {
+            color: #8a032d; /* Primary Wine Red */
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 10px;
+            font-size: 2.8em;
+        }
+
+        h2 {
             color: #555;
-            text-decoration: none; /* For the link */
+            text-align: center;
+            margin-top: 5px;
+            font-weight: 300;
+            font-size: 1.2em;
+        }
+
+        /* --- Separator Line --- */
+        hr {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #8a032d, rgba(0, 0, 0, 0));
+            margin: 25px 0;
         }
         
-        .tab-button.active {
-            background-color: #f9f9f9;
-            border-color: #ddd;
-            border-bottom-color: #fff; /* Blends with content */
-            color: #000;
-            margin-bottom: -2px; /* Overlaps border */
+        .intro-text {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #777;
+            font-style: italic;
         }
 
-        /* Style for the link tab (Advanced) */
-        a.tab-button {
-            background-color: #eef; /* Slight blue tint to indicate link */
+        /* --- Dropdown Controls (Standard) --- */
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
         }
-        a.tab-button:hover {
-            background-color: #dde;
-        }
-
-        /* CONTENT AREAS */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* APP ELEMENTS */
-        .emoji-button { 
-            display: block; 
-            width: 100%; 
-            padding: 10px; 
-            margin: 5px 0; 
-            text-align: left; 
-            cursor: pointer;
-            background: white;
+        
+        .control-group select {
+            width: 100%;
+            padding: 12px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            color: #333;
+            box-sizing: border-box;
+            font-size: 1em;
+            cursor: pointer;
+            transition: border-color 0.3s;
         }
-        .emoji-button:hover { background-color: #f0f0f0; }
-        .emoji-button.multi-select-active {
-            background-color: #d1e7dd;
-            border-color: #0f5132;
+
+        .control-group select:focus {
+            outline: none;
+            border-color: #8a032d;
+        }
+
+        /* --- Button Group (Emoji Selector) Styling --- */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .emoji-button {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            color: #333;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            line-height: 1.4;
+            min-width: 100px;
         }
         
-        #breadcrumbs { margin-bottom: 15px; font-size: 0.9em; color: #666; }
-        .breadcrumb-item { display: inline-block; margin-right: 5px; cursor: pointer; color: blue; text-decoration: underline; }
-        
-        #result { 
-            display: none; 
-            background: #f8f9fa; 
-            padding: 20px; 
-            border-radius: 8px; 
-            border: 1px solid #ddd; 
+        .emoji-button span.emoji {
+            font-size: 1.5em;
+            display: block;
+            margin-bottom: 5px;
         }
-        .rationale { font-style: italic; color: #555; margin-top: 10px; }
-        #multi-warning { color: red; display: none; margin-bottom: 5px; }
-        #next-step-btn { display: none; margin-top: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+
+        .emoji-button:hover {
+            border-color: #b3003b;
+            background-color: #f7e0e7;
+        }
+
+        .emoji-button.selected {
+            background-color: #8a032d;
+            color: #ffffff;
+            border-color: #8a032d;
+            box-shadow: 0 4px 8px rgba(138, 3, 45, 0.4);
+        }
+        
+        .emoji-button.selected span.emoji {
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
+
+
+        /* --- Result Area --- */
+        .result-title {
+            color: #8a032d;
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #result {
+            margin-top: 15px;
+            padding: 25px;
+            border: 2px solid #8a032d;
+            border-radius: 10px;
+            background-color: #fcf4f5; /* Very light pink background */
+            text-align: center;
+            font-size: 1.3em;
+            min-height: 60px;
+            color: #333;
+            transition: all 0.5s ease-in-out;
+        }
+
+        #result strong {
+            color: #8a032d; /* Primary color for wine name emphasis */
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="tabs">
-        <div class="tab-button active">Quick Match</div>
-        
-        <a href="advanced-page.html" class="tab-button">Advanced Mode 🔗</a>
-    </div>
+    <div class="container">
+        <h1>🍷 The Perfect Pour</h1>
+        <h2>Instantly Match Wine to Your Meal</h2>
+        <p class="intro-text">
+            Tap the emojis to describe your dish's cuisine and dominant flavor, then select your main ingredient for an expert recommendation.
+        </p>
+        <hr>
 
-    <div id="quick-content" class="tab-content active">
-        <h2 id="res-title" style="display:none;">Pairing Result</h2>
+        <div class="control-group">
+            <label>1. Choose Cuisine Style:</label>
+            <div class="button-group" id="cuisine-group">
+                <button class="emoji-button" data-value="Italian"><span class="emoji">🇮🇹</span> Italian</button>
+                <button class="emoji-button" data-value="French"><span class="emoji">🇫🇷</span> French</button>
+                <button class="emoji-button" data-value="Spanish"><span class="emoji">🇪🇸</span> Spanish</button>
+                <button class="emoji-button" data-value="Asian"><span class="emoji">🇹🇭</span> Asian</button>
+                <button class="emoji-button" data-value="American"><span class="emoji">🇺🇸</span> American</button>
+            </div>
+        </div>
+        <hr>
+
+        <div class="control-group">
+            <label for="protein">2. Choose Main Ingredient/Protein:</label>
+            <select id="protein">
+                <option value="default" disabled selected>-- Select Main Ingredient --</option>
+                <option value="Beef/Lamb">Beef or Lamb (Heavy Red Meat)</option>
+                <option value="Pork/Veal">Pork or Veal (Light Red/White Meat)</option>
+                <option value="Poultry">Poultry (Chicken or Turkey)</option>
+                <option value="Fish_Rich">Rich Fish (Salmon, Tuna, Swordfish)</option>
+                <option value="Fish_Lean">Lean Fish (Cod, Tilapia, Shellfish)</option>
+                <option value="Vegetarian">Vegetarian/Vegan</option>
+            </select>
+        </div>
+        <hr>
         
-        <div id="steps-container">
-            <div id="breadcrumbs"></div>
-            <h3 id="step-prompt">Choose Cuisine Style:</h3>
-            <div id="multi-warning">Select up to 2 items, then click Next.</div>
-            <div id="button-options-container">
-                </div>
-            <button id="next-step-btn">Next Step &rarr;</button>
+        <div class="control-group">
+            <label>3. Choose Dominant Flavor Note:</label>
+            <div class="button-group" id="flavor-group">
+                <button class="emoji-button" data-value="Acidic"><span class="emoji">🍅</span> Tomato/Acidic</button>
+                <button class="emoji-button" data-value="Rich"><span class="emoji">🧈</span> Cream/Butter</button>
+                <button class="emoji-button" data-value="Spicy"><span class="emoji">🔥</span> Spicy/Sweet</button>
+                <button class="emoji-button" data-value="Earthy"><span class="emoji">🍄</span> Earthy/Grilled</button>
+                <button class="emoji-button" data-value="Herbal"><span class="emoji">🌿</span> Herbal/Fresh</button>
+            </div>
         </div>
 
+        <div class="result-title">Your Expert Pairing:</div>
         <div id="result">
-            </div>
+            Please make one selection in all three categories above.
+        </div>
+
     </div>
 
     <script>
-        // ==========================================
-        // DATA STRUCTURE
-        // ==========================================
+        // --- JavaScript Logic ---
         
-        // **IMPORTANT:** PASTE YOUR FULL JSON DATA HERE
-        const winePairings = {
-            "Italian": { 
-                "user_label": "Italian", 
-                "emoji": "🍝",
-                "options": {
-                    // ... Your Italian Data ...
-                }
-            },
-            // ... Your Other Cuisines ...
-        };
-
-        // ==========================================
-        // STATE MANAGEMENT
-        // ==========================================
-        let currentPath = []; 
-        let currentOptions = winePairings; 
-        
-        // Multi-select state
-        let multiSelectMode = false;
-        let selectedMultiOptions = [];
-
-        // DOM Elements
-        const breadcrumbsDiv = document.getElementById('breadcrumbs');
-        const optionsContainer = document.getElementById('button-options-container');
-        const stepPrompt = document.getElementById('step-prompt');
-        const nextBtn = document.getElementById('next-step-btn');
-        const warningMsg = document.getElementById('multi-warning');
-        const resultDiv = document.getElementById('result');
-        const resultTitle = document.getElementById('res-title');
-        const stepsContainer = document.getElementById('steps-container');
-
-        // ==========================================
-        // CORE LOGIC FUNCTIONS
-        // ==========================================
-
-        function init() {
-            // No need to setup Advanced inputs anymore!
-            // Start Quick Tab Logic immediately
-            resetApp();
-        }
-
-        // --- Breadcrumbs ---
-        function updateBreadcrumbs() {
-            breadcrumbsDiv.innerHTML = '';
-            
-            const homeBtn = document.createElement('div');
-            homeBtn.className = 'breadcrumb-item';
-            homeBtn.innerHTML = '🏠 Start';
-            homeBtn.onclick = () => resetApp();
-            breadcrumbsDiv.appendChild(homeBtn);
-
-            currentPath.forEach((step, index) => {
-                const badge = document.createElement('div');
-                badge.className = 'breadcrumb-item';
-                badge.textContent = step.label;
-                badge.onclick = () => handleBreadcrumbClick(index);
-                breadcrumbsDiv.appendChild(badge);
+        // Helper function to handle button selection
+        function setupButtonSelection(groupId, inputElementId) {
+            const group = document.getElementById(groupId);
+            group.querySelectorAll('.emoji-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Deselect all others in the group
+                    group.querySelectorAll('.emoji-button').forEach(btn => btn.classList.remove('selected'));
+                    // Select this button
+                    this.classList.add('selected');
+                    // Store the value for pairing logic
+                    document.getElementById(inputElementId).value = this.dataset.value;
+                    updatePairing();
+                });
             });
         }
 
-        function handleBreadcrumbClick(index) {
-            let ptr = winePairings;
-            for(let i=0; i<index; i++) { 
-                let key = currentPath[i].id.includes('+') ? currentPath[i].id.split('+')[0] : currentPath[i].id;
-                
-                if (ptr.options && ptr.options[key]) {
-                    ptr = ptr.options[key];
-                } else if (ptr[key]) {
-                     ptr = ptr[key];
-                } else if (ptr.type === 'multi_select') {
-                    ptr = ptr.options[key];
-                }
-            }
+        // --- Wine Pairing Core Function ---
+        function getWinePairing(cuisine, protein, flavor_note) {
             
-            currentPath = currentPath.slice(0, index);
-            currentOptions = ptr;
-
-            resultDiv.style.display = 'none';
-            resultTitle.style.display = 'none';
-            stepsContainer.style.display = 'block'; 
-            
-            if (currentPath.length === 0) {
-                renderOptions(winePairings, "1. Choose Cuisine Style:");
-            } else {
-                renderOptions(currentOptions.options || currentOptions, currentOptions.next_prompt || "Choose:");
-            }
-        }
-        
-        function resetApp() {
-            currentPath = [];
-            currentOptions = winePairings;
-            resultDiv.style.display = 'none';
-            resultTitle.style.display = 'none';
-            stepsContainer.style.display = 'block'; 
-            
-            const oldReset = document.getElementById('reset-button');
-            if(oldReset) oldReset.remove();
-
-            document.querySelectorAll('.multi-select-active').forEach(btn => btn.classList.remove('multi-select-active'));
-
-            renderOptions(winePairings, "1. Choose Cuisine Style:");
-        }
-
-        // --- Render Logic ---
-        function renderOptions(optionsObj, promptText) {
-            updateBreadcrumbs();
-            optionsContainer.innerHTML = '';
-            stepPrompt.textContent = promptText;
-            
-            multiSelectMode = false;
-            selectedMultiOptions = [];
-            nextBtn.style.display = 'none';
-            warningMsg.style.display = 'none';
-
-            if (currentOptions.type === 'multi_select') {
-                renderMultiSelect(currentOptions);
-                return;
+            if (!cuisine || !protein || !flavor_note || protein === "default") {
+                return "Please make one selection in all three categories above.";
             }
 
-            const keys = Object.keys(optionsObj).filter(k => k !== 'type' && k !== 'next_prompt' && k !== 'next_prompt_after_multi' && k !== 'choices' && k !== 'user_label' && k !== 'emoji');
+            let pairing = "A versatile choice: ";
+            let prep_sauce = flavor_note; // Use flavor_note to substitute for prep/sauce in the logic
 
-            keys.forEach(key => {
-                const btn = document.createElement('button');
-                btn.className = 'emoji-button';
-                
-                let data = optionsObj[key];
-                let label = data.user_label || key;
-                let emoji = data.emoji || getEmoji(key); 
-
-                btn.innerHTML = `<span class="emoji">${emoji}</span> ${label}`;
-                btn.onclick = () => handleSelection(key, label);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function renderMultiSelect(data) {
-            multiSelectMode = true;
-            stepPrompt.textContent = data.next_prompt;
-            
-            const choices = data.choices; 
-            Object.keys(choices).forEach(code => {
-                const btn = document.createElement('button');
-                btn.className = 'emoji-button';
-                btn.innerHTML = `<span class="emoji">🍲</span> ${choices[code]}`;
-                btn.dataset.code = code;
-                
-                btn.onclick = () => {
-                    if (selectedMultiOptions.includes(code)) {
-                        selectedMultiOptions = selectedMultiOptions.filter(c => c !== code);
-                        btn.classList.remove('multi-select-active');
-                    } else {
-                        if (selectedMultiOptions.length < 2) {
-                            selectedMultiOptions.push(code);
-                            btn.classList.add('multi-select-active');
-                        } else {
-                            warningMsg.style.display = 'block';
-                            setTimeout(() => warningMsg.style.display = 'none', 2000);
-                        }
-                    }
-                };
-                optionsContainer.appendChild(btn);
-            });
-
-            nextBtn.style.display = 'inline-block';
-            nextBtn.onclick = handleMultiSelectSubmit;
-        }
-
-        // --- Handler Logic ---
-        function handleSelection(key, label) {
-            let nextNode = currentOptions.options ? currentOptions.options[key] : currentOptions[key];
-            
-            if (!nextNode || nextNode.user_label === "Not Implemented Yet") {
-                alert("Data coming soon for this path!");
-                return;
-            }
-
-            currentPath.push({ id: key, label: label });
-            currentOptions = nextNode;
-
-            if (currentOptions.result_specific) {
-                displayResult(currentOptions);
-            } else {
-                if (currentOptions.type === 'multi_select') {
-                    renderMultiSelect(currentOptions);
+            // --- Base Pairing Logic (Protein & Sauce/Flavor) ---
+            if (protein === "Beef/Lamb") {
+                if (prep_sauce === "Acidic" && cuisine === "Italian") {
+                    pairing = "Classic **Chianti Classico** or **Barbera** (medium-bodied Italian red).";
+                } else if (prep_sauce === "Rich" || prep_sauce === "Earthy") {
+                    pairing = "Bold **Cabernet Sauvignon**, **Left Bank Bordeaux**, or **Syrah/Shiraz**.";
+                } else if (cuisine === "American") {
+                    pairing = "Powerful **Napa Cabernet Sauvignon** or peppery **Zinfandel**.";
                 } else {
-                    renderOptions(currentOptions.options || currentOptions, currentOptions.next_prompt);
+                    pairing = "Smooth **Merlot** or earthy **Malbec**.";
                 }
             }
+            else if (protein === "Pork/Veal" || protein === "Poultry") {
+                if (prep_sauce === "Spicy" || cuisine === "Asian") {
+                    pairing = "**Off-dry Riesling** (German or Alsatian) or aromatic **Gewürztraminer**.";
+                } else if (prep_sauce === "Rich" || cuisine === "French") {
+                    pairing = "Rich, oaked **Chardonnay** (White Burgundy) or light-bodied, earthy **Pinot Noir**.";
+                } else if (prep_sauce === "Acidic" || cuisine === "Italian") {
+                    pairing = "Medium-bodied **Sangiovese** (unoaked) or a high-acid **Rosé**.";
+                } else {
+                    pairing = "Versatile **Pinot Noir** or medium-bodied **Viognier**.";
+                }
+            }
+            else if (protein.startsWith("Fish")) {
+                if (prep_sauce === "Rich") {
+                    pairing = "Full-bodied **Oaked Chardonnay** or traditional **White Rioja**.";
+                } else if (prep_sauce === "Acidic" || protein === "Fish_Lean" || prep_sauce === "Herbal") {
+                    if (cuisine === "Spanish") {
+                         pairing = "Crisp **Albariño** or refreshing **Cava** (Spanish Sparkling).";
+                    } else {
+                         pairing = "Zesty **Sauvignon Blanc** (Sancerre/NZ) or bone-dry **Muscadet**.";
+                    }
+                } else {
+                    pairing = "Crisp **Pinot Grigio** or dry **Rosé**.";
+                }
+            }
+            else if (protein === "Vegetarian") {
+                if (prep_sauce === "Spicy" || cuisine === "Asian") {
+                    pairing = "**Off-dry Riesling** or bright **Grüner Veltliner**.";
+                } else if (prep_sauce === "Earthy") {
+                    pairing = "Earthy **Pinot Noir** or textural **Nebbiolo** (lightly aged).";
+                } else {
+                    pairing = "Herbaceous **Sauvignon Blanc** or light **Gamay** (Beaujolais).";
+                }
+            }
+            
+            // --- Final Refinement based on Dominant Flavor Note ---
+            let refinement = "";
+
+            if (flavor_note === "Spicy") {
+                refinement = " *Hint: Look for a wine with a slight sweetness or lower alcohol to balance the heat, like a German Riesling.*";
+            } else if (flavor_note === "Herbal") {
+                refinement = " *Hint: Pair with a wine that has similar green notes, such as Sauvignon Blanc or Cabernet Franc.*";
+            } else if (flavor_note === "Acidic") {
+                 refinement = " *Hint: The wine must be as acidic as the food, otherwise it will taste flabby. Go for high-acid varieties.*";
+            } else if (flavor_note === "Rich") {
+                 refinement = " *Hint: Choose a full-bodied wine with richness (oak/texture) to match the fat content of the sauce.*";
+            } else if (flavor_note === "Earthy") {
+                 refinement = " *Hint: An old-world, savory red or a textural, mushroom-friendly white will be best.*";
+            }
+            
+            return pairing + refinement;
         }
 
-        function handleMultiSelectSubmit() {
-            if (selectedMultiOptions.length === 0) {
-                warningMsg.style.display = 'block';
-                return;
+        // --- Event Listeners and Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Invisible input fields to hold the button selection values
+            const cuisineInput = document.createElement('input');
+            cuisineInput.type = 'hidden';
+            cuisineInput.id = 'cuisine_val';
+            document.body.appendChild(cuisineInput);
+            
+            const flavorInput = document.createElement('input');
+            flavorInput.type = 'hidden';
+            flavorInput.id = 'flavor_val';
+            document.body.appendChild(flavorInput);
+
+            // Setup button groups
+            setupButtonSelection('cuisine-group', 'cuisine_val');
+            setupButtonSelection('flavor-group', 'flavor_val');
+
+            const proteinSelect = document.getElementById('protein');
+            const resultDiv = document.getElementById('result');
+
+            window.updatePairing = function() {
+                const cuisine = document.getElementById('cuisine_val').value;
+                const protein = proteinSelect.value;
+                const flavor = document.getElementById('flavor_val').value;
+
+                const pairing = getWinePairing(cuisine, protein, flavor);
+                resultDiv.innerHTML = pairing;
             }
 
-            selectedMultiOptions.sort();
-            let comboKey = selectedMultiOptions.join('+');
-            
-            let nextNode = currentOptions.options[comboKey];
-            
-            if (!nextNode && selectedMultiOptions.length > 0) {
-                 nextNode = currentOptions.options[selectedMultiOptions[0]];
-            }
-            
-            if (!nextNode && currentOptions.options['default']) {
-                nextNode = currentOptions.options['default'];
-            }
+            // Attach updatePairing to the protein dropdown
+            proteinSelect.addEventListener('change', updatePairing);
 
-            if (!nextNode) {
-                alert("Combination not found in data. Try a single selection.");
-                return;
-            }
-
-            let readableLabel = selectedMultiOptions.map(c => currentOptions.choices[c]).join(" + ");
-
-            currentPath.push({ id: comboKey, label: readableLabel });
-            currentOptions = nextNode;
-
-            if (currentOptions.result_specific) {
-                displayResult(currentOptions);
-            } else {
-                renderOptions(currentOptions.options || currentOptions, currentOptions.next_prompt || "Choose Preparation:");
-            }
-        }
-
-        function displayResult(data) {
-            updateBreadcrumbs();
-            stepsContainer.style.display = 'none';
-            resultDiv.style.display = 'block';
-            resultTitle.style.display = 'block';
-            
-            let html = `
-                <p>The **Absolute Best Pairing** is: <br><strong>${data.result_specific}</strong></p>
-                <p style="margin-top: 15px;">A great **Available Alternative** is: <br><strong>${data.result_general}</strong></p>
-                <div class="rationale">Rationale: ${data.rationale}</div>
-                <button id="reset-button" onclick="resetApp()">Start Over ↺</button>
-            `;
-            
-            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            resultDiv.innerHTML = html;
-        }
-
-        // --- Helper for Emoji ---
-        function getEmoji(key) {
-            if (key.includes("Pasta")) return "🍝";
-            if (key.includes("Risotto")) return "🍚";
-            if (key.includes("Meat") || key.includes("Beef")) return "🥩";
-            if (key.includes("Fish") || key.includes("Seafood")) return "🐟";
-            if (key.includes("Pizza")) return "🍕";
-            if (key.includes("Vegetarian")) return "🥕";
-            if (key.includes("Cheese")) return "🧀";
-            if (key.includes("Spread")) return "🦃";
-            if (key.includes("Turkey")) return "🍗";
-            if (key.includes("Course")) return "🍽️";
-            if (key.includes("Amuse")) return "🥂";
-            if (key.includes("Heavy") || key.includes("Roasted")) return "🔥";
-            if (key.includes("Light") || key.includes("Fresh")) return "🍃";
-            return "🍷";
-        }
-
-        // Start App
-        document.addEventListener('DOMContentLoaded', init);
-
+            // Initial call
+            updatePairing();
+        });
     </script>
 </body>
 </html>
