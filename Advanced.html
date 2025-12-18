@@ -251,402 +251,186 @@
         
         // Helper to keep the file shorter - I've kept the structure but focused on the Festive Data
         const winePairings = {
-           "Italian": {
-                "title": "Italian Cuisine 🇮🇹",
-                "next_prompt": "2. Choose Initial Category:",
-                "emoji": "🇮🇹",
-                "options": {
-                    // Level 2: INITIAL CATEGORY
-                    "Pasta / Gnocchi": {
-                        "user_label": "🍝 Pasta & Noodles",
-                        "next_prompt": "3. Choose Dominant Sauce Style:",
-                        "options": {
-                            // Level 3: PASTA SAUCE STYLE
-                            "Tomato-Based (Red)": {
-                                "next_prompt": "4. Choose Combination/Protein Type:",
-                                "options": {
-                                    "Heavy Meat Ragu: (Beef, Wild Boar, Lamb)": {
-                                        "result_specific": "Classic **Chianti Classico Riserva** (Tuscany, Sangiovese)",
-                                        "result_general": "Excellent alternative: **Cabernet Sauvignon** (E.g., Chilean or Washington State)",
-                                        "rationale": "The high acidity in Chianti cuts the fat of the heavy meat, while its firm tannins match the richness of the ragu. Cabernet Sauvignon is an excellent alternative because its high tannin and robust structure are universally known to pair well with heavy red meats."
-                                    },
-                                    "White Meat / Sausage: (Pork sausage, Veal, lighter meats)": {
-                                        "result_specific": "**Aglianico del Vulture** (Basilicata) or **Montepulciano d'Abruzzo**",
-                                        "result_general": "Excellent alternative: **Zinfandel** (Californian) or **Côtes du Rhône** (French Blend)",
-                                        "rationale": "The best pairings offer a medium body and soft tannins, focusing on earthy/spicy notes that complement sausage fennel/spice. Zinfandel works because its dark, jammy fruit and spice notes are delicious with pork/sausage, and it typically has softer tannins than Cabernet."
-                                    },
-                                    "Vegetable-Forward: (Simple marinara with vegetables)": {
-                                        "result_specific": "**Rosso di Montalcino** (Tuscany, Sangiovese) or **Dry Rosato** (Puglia)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Any region) or **Sauvignon Blanc** (New Zealand/Chile)",
-                                        "rationale": "This requires high acidity to match the tomato but low tannins to avoid clashing with the lack of meat fat. Pinot Noir is a light-bodied, high-acid red that handles tomato beautifully."
-                                    },
-                                    "Spicy / Chili: (Arrabbiata, Puttanesca)": {
-                                        "result_specific": "**Fiano di Avellino** (Campania) or **Dolcetto d'Alba** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Off-Dry Riesling** (Germany/Alsace) or **Gamay / Beaujolais** (France)",
-                                        "rationale": "The key for spice is low alcohol and low tannin, as these elements magnify heat. Off-Dry Riesling (or a slightly sweeter white) is universally recommended for spice because the residual sugar calms the heat."
-                                    },
-                                    "Seafood / Light: (Quick-cooked tomato sauce with clams or mussels)": {
-                                        "result_specific": "**Vermentino di Sardegna** (Sardinia) or **Falanghina** (Campania)",
-                                        "result_general": "Excellent alternative: **Pinot Grigio** (Italy) or **Unoaked Chardonnay** (Chablis, etc.)",
-                                        "rationale": "The high-acid, mineral/saline coastal Italian whites are perfect partners for seafood. Pinot Grigio is the most available and reliable choice, offering the required crispness and acid."
-                                    }
-                                }
-                            },
-                            "Cream/Butter/Cheese-Based": {
-                                "next_prompt": "4. Choose Combination/Protein Type:",
-                                "options": {
-                                    "Robust Cheese: (Cacio e Pepe, heavy Pecorino/Parmigiano)": {
-                                        "result_specific": "**Fiano di Avellino** (Campania) or **Verdicchio dei Castelli di Jesi Riserva** (Marche)",
-                                        "result_general": "Excellent alternative: **Oaked Chardonnay** (Burgundy or California) or **White Rioja** (Spain)",
-                                        "rationale": "The high savory, salty, and umami intensity of aged cheese requires a full-bodied white with good acid and texture. Oaked Chardonnay has the weight and savory notes to complement the richness, while its acidity cleanses the palate."
-                                    },
-                                    "Egg / Carbonara Style: (High egg/cured meat content)": {
-                                        "result_specific": "**Frascati Superiore** (Lazio) or **Champagne / Franciacorta** (Brut)",
-                                        "result_general": "Excellent alternative: **Dry Sparkling Wine** (Cava or Prosecco Brut)",
-                                        "rationale": "Carbonara is extremely rich and high in fat. The bubbles and high acidity of a quality sparkling wine act as a palate cleanser, cutting through the dish's richness. Dry Champagne is the gold standard for high-fat dishes."
-                                    },
-                                    "Mushroom / Earthy: (Porcini, Truffles, or heavy funghi)": {
-                                        "result_specific": "**Barolo** or **Barbaresco** (Piedmont, Nebbiolo) or Aged Nebbiolo",
-                                        "result_general": "Excellent alternative: **Aged Pinot Noir** (Burgundy or Oregon) or **Medium-Dry Sherry** (Amontillado)",
-                                        "rationale": "The earthy, complex flavors of mushrooms and truffles pair beautifully with the complex, tertiary notes of aged, savory red wines. Barolo is the regional match."
-                                    },
-                                    "Rich Meat / Game: (Cream sauce with pancetta, guanciale, or game)": {
-                                        "result_specific": "**Barbera d'Asti** (Piedmont) or **Lagrein** (Alto Adige)",
-                                        "result_general": "Excellent alternative: **Merlot** (Bordeaux or Washington State) or **Medium-Bodied Sangiovese**",
-                                        "rationale": "The cream and meat require a red wine with very high acidity to cut the fat, but with soft, supple tannins that won't clash with the creamy texture. Barbera is famous for its bright acidity and soft tannins."
-                                    },
-                                    "Simple / Light Cream: (Simple butter sauce, light ricotta filling)": {
-                                        "result_specific": "**Soave Classico** (Veneto) or **Gavi (Cortese)** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Pinot Grigio** (Alto Adige/Friuli) or **Unoaked White Blend** (E.g., Veltliner)",
-                                        "rationale": "A simple, delicate sauce needs a crisp, unoaked white that is highly refreshing. Soave and Gavi offer light body, refreshing acidity, and a touch of almond/mineral quality."
-                                    }
-                                }
-                            },
-                            "Seafood-Based (Light)": {
-                                "next_prompt": "4. Choose Combination/Protein Type:",
-                                "options": {
-                                    "Shellfish (Salty): (Vongole, Mussels, high-saline seafood)": {
-                                        "result_specific": "**Vermentino di Sardegna** (Sardinia) or **Fiano di Avellino** (Campania)",
-                                        "result_general": "Excellent alternative: **Albariño** (Rías Baixas, Spain) or **Sauvignon Blanc** (Sancerre, France)",
-                                        "rationale": "The high salinity and fresh flavor of shellfish require a wine with sharp, refreshing acidity and intense minerality to harmonize with the ocean flavors. Albariño/Sancerre are universally available, high-acid whites with a similar crisp, mineral profile."
-                                    },
-                                    "Rich Fish / Calamari: (Tuna, swordfish, deep-fried calamari)": {
-                                        "result_specific": "**Etna Bianco** (Sicily, Carricante) or **Grechetto** (Umbria)",
-                                        "result_general": "Excellent alternative: **Pinot Gris** (Alsace) or **Unoaked Chardonnay** (Chablis, France)",
-                                        "rationale": "Richer or fried fish needs a wine with slightly more body and texture to stand up to the fat. Pinot Gris and Unoaked Chardonnay offer that necessary structure and weight without overpowering the dish with oak."
-                                    },
-                                    "Lemon / Acidic: (Sauce heavily flavored with lemon/citrus)": {
-                                        "result_specific": "**Falanghina** (Campania) or **Verdicchio dei Castelli di Jesi** (Marche)",
-                                        "result_general": "Excellent alternative: **Sauvignon Blanc** (New Zealand) or **Dry Riesling** (Austria)",
-                                        "rationale": "The wine must be as acidic as the dish's lemon/citrus to prevent the wine from tasting flat. Sauvignon Blanc and Dry Riesling are globally available, reliable high-acid choices."
-                                    },
-                                    "Herbaceous / Green: (Pesto with seafood, heavy parsley/basil)": {
-                                        "result_specific": "**Gavi (Cortese)** (Piedmont) or **Soave Classico** (Veneto)",
-                                        "result_general": "Excellent alternative: **Verdejo** (Spain) or **Sauvignon Blanc** (Chile)",
-                                        "rationale": "Herbaceous flavors (especially pesto) require a wine that is unoaked and has 'green' or fresh herbal notes to match. Sauvignon Blanc and Verdejo are famous for their signature herbal and grassy aromas."
-                                    },
-                                    "Simple / Steamed: (Shrimp or fish simply poached/steamed)": {
-                                        "result_specific": "**Pinot Grigio** (Alto Adige/Friuli) or **Prosecco (Brut)** (Veneto)",
-                                        "result_general": "Excellent alternative: **Pinot Grigio** (Any region) or **Cava (Brut)** (Spain)",
-                                        "rationale": "The simplest preparation needs the simplest, most refreshing pairing. High-quality Pinot Grigio is light, crisp, and refreshing."
-                                    }
-                                }
-                            },
-                            "Oil-Based / Garlic": {
-                                "next_prompt": "4. Choose Combination/Flavor Type:",
-                                "options": {
-                                    "Garlic / Chili Heavy: (Aglio e Olio)": {
-                                        "result_specific": "**Falanghina** (Campania) or **Verdicchio dei Castelli di Jesi** (Marche)",
-                                        "result_general": "Excellent alternative: **Sauvignon Blanc** (New Zealand/Chile) or **Off-Dry Riesling** (Germany/Alsace)",
-                                        "rationale": "The intense garlic and chili require a wine with high acidity and noticeable body/aromatics to cleanse the palate. Off-Dry Riesling is a fantastic choice because its slight sweetness is the best counterpoint for intense spice."
-                                    },
-                                    "Breadcrumbs / Nutty: (Pangrattato, walnuts, pine nuts)": {
-                                        "result_specific": "**Fiano di Avellino** (Campania) or **Vernaccia di San Gimignano** (Tuscany)",
-                                        "result_general": "Excellent alternative: **Oaked Chardonnay** (California or Mâcon, France) or **White Rioja** (Spain)",
-                                        "rationale": "The nutty and savory/toasted texture works best with a white wine that has a similar texture or subtle savory complexity. Oaked Chardonnay is a great match because its subtle vanilla/nutty notes and fuller body complement the toasty element."
-                                    },
-                                    "Tomato / Olive: (Puttanesca [no heavy meat] or simple olives)": {
-                                        "result_specific": "**Rosato (Rosé)** from Abruzzo (Montepulciano d'Abruzzo based) or **Cerasuolo**",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Any region) or **Dry Rosé** (Provence, France)",
-                                        "rationale": "This combination has the acidity of tomato, the salt of olives, and often savory/umami from capers. A savory, structured Italian Rosato is the perfect bridge. Pinot Noir is an excellent alternative red because its light body, high acid, and low tannins handle the savory tomato/olive flavor."
-                                    },
-                                    "Herbaceous / Green: (Oil with heavy oregano, parsley, or rosemary)": {
-                                        "result_specific": "**Gavi (Cortese)** (Piedmont) or **Soave Classico** (Veneto)",
-                                        "result_general": "Excellent alternative: **Sauvignon Blanc** (Sancerre, France) or **Verdejo** (Spain)",
-                                        "rationale": "When fresh herbs are the dominant flavor, the wine should echo these 'green' and herbaceous notes. Sauvignon Blanc and Verdejo are world-renowned for their herbal, grassy, and citrus character."
-                                    },
-                                    "Simple / Minimal: (Pasta simply dressed with high-quality olive oil)": {
-                                        "result_specific": "**Pinot Grigio** (Alto Adige/Friuli) or **Prosecco (Brut)** (Veneto)",
-                                        "result_general": "Excellent alternative: **Pinot Grigio** (Any region) or **Soave Classico** (Veneto)",
-                                        "rationale": "This delicate dish must not be overpowered. The wine should be light, neutral, and crisp to cleanse the palate and highlight the quality of the olive oil."
-                                    }
-                                }
-                            },
-                            "Stuffed Pasta (Richer)": {
-                                "next_prompt": "4. Choose Combination/Filling Type:",
-                                "options": {
-                                    "Beef / Veal Filling: (Classic meat tortelli, Anolini)": {
-                                        "result_specific": "**Barbera d'Asti** (Piedmont) or **Dolcetto d'Alba** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Merlot** (Bordeaux or Washington State) or **Chianti** (Tuscany)",
-                                        "rationale": "The cooked red meat filling requires a savory, medium-bodied red with high acidity to cut the richness of the meat and the often butter-based sauce. Barbera and Dolcetto are regional classics."
-                                    },
-                                    "Game / Rich Meat: (Duck, Rabbit, Wild Boar filling)": {
-                                        "result_specific": "**Pinot Noir** (Alto Adige/Trentino) or **Aglianico del Vulture** (Basilicata)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Oregon or Burgundy) or **Medium-bodied Zinfandel** (California)",
-                                        "rationale": "Game meats require a wine that is slightly more complex, earthy, and aromatic, but not overly tannic. Pinot Noir is the classic choice for duck and other game birds due to its earthy notes."
-                                    },
-                                    "Rich Cheese / Cream: (Heavy ricotta/cheese filling, no spinach)": {
-                                        "result_specific": "**Oaked Chardonnay** (Tuscany, Sicily, or Alto Adige) or **Verdicchio Riserva** (Marche)",
-                                        "result_general": "Excellent alternative: **Oaked Chardonnay** (California or White Burgundy) or **White Rioja** (Spain)",
-                                        "rationale": "The high-fat, rich dairy filling needs a full-bodied white wine with good structure and a creamy texture to match the food. Oaked Chardonnay provides the required weight."
-                                    },
-                                    "Light Vegetable / Herb: (Spinach/Ricotta, pumpkin/squash [non-sweet])": {
-                                        "result_specific": "**Gavi (Cortese)** (Piedmont) or **Soave Classico** (Veneto)",
-                                        "result_general": "Excellent alternative: **Sauvignon Blanc** (Sancerre, France) or **Pinot Grigio** (Friuli/Alto Adige)",
-                                        "rationale": "Lighter vegetable fillings are delicate and often paired with butter/sage. The wine must be crisp, unoaked, and aromatic. Gavi is known for its fresh, subtle herbal notes."
-                                    },
-                                    "Sweet / Spice: (Sweet pumpkin/squash filling, e.g., Tortelli di Zucca)": {
-                                        "result_specific": "**Lambrusco Amabile/Secco** (Emilia-Romagna) or **Recioto di Soave** (Veneto)",
-                                        "result_general": "Excellent alternative: **Off-Dry Riesling** (Mosel, Germany) or **Dry Sparkling Rosé** (Prosecco, Cava)",
-                                        "rationale": "This is challenging, requiring a wine that can handle both the sweetness and often intense spice. A slightly sweet, sparkling Lambrusco is the perfect regional match. Off-Dry Riesling is the best alternative."
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "Risotto / Polenta": {
-                        "user_label": "🍚 Rice & Creamy Grains",
-                        "next_prompt": "3. Choose Primary Base/Fat:",
-                        "options": {
-                            // Level 3: RISOTTO BASE/FAT
-                            "Saffron / Butter": {
-                                "next_prompt": "4. Choose Combination/Protein Type:",
-                                "options": {
-                                    "Ossobuco / Heavy Meat: (Rich, slow-cooked meat or jus)": {
-                                        "result_specific": "**Barolo** (Piedmont, Nebbiolo) or **Valpolicella Ripasso** (Veneto)",
-                                        "result_general": "Excellent alternative: **Cabernet Sauvignon** (Bordeaux or Napa Valley) or **Shiraz/Syrah** (Rhône Valley/Australia)",
-                                        "rationale": "Ossobuco is a heavy, rich, savory dish. It requires a powerful, structured red wine with high tannins and enough body to stand up to the slow-cooked meat."
-                                    },
-                                    "Rich Bone Marrow: (Traditional Milanese style, very fatty)": {
-                                        "result_specific": "**Franciacorta Brut** (Lombardy) or **Alto Adige Pinot Bianco** (Trentino)",
-                                        "result_general": "Excellent alternative: **Dry Champagne** (Brut, Multi-Vintage) or **Unoaked Chardonnay** (Chablis)",
-                                        "rationale": "High-fat dishes require a wine with extremely high acidity and/or effervescence to cut through the fat and cleanse the palate. Franciacorta is a perfect regional match."
-                                    },
-                                    "Mushroom / Earthy: (Porcini, truffles, or other earthy fungi)": {
-                                        "result_specific": "**Barbaresco** (Piedmont, Nebbiolo) or **Older Chianti Classico** (Tuscany)",
-                                        "result_general": "Excellent alternative: **Aged Pinot Noir** (Burgundy or Oregon) or **Medium-Dry Sherry** (Amontillado)",
-                                        "rationale": "The savory, complex flavors of mushrooms and truffles pair beautifully with the tertiary notes (earth, leather, tobacco) of aged, savory red wines. Barbaresco is the regional match."
-                                    },
-                                    "Simple / Light Herbs: (Just butter/saffron, focus on pure flavor)": {
-                                        "result_specific": "**Soave Classico** (Veneto) or **Gavi (Cortese)** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Pinot Grigio** (Friuli/Alto Adige) or **Dry Rosé** (Provence, France)",
-                                        "rationale": "This is a delicate dish that shouldn't be overpowered. It needs a very light, unoaked, high-acid white. Soave and Gavi are ideal, crisp Italian choices."
-                                    },
-                                    "Poultry / White Meat: (Chicken or veal pieces in the risotto)": {
-                                        "result_specific": "**Lugana** (Veneto/Lombardy, Turbiana) or **Pinot Bianco** (Alto Adige)",
-                                        "result_general": "Excellent alternative: **Viognier** (Rhône Valley/Australia) or **Oaked Chardonnay** (Macon or California)",
-                                        "rationale": "White meat needs a slightly richer, more textural white wine than simple risotto. Lugana and Pinot Bianco have enough body and weight. Viognier and Oaked Chardonnay are excellent alternatives."
-                                    }
-                                }
-                            },
-                            "Rich Cheese / Cream": {
-                                "next_prompt": "4. Choose Combination/Flavor Type:",
-                                "options": {
-                                    "Strong/Aged Cheese: (Gorgonzola, heavy Taleggio, Pecorino)": {
-                                        "result_specific": "**Recioto di Soave** (Sweet, Veneto) or **Marsala Superiore** (Fortified)",
-                                        "result_general": "Excellent alternative: **Sauternes** (Sweet Bordeaux) or **Off-Dry Riesling** (Germany)",
-                                        "rationale": "The absolute best pairing for pungent blue/aged cheeses is often a contrasting sweet wine. The sweetness of the wine balances the cheese's salt and pungent notes."
-                                    },
-                                    "Butternut / Squash / Pumpkin: (Sweet-savory vegetable element)": {
-                                        "result_specific": "**Arneis** (Piedmont) or **Pinot Grigio Ramato** (Friuli)",
-                                        "result_general": "Excellent alternative: **Viognier** (Rhône Valley/Australia) or **Oaked Chardonnay** (Macon, France)",
-                                        "rationale": "The subtle sweetness of squash requires a white wine with a round, textured body and aromatic intensity. Viognier offers a full body and notes of peach/apricot that harmonize well with sweet vegetables."
-                                    },
-                                    "Earthy / Truffle: (Truffles or intense truffle oil flavor)": {
-                                        "result_specific": "**Aged Barolo** (Piedmont, Nebbiolo) or **Barbaresco**",
-                                        "result_general": "Excellent alternative: **Aged Pinot Noir** (Burgundy or Oregon) or **Cru Beaujolais** (Morgon, Fleurie)",
-                                        "rationale": "The distinct, savory umami of truffle and rich mushroom pairs best with aged red wines that exhibit tertiary, earthy aromas. Barolo/Barbaresco is the classic regional pairing."
-                                    },
-                                    "Game / Savory Meat: (Duck, Wild Boar, or heavy pancetta)": {
-                                        "result_specific": "**Barbera d'Asti Superiore** (Piedmont) or **Lagrein** (Alto Adige)",
-                                        "result_general": "Excellent alternative: **Merlot** (Bordeaux or Washington State) or **Medium-bodied Zinfandel** (California)",
-                                        "rationale": "The high fat and savory nature of the meat demand a red wine with very high acidity to cut through the fat, and soft, approachable tannins. Barbera is famous for its bright acidity."
-                                    },
-                                    "Light Vegetable: (Asparagus, zucchini, or simple greens)": {
-                                        "result_specific": "**Soave Classico** (Veneto) or **Verdicchio dei Castelli di Jesi** (Marche)",
-                                        "result_general": "Excellent alternative: **Sauvignon Blanc** (Sancerre, France) or **Pinot Grigio** (Alto Adige/Friuli)",
-                                        "rationale": "Lighter vegetables, especially asparagus which can be tricky, require a wine with high acidity and crisp, sometimes herbaceous notes. Sauvignon Blanc is an excellent alternative."
-                                    }
-                                }
-                            },
-                            "Vegetable Broth (Light)": {
-                                "next_prompt": "4. Choose Combination/Vegetable Type:",
-                                "options": {
-                                    "Peas / Zucchini: (Simple, fresh, green vegetables)": {
-                                        "result_specific": "**Soave Classico** (Veneto, Garganega) or **Gavi (Cortese)** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Pinot Grigio** (Alto Adige/Friuli) or **Sauvignon Blanc** (Chile)",
-                                        "rationale": "These light, fresh green vegetables pair best with crisp, unoaked whites that have a slightly neutral profile, letting the vegetable flavor shine. Soave and Gavi are dry, high-acid Italian classics."
-                                    },
-                                    "Asparagus / Artichoke: (Vegetables with bitter or distinct flavor)": {
-                                        "result_specific": "**Sauvignon Blanc** (Alto Adige, Italy) or **Verdicchio dei Castelli di Jesi** (Marche)",
-                                        "result_general": "Excellent alternative: **Sauvignon Blanc** (Sancerre/New Zealand) or **Dry Riesling** (Austria)",
-                                        "rationale": "Asparagus and artichoke contain compounds that can make dry, tannic, or high-alcohol wines taste metallic or bitter. The best pairing is a highly acidic white with a natural affinity for 'green' flavors."
-                                    },
-                                    "Herb Pesto / Basil: (Strong presence of green herbs, not cream)": {
-                                        "result_specific": "**Vermentino di Sardegna** (Sardinia) or **Gavi (Cortese)** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Sauvignon Blanc** (Sancerre, France) or **Verdejo** (Spain)",
-                                        "rationale": "The intense, aromatic green herbs require a wine that can match this aromatic intensity. Vermentino and Gavi offer that aromatic complexity with good acidity."
-                                    },
-                                    "Tomato / Red Pepper: (Lightly colored with red vegetables)": {
-                                        "result_specific": "**Rosato (Rosé)** from Abruzzo (Cerasuolo style) or **Bardolino** (Veneto)",
-                                        "result_general": "Excellent alternative: **Dry Rosé** (Provence, France) or **Gamay / Beaujolais** (France)",
-                                        "rationale": "The tomato and red pepper introduce a degree of acidity and subtle sweetness that is best matched by a high-acid, versatile wine. Gamay (Beaujolais) is an ideal light red alternative—high acid, low tannin, and served slightly cool."
-                                    },
-                                    "Legumes / Beans: (Lentils or hearty bean component)": {
-                                        "result_specific": "**Chianti** (Tuscany, Sangiovese) or **Bardolino** (Veneto)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Any region) or **Medium-bodied Merlot** (Chile)",
-                                        "rationale": "The hearty texture and earthiness of lentils and beans require a little more body than simple greens. Chianti is the classic match for beans due to its high acidity and savory character."
-                                    }
-                                }
-                            },
-                            "Tomato / Red Wine Base": {
-                                "next_prompt": "4. Choose Combination/Protein Type:",
-                                "options": {
-                                    "Heavy Meat / Game: (Beef, Wild Boar, Salsiccia)": {
-                                        "result_specific": "**Barolo** or **Barbaresco** (Piedmont, Nebbiolo) or **Chianti Classico Riserva** (Tuscany)",
-                                        "result_general": "Excellent alternative: **Cabernet Sauvignon** (Napa or Bordeaux) or **Shiraz/Syrah** (Australia/Rhône)",
-                                        "rationale": "This is the heaviest combination. It requires a powerful, structured red wine with high acidity (to match the tomato/red wine base) and high tannins (to cut through the richness of the meat/sausage). Barolo and Chianti Classico fit this profile perfectly."
-                                    },
-                                    "Poultry / White Meat: (Chicken, Veal)": {
-                                        "result_specific": "**Aglianico del Vulture** (Basilicata) or **Montepulciano d'Abruzzo**",
-                                        "result_general": "Excellent alternative: **Zinfandel** (California) or **Merlot** (Bordeaux/Chile)",
-                                        "rationale": "This needs a red wine with excellent acidity to handle the tomato and richness, but with softer, more supple tannins that won't overpower the poultry/veal. Aglianico and Montepulciano are medium-bodied, savory reds."
-                                    },
-                                    "Seafood / Robust Fish: (Tuna, swordfish, heavy fish stock)": {
-                                        "result_specific": "**Etna Rosso** (Sicily, Nerello Mascalese) or **Rosso di Montalcino** (Tuscany)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Oregon/Burgundy) or **Dry Rosato** (Puglia)",
-                                        "rationale": "This combination requires a light-bodied, savory, high-acid red with very low tannins. Etna Rosso is a high-acid, savory red that handles both the tomato and the meaty texture of tuna/swordfish well."
-                                    },
-                                    "Vegetarian / Simple: (Just tomato and/or basic vegetables)": {
-                                        "result_specific": "**Bardolino** (Veneto) or **Valpolicella Classico** (Veneto)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Any region) or **Gamay / Beaujolais** (France)",
-                                        "rationale": "The simple, savory tomato base needs a high-acid, low-tannin red that can be served slightly cool. Bardolino and Valpolicella are perfect regional choices."
-                                    },
-                                    "Spicy / Chili: (Arriving with a noticeable kick of heat)": {
-                                        "result_specific": "**Dolcetto d'Alba** (Piedmont) or **Lagrein** (Alto Adige)",
-                                        "result_general": "Excellent alternative: **Zinfandel** (California) or **Cru Beaujolais** (France)",
-                                        "rationale": "The presence of spice mandates a wine that is low in alcohol and tannin. Dolcetto is a fruity red with soft tannins and moderate alcohol. Zinfandel is a great counterpoint."
-                                    }
-                                }
-                            },
-                            "Seafood Broth (Robust)": {
-                                "next_prompt": "4. Choose Combination/Flavor Type:",
-                                "options": {
-                                    "Black Ink (Nero di Seppia): (Dark, rich, and intensely savory)": {
-                                        "result_specific": "**Vermentino di Sardegna** (High Quality) or **Etna Bianco** (Sicily, Carricante)",
-                                        "result_general": "Excellent alternative: **Sémillon** (Australia/Bordeaux) or **Sauvignon Blanc** (Fumé Blanc style)",
-                                        "rationale": "The savory, rich, and slightly metallic flavor of black ink requires a white wine with substantial body, structure, and high acidity to cut the richness. Sémillon offers a round texture and ability to age, matching the dish's complexity."
-                                    },
-                                    "Shellfish (Salty): (Clams/Vongole, Mussels, high-saline seafood)": {
-                                        "result_specific": "**Greco di Tufo** (Campania) or **Verdicchio dei Castelli di Jesi Riserva** (Marche)",
-                                        "result_general": "Excellent alternative: **Albariño** (Rías Baixas, Spain) or **Sauvignon Blanc** (Sancerre, France)",
-                                        "rationale": "The intense salinity of shellfish demands a bone-dry, high-acid white with pronounced minerality. Greco di Tufo is a complex, high-acid Southern Italian white."
-                                    },
-                                    "Rich Fish / Shrimp: (Tuna, Monkfish, large prawns)": {
-                                        "result_specific": "**Lugana** (Veneto/Lombardy, Turbiana) or **Fiano di Avellino** (Campania)",
-                                        "result_general": "Excellent alternative: **Viognier** (Rhône Valley/Australia) or **Oaked Chardonnay** (Chablis Premier Cru or Burgundy)",
-                                        "rationale": "Rich, meaty fish and large prawns require a white wine with more texture and body to match the food's weight. Viognier offers a fuller body and round texture."
-                                    },
-                                    "Tomato / Light Red: (Seafood base with a tomato component)": {
-                                        "result_specific": "**Etna Rosso** (Sicily, Nerello Mascalese) or **Rosato (Rosé) del Salento** (Puglia)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Any region) or **Dry Rosé** (Bandol or Tavel, France)",
-                                        "rationale": "The tomato introduces high acidity, which is difficult for white wines. Etna Rosso is one of the few high-acid red wines that handles seafood/tomato well."
-                                    },
-                                    "Spicy / Pepper: (With a noticeable heat/pepper flakes)": {
-                                        "result_specific": "**Gewürztraminer** (Alto Adige/Friuli) or **Falanghina** (Campania)",
-                                        "result_general": "Excellent alternative: **Off-Dry Riesling** (Mosel, Germany) or **Dry Sparkling Wine** (Prosecco)",
-                                        "rationale": "Spice must be met with low alcohol/tannin and often a touch of sweetness to soothe the heat. Gewürztraminer is the classic spice pairing due to its aromatic intensity and lower acid/alcohol."
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "Grilled / Roasted Meats": {
-                        "user_label": "🥩 Main Meats (Secondi)",
-                        "next_prompt": "3. Choose Type of Meat / Cut:",
-                        "options": {
-                            // Level 3: MEAT TYPE / CUT
-                            "Red Meat (Beef/Lamb)": {
-                                "next_prompt": "4. Choose Combination/Preparation Style:",
-                                "options": {
-                                    "Simple Seasoning / Grill: (Bistecca alla Fiorentina)": {
-                                        "result_specific": "**Chianti Classico Riserva** (Tuscany, Sangiovese) or **Barolo/Barbaresco** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Cabernet Sauvignon** (Napa or Bordeaux) or **Malbec** (Argentina)",
-                                        "rationale": "Simple preparation means the focus is on the meat's quality and fat. This demands a high-tannin, high-acid red wine. The tannins bind to the meat's protein and fat, cleansing the palate. Chianti is the perfect regional match for Bistecca."
-                                    },
-                                    "Rich Red Wine Reduction: (Heavy sauce or glaze)": {
-                                        "result_specific": "**Amarone della Valpolicella** (Veneto) or **Super Tuscan** (Sangiovese/Cabernet Blend)",
-                                        "result_general": "Excellent alternative: **Cabernet Franc** (Loire Valley or Washington) or **Aged Merlot** (Pomerol style)",
-                                        "rationale": "The reduction sauce requires a wine with immense body and concentrated flavor, often with high alcohol, to stand up to the glaze. Amarone has the power and concentration to match."
-                                    },
-                                    "Herb Crust / Garlic: (Heavy rosemary, thyme, or garlic)": {
-                                        "result_specific": "**Aglianico del Vulture** (Basilicata) or **Taurasi** (Campania)",
-                                        "result_general": "Excellent alternative: **Syrah/Shiraz** (Rhône Valley or Australia) or **Priorat** (Spain)",
-                                        "rationale": "The intense, savory flavors of rosemary and garlic need a wine with a strong savory, peppery, or herbal backbone. Syrah is the perfect global choice, as its classic profile includes savory, pepper, and herbaceous notes that harmonize with the seasoning."
-                                    },
-                                    "Fatty Cut: (Ribeye/Costata, high marbling)": {
-                                        "result_specific": "**Barolo** (Piedmont, Nebbiolo) or **Sagrantino di Montefalco** (Umbria)",
-                                        "result_general": "Excellent alternative: **Cabernet Sauvignon** (Napa or Coonawarra) or **Tannat** (Uruguay/Madiran)",
-                                        "rationale": "High fat requires the highest level of tannin to efficiently cleanse the palate. Barolo and Sagrantino are some of Italy's most tannic wines. The fat softens the wine's harshness and the wine cuts through the richness."
-                                    },
-                                    "Acidity / Citrus: (Lemon zest, or a light vinegar reduction)": {
-                                        "result_specific": "**Barbera d'Asti Superiore** (Piedmont) or **Valpolicella Ripasso** (Veneto)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Oregon or Burgundy) or **Light-bodied Sangiovese** (Chianti)",
-                                        "rationale": "When high acidity is present in the sauce/seasoning, the wine must have high acidity, but it often needs softer tannins to avoid clashing. Barbera is famous for its very bright acidity and soft tannins."
-                                    }
-                                }
-                            },
-                            "White Meat (Pork/Veal)": {
-                                "next_prompt": "4. Choose Combination/Preparation Style:",
-                                "options": {
-                                    "Cream / Butter Sauce: (Heavy pan sauce, e.g., scaloppine)": {
-                                        "result_specific": "**Lugana** (Veneto/Lombardy, Turbiana) or **Oaked Vernaccia di San Gimignano** (Tuscany)",
-                                        "result_general": "Excellent alternative: **Oaked Chardonnay** (California or Burgundy) or **Viognier** (Rhône Valley)",
-                                        "rationale": "The richness of the cream and butter sauce requires a full-bodied white wine with good acidity and texture. Oaked Chardonnay provides the necessary weight and structure, while its acidity cuts through the fat to cleanse the palate."
-                                    },
-                                    "Herb-Crusted / Roasted: (Heavy rosemary/sage seasoning, e.g., Arrosto)": {
-                                        "result_specific": "**Chianti Rufina** (Tuscany, Sangiovese) or **Barbera d'Asti** (Piedmont)",
-                                        "result_general": "Excellent alternative: **Pinot Noir** (Oregon/Burgundy) or **Cru Beaujolais** (France, Gamay)",
-                                        "rationale": "The aromatic herbs (rosemary/sage) pair beautifully with savory, earthy, and high-acid reds. The acidity of Chianti and Barbera complements the roasted meat. Pinot Noir and Beaujolais are perfect alternatives: light enough for the white meat, but savory enough for the herbs."
-                                    }
-                                    // NOTE: Data stops here for this branch, but the JS handles it gracefully.
-                                }
-                            }
-                            // NOTE: Data stops here for this branch, but the JS handles it gracefully.
-                            // ... Add Game Meat, Offal / Rich Cuts, and Poultry pairings here ...
-                        }
-                    },
-                    "Grilled Fish / Light Dishes": {
-                        "user_label": "🐟 Light Fish & Seafood",
-                        "next_prompt": "3. Choose Fish Texture / Fat Content:",
-                        "options": {
-                            // Level 3: FISH TEXTURE / FAT CONTENT
-                            "Lean White Fish": {
-                                "next_prompt": "4. Choose Combination/Flavor Profile:",
-                                "options": {
-                                    // ... Fish Pairings here ...
-                                }
-                            },
-                            "Medium-Fat Fish": {
-                                "next_prompt": "4. Choose Combination/Flavor Profile:",
-                                "options": {
-                                    // ... Fish Pairings here ...
-                                }
-                            }
-                            // NOTE: Data stops here for this branch, but the JS handles it gracefully.
-                            // ... Add Oily Fish, Shellfish, and Light Vegetable/Salad pairings here ...
-                        }
-                    },
+"Italian": {
+    "title": "Italian Cuisine 🇮🇹",
+    "emoji": "🇮🇹",
+    "next_prompt": "2. Choose Initial Category:",
+    "options": {
+        // LEVEL 1: Red Meat & Beef
+        "Red Meat & Beef": {
+            "user_label": "🥩 Red Meat & Beef",
+            "next_prompt": "3. Choose Preparation/Sauce Base:",
+            "options": {
+                "Heavy Wine Reduction / Stewed (Brasato, Stufato)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "High Tannin / Heavy Reduction (e.g., Barolo)": { "result_specific": "Barolo (Piedmont, Nebbiolo)", "result_general": "Cabernet Sauvignon (Napa Valley) or Aged Syrah (Northern Rhône)", "rationale": "Braised beef cooked in Barolo needs a wine that matches the immense structure, high tannins, and high acidity. Barolo (or its regional equivalent, Barbaresco) is the perfect textural and flavor match. Cabernet Sauvignon offers the necessary tannin structure and deep fruit power." },
+                        "Savory / Earthy / Mushroom Focus": { "result_specific": "Brunello di Montalcino (Tuscany, Sangiovese)", "result_general": "Aged Pinot Noir (Burgundy) or Medium-Bodied Nebbiolo (Langhe)", "rationale": "Mushroom and earthy notes demand a savory, complex wine. Brunello provides structure, high acidity, and notes of leather/earth. Aged Pinot Noir offers a delicate, earthy alternative that complements the savory focus." },
+                        "Simple Tomato / Broth Base (Lower intensity)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese)", "result_general": "Pinot Noir (Any region) or Light-Bodied Merlot", "rationale": "Tomato introduces high acidity, which the wine must match. Chianti Classico is the classic high-acid, savory red. Its high acidity prevents the wine from tasting flabby or metallic against the tomato base. Pinot Noir offers a high-acid, soft-tannin global alternative." },
+                        "Northern Italian Herbs / Juniper (Alto Adige)": { "result_specific": "Lagrein (Alto Adige)", "result_general": "Syrah/Shiraz (Australia/Rhône) or Zinfandel (California)", "rationale": "Juniper and Northern herbs require a deep, structured red with complementary spice and dark fruit. Lagrein is a full-bodied, often smoky, regional match. Syrah and Zinfandel are excellent alternatives due to their dark fruit, pepper, and bold structure." },
+                        "Sweet / Dried Fruit (Prunes, Figs in sauce)": { "result_specific": "Valpolicella Ripasso (Veneto)", "result_general": "Zinfandel (California) or Primitivo (Puglia)", "rationale": "Sweetness requires the wine to have concentrated fruit or a touch of residual sugar. Ripasso is made with partially dried grapes, giving it concentrated, slightly raisinated fruit that balances the subtle sweetness of dried fruits in the stew. Zinfandel/Primitivo provides the jammy fruit and spice needed." }
+                    }
+                },
+                "Grill / Roast (Bistecca alla Fiorentina)": {
+                    "next_prompt": "4. Choose Preparation Detail:",
+                    "options": {
+                        "Heavy Char / Fat (Bone-in, heavy sear)": { "result_specific": "Barolo (Piedmont, Nebbiolo)", "result_general": "Cabernet Sauvignon (Napa/Bordeaux) or Aglianico (Campania/Basilicata)", "rationale": "Heavy char and high fat demand a wine with immense tannin and acidity to cut the richness and match the char's intensity. Barolo is the ultimate structural match. Aglianico is a high-tannin Southern Italian option." },
+                        "Simple Sear / Lean (Filetto, Tagliata)": { "result_specific": "Chianti Classico Riserva (Tuscany, Sangiovese)", "result_general": "Merlot (Bordeaux/Chile) or Malbec (Argentina)", "rationale": "Leaner cuts require high-acid structure without overwhelming tannins. Chianti Classico Riserva provides complexity and high acid. Merlot and Malbec are softer alternatives that complement the meat's flavor." },
+                        "Aromatic Herbs (Rosemary/Garlic/Sage)": { "result_specific": "Morellino di Scansano (Tuscany, Sangiovese)", "result_general": "Cabernet Franc (Loire Valley) or Zinfandel (California)", "rationale": "Aromatic herbs pair beautifully with high-acid, savory, earthy reds. Morellino (coastal Sangiovese) offers this balance. Cabernet Franc and Zinfandel often exhibit complementary herbal/spicy notes." },
+                        "Served Rare / Cool Center": { "result_specific": "Dolcetto d'Alba (Piedmont)", "result_general": "Cru Beaujolais (France, Gamay) or Light-Bodied Pinot Noir", "rationale": "A rare/cool center demands a wine with bright acidity and juicy fruit, served slightly cool, with minimal tannin to avoid a metallic clash. Dolcetto is a soft, fruity, low-tannin Piedmontese red. Cru Beaujolais is the ultimate light-red alternative." },
+                        "High Pepper / Spiced Rub": { "result_specific": "Primitivo di Manduria (Puglia)", "result_general": "Zinfandel (California) or Syrah/Shiraz (Australia/Rhône)", "rationale": "High spice requires a red wine with bold, concentrated fruit and high alcohol to balance the heat. Primitivo (Zinfandel) provides the jammy fruit, spice, and structure needed to match an aggressive rub." }
+                    }
+                },
+                "Simple Pan-Sauce / Lemon / Herbs (Piccata, Saltimbocca)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "High Lemon / Caper (Piccata style)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche)", "result_general": "Sauvignon Blanc (Sancerre) or Dry Riesling (Austria/Alsace)", "rationale": "High citrus acidity requires the wine to match it. Verdicchio is a high-acid, structured Italian white that handles lemon and capers beautifully. Sauvignon Blanc and Dry Riesling are globally available, highly reliable, high-acid pairings." },
+                        "High Butter / Nutty (Meunière style)": { "result_specific": "Oaked Vernaccia di San Gimignano (Tuscany)", "result_general": "Oaked Chardonnay (Burgundy/California) or Fiano di Avellino (Campania)", "rationale": "The rich, nutty brown butter demands a full-bodied white with texture, good acidity, and often subtle oak/nutty notes. Oaked Vernaccia or Fiano offers the necessary structure. Oaked Chardonnay is the classic global pairing for brown butter." },
+                        "Herbaceous / Sage / Prosciutto (Saltimbocca)": { "result_specific": "Chianti (Tuscany, Sangiovese) or Rosso di Montalcino", "result_general": "Pinot Noir (Any region) or Gamay / Beaujolais (France)", "rationale": "The savory meat, herbs, and subtle fat need a high-acid red with soft tannins. Chianti is the quintessential savory, high-acid match. Pinot Noir is a good alternative—savory, high-acid, and light enough for the meat." },
+                        "Simple Pan-Sauté / No Sauce": { "result_specific": "Soave Classico (Veneto)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Unoaked Chardonnay (Chablis)", "rationale": "A simple, clean preparation needs a neutral, crisp, unoaked white wine that won't overpower the meat. Soave is an ideal high-acid, minerally Italian choice. Pinot Grigio is the safest and most widely available neutral white." },
+                        "Sweet Wine Glaze / Onion Agrodolce": { "result_specific": "Valpolicella Ripasso (Veneto)", "result_general": "Off-Dry Riesling (Germany/Alsace) or Dry Chenin Blanc (Vouvray Sec)", "rationale": "The slight sweetness needs a wine with concentrated fruit or residual sugar, balanced by high acidity. Ripasso provides concentrated fruit. Off-Dry Riesling is the universal best choice for sweetness in savory dishes." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Pork & Cured Meats
+        "Pork & Cured Meats": {
+            "user_label": "🐖 Pork & Cured Meats",
+            "next_prompt": "3. Choose Preparation/Focus:",
+            "options": {
+                "Cured Meats (Salumi, Prosciutto)": {
+                    "next_prompt": "4. Choose Cured Meat Detail:",
+                    "options": {
+                        "High Fat / Richness (Salami, Mortadella)": { "result_specific": "Lambrusco di Sorbara Secco (Emilia-Romagna)", "result_general": "Dry Sparkling Rosé (Cava/Prosecco) or Dry Fino Sherry", "rationale": "The high fat content of Salami demands a high-acid, refreshing wine—ideally with bubbles—to cut the richness. Dry Lambrusco (fizzy red) is the ultimate regional pairing. Dry Sparkling Rosé is an excellent alternative." },
+                        "Heavy Spice / Pepper (Spicy Salumi)": { "result_specific": "Primitivo di Manduria (Puglia) or Aglianico (Basilicata)", "result_general": "Zinfandel (California) or Shiraz/Syrah (Australia/Rhône)", "rationale": "The spice and fat need a bold, fruity red with enough structure and high alcohol to balance the heat. Primitivo (Zinfandel) is the ideal regional match due to its jammy fruit and spice. Zinfandel and Shiraz are great global alternatives." },
+                        "Simple / Delicacy (Prosciutto, Speck)": { "result_specific": "Pinot Grigio (Alto Adige) or Prosecco (Brut) (Veneto)", "result_general": "Dry Sparkling Wine (Cava/Prosecco) or Sancerre (Sauvignon Blanc)", "rationale": "The delicacy and salt of Prosciutto need a crisp, high-acid wine that enhances the flavor without overwhelming it. Sparkling wine is perfect, as the bubbles cleanse the palate of the salt. Pinot Grigio (Alto Adige) is a great high-acid still wine option." },
+                        "Game / Earthy Cure (Culatello, seasoned cuts)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese) or Rosso di Montalcino", "result_general": "Pinot Noir (Burgundy/Oregon) or Cru Beaujolais (France, Gamay)", "rationale": "Earthy, seasoned cuts need a savory, high-acid red with soft tannins. Chianti is the quintessential Italian savory red. Pinot Noir provides the necessary high acidity and delicate earthy structure." },
+                        "Served with Fruit (Melon/Figs)": { "result_specific": "Moscato d'Asti (Piedmont) or Prosecco Extra Dry", "result_general": "Off-Dry Riesling (Germany/Alsace) or Demi-Sec Sparkling Wine", "rationale": "The sweetness of the fruit demands a wine with some residual sugar. Moscato d'Asti (lightly sweet, fizzy) is the perfect regional pairing. Prosecco Extra Dry is the most common accessible off-dry sparkling wine." }
+                    }
+                },
+                "Herb-Crusted / Roasted: (Heavy rosemary/sage seasoning, e.g., Arrosto)": {
+                    "next_prompt": "4. Choose Herb/Roast Detail:",
+                    "options": {
+                        "Heavy rosemary/sage seasoning, e.g., Arrosto": { "result_specific": "Chianti Rufina (Tuscany, Sangiovese) or Barbera d'Asti (Piedmont)", "result_general": "Pinot Noir (Oregon/Burgundy) or Cru Beaujolais (France, Gamay)", "rationale": "The aromatic herbs (rosemary/sage) pair beautifully with savory, earthy, and high-acid reds. The acidity of Chianti and Barbera complements the roasted meat. Pinot Noir and Beaujolais are perfect alternatives: light enough for the white meat, but savory and earthy enough to match the herb crust." }
+                    }
+                },
+                "Tomato / Red Sauce: (Light tomato base, e.g., pork shoulder in sauce)": {
+                    "next_prompt": "4. Choose Sauce Detail:",
+                    "options": {
+                        "Light tomato base, e.g., pork shoulder in sauce": { "result_specific": "Valpolicella Classico (Veneto) or Bardolino (Veneto)", "result_general": "Pinot Noir (Any region) or Light-bodied Sangiovese (Italy)", "rationale": "The tomato introduces acidity, so the wine must be high in acid but light in tannin to prevent a metallic taste. Valpolicella and Bardolino are excellent regional choices—light, high-acid, and fruity reds. Pinot Noir is the ideal global alternative due to its high acidity and soft tannins." }
+                    }
+                },
+                "Simple Sauté / Lean: (Quick-cooked, simple seasoning)": {
+                    "next_prompt": "4. Choose Preparation Detail:",
+                    "options": {
+                        "Quick-cooked, simple seasoning": { "result_specific": "Vermentino di Sardegna (Sardinia) or Soave Classico (Veneto)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Unoaked Chardonnay (Chablis)", "rationale": "A lean, simply seasoned dish requires a wine that is crisp, refreshing, and unoaked so it doesn't overpower the meat's subtle flavor. Vermentino and Soave are perfect Italian matches. Pinot Grigio is the most widely available, light, and crisp wine for a simple pairing." }
+                    }
+                },
+                "Smoked / Cured: (Smoked pork chop or heavily cured preparation)": {
+                    "next_prompt": "4. Choose Smoking/Curing Detail:",
+                    "options": {
+                        "Smoked pork chop or heavily cured preparation": { "result_specific": "Lagrein (Alto Adige) or Teroldego Rotaliano (Trentino)", "result_general": "Zinfandel (California) or Syrah/Shiraz (Australia/Rhône)", "rationale": "The intense, savory flavors of smoke and cure require a red wine with deep fruit, spice, and structure. Lagrein and Teroldego are dark, often smoky Northern Italian reds. Zinfandel is the best global alternative, as its jammy fruit, spice, and slight sweetness are a perfect foil for the smoky, fatty flavor of cured pork." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Game & Offal
+        "Game & Offal": {
+            "user_label": "🦌 Game & Offal",
+            "next_prompt": "3. Choose Preparation/Style:",
+            "options": {
+                "Game (Cinghiale, Capriolo, Lepre)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Heavy Wine Reduction / Stewed: (Braised in red wine, e.g., Cinghiale)": { "result_specific": "Brunello di Montalcino (Tuscany, Sangiovese) or Taurasi (Campania, Aglianico)", "result_general": "Cabernet Sauvignon (Bordeaux/Napa Valley) or Rhône Valley Syrah (Hermitage/Côte-Rôtie)", "rationale": "Braised game needs a wine that is powerful and savory, with high tannins and acidity to cut the rich stewing liquid and intense flavor of the meat. Brunello is a massive, age-worthy wine that stands up perfectly. Syrah is an excellent alternative due to its deep color, full body, and classic savory, smoky, and peppery notes." },
+                        "Earthy / Truffle: (Served with polenta or sauce rich in mushroom/truffle)": { "result_specific": "Barolo (Piedmont, Nebbiolo) or Aged Nebbiolo", "result_general": "Aged Pinot Noir (Burgundy or Oregon) or Medium-Dry Sherry (Amontillado)", "rationale": "The earthy, savory, and umami flavors of truffle and mushroom are best matched by the complex, tertiary notes (forest floor, leather, tobacco) found in aged, high-quality reds. Barolo is the perfect regional match. Aged Pinot Noir offers a similar delicate, earthy complexity globally." },
+                        "Fruit / Sweet-Sour (Agrodolce): (Glazed with cherry, prune, or vinegar/sugar)": { "result_specific": "Valpolicella Ripasso (Veneto) or Zinfandel (Apulia, Primitivo)", "result_general": "Medium-Dry Zinfandel (California) or Off-Dry Riesling (Germany/Alsace)", "rationale": "The sweet-sour balance requires a wine that is slightly fruity or has a touch of residual sugar to handle the sweetness, alongside high acidity to cut the fat and vinegar. Ripasso is concentrated and fruity. Zinfandel (especially Primitivo) is ideal, as its ripe, jammy fruit and spice naturally complement fruit reductions." },
+                        "Simple Roast / Grill: (Roasted or grilled with light seasoning)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese) or Vino Nobile di Montepulciano (Tuscany)", "result_general": "Malbec (Argentina) or Merlot (Bordeaux/Chile)", "rationale": "When the preparation is simple, the pairing focuses on the meat's inherent gamey flavor. It needs a high-acid red with prominent savory/earthy notes but tannins that aren't overwhelming. Chianti Classico is high in acid and earthiness. Malbec is a good, structured alternative with dark fruit and a subtle earthy finish." },
+                        "Rich Pâté / Terrine: (Pressed meat dish, highly spiced)": { "result_specific": "Recioto della Valpolicella (Sweet Red) or Vin Santo (Sweet Fortified)", "result_general": "Late Harvest Zinfandel (California) or Dry Amontillado Sherry (Spain)", "rationale": "Rich, heavily spiced, and often cold pressed game meats require a wine that can cut through the extreme richness (high fat/seasoning). A sweet/fortified red like Recioto is a stunning, classic pairing, as the sweetness balances the intense savoriness. A Dry Amontillado Sherry is a fantastic alternative for the savory, nutty richness of pâté." }
+                    }
+                },
+                "Offal (Fegato, Trippa, Salsiccia)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Heavy Butter / Cream: (High-fat preparation)": { "result_specific": "Pinot Bianco (Alto Adige/Trentino) or Oaked Vernaccia di San Gimignano (Tuscany)", "result_general": "Oaked Chardonnay (Burgundy or California) or Viognier (Rhône Valley)", "rationale": "The extreme richness and fat of a heavy cream/butter sauce must be cut by a full-bodied white wine with good acidity. Pinot Bianco and Oaked Chardonnay provide the necessary weight and structure, cleansing the palate while complementing the savory character of the meat." },
+                        "High Acidity / Vinegar: (Fegato alla Veneziana, with onions and vinegar)": { "result_specific": "Valpolicella Classico (Veneto) or Bardolino (Veneto)", "result_general": "Pinot Noir (Burgundy or Oregon) or Gamay / Beaujolais (France)", "rationale": "The acidity from vinegar and the high iron content of liver require a wine with high acidity and very low tannins to prevent a bitter, metallic clash. Valpolicella and Bardolino are light, high-acid regional reds. Pinot Noir and Gamay are the best global alternatives due to their high acidity and soft, approachable tannins." },
+                        "Grill / Charred Sausage: (Fatty sausage, intense grill char)": { "result_specific": "Lagrein (Alto Adige) or Primitivo (Puglia)", "result_general": "Zinfandel (California) or Syrah/Shiraz (Rhône Valley/Australia)", "rationale": "The intense fat and char need a bold, structured red wine with deep fruit and spice to match the power of the dish. Lagrein and Primitivo (Zinfandel) are powerful, dark, and often smoky Italian reds. Zinfandel is the ideal global alternative, as its concentrated fruit and robust body stand up to the high-fat and smoky flavors perfectly." },
+                        "Simple Fry / Light Seasoning: (Quickly fried/sautéed with light herbs)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Sauvignon Blanc (Chile)", "rationale": "Simple preparations need a crisp, unoaked white wine that is high in acid and refreshing. Vermentino offers coastal minerality, while Gavi is known for its clarity. Pinot Grigio is the most widely available, reliable neutral white for cleansing the palate of the light oil and refreshing the simple seasoning." },
+                        "Tomato / Broth Base: (Cooked in a light sauce, e.g., Trippa in umido)": { "result_specific": "Chianti (Tuscany, Sangiovese) or Rosso di Montalcino (Tuscany)", "result_general": "Pinot Noir (Any region) or Sangiovese (General Italian)", "rationale": "The presence of tomato introduces high acidity, which the wine must match. The offal/rich cuts add intensity. This demands a high-acid, savory red. Chianti is the classic regional choice for tomato-based, rustic dishes. Pinot Noir is a good alternative—savory, high-acid, and light enough not to overpower the broth." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Poultry
+        "Poultry": {
+            "user_label": "🐔 Poultry",
+            "next_prompt": "3. Choose Preparation/Style:",
+            "options": {
+                "Duck / Fowl": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Fatty Duck / Goose: (Skin on, high-fat content)": { "result_specific": "Pinot Noir (Alto Adige/Trentino) or Barbera d'Alba (Piedmont)", "result_general": "Pinot Noir (Burgundy or Oregon) or Cru Beaujolais (France, Gamay)", "rationale": "Fatty duck/goose requires a high-acid, savory red wine with soft tannins to cut the rich fat without overpowering the meat. Pinot Noir (both Italian and global) is the definitive choice for duck due to its high acidity, bright cherry fruit, and subtle earthy/savory notes." }
+                    }
+                },
+                "Chicken / Turkey": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Simple Roast / Chicken: (Chicken under a brick, simple oven roast)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Lugana (Veneto/Lombardy)", "result_general": "Unoaked Chardonnay (Chablis, France) or Pinot Grigio (Friuli/Alto Adige)", "rationale": "A simple roast focuses on the poultry's subtle flavor and skin texture. It needs a refreshing, medium-bodied white that won't compete. Vermentino and Lugana have the body. Unoaked Chardonnay offers a versatile, crisp, and clean pairing that provides enough structure to match the oven roast." },
+                        "Tomato / Olive Sauce: (Cacciatore style or stewed with olives)": { "result_specific": "Chianti Classico (Tuscany, Sangiovese) or Rosso di Montalcino (Tuscany)", "result_general": "Pinot Noir (Any region) or Medium-bodied Merlot (Chile/Italy)", "rationale": "The high acidity of the tomato sauce requires a high-acid wine. The savory olives and chicken need an earthy component. Chianti is the quintessential high-acid, savory red for tomato-based rustic dishes. Pinot Noir is a reliable low-tannin, high-acid alternative that handles both the tomato and the poultry." },
+                        "Herbaceous / Lemon: (Heavy rosemary, sage, and lemon, e.g., Pollo al mattone)": { "result_specific": "Soave Classico (Veneto) or Sauvignon Blanc (Alto Adige)", "result_general": "Sauvignon Blanc (Sancerre, France) or Verdejo (Spain)", "rationale": "The intense herbs and lemon demand a crisp white wine with complementary herbaceous and citrus notes. Sauvignon Blanc (Sancerre or Italian Alto Adige) is globally recognized for its ability to match high acidity and 'green' flavors. Soave is a great Italian option for balancing the lemon." },
+                        "Cream / Butter Pan Sauce: (Rich sauce base from the pan drippings)": { "result_specific": "Fiano di Avellino (Campania) or Oaked Chardonnay (Tuscany or Alto Adige)", "result_general": "Oaked Chardonnay (California/Burgundy) or Viognier (Rhône Valley)", "rationale": "The high-fat content of the cream/butter sauce needs a full-bodied white wine with good acidity and texture. Oaked Chardonnay (or a textural white like Fiano) provides the necessary weight and richness to complement the sauce, while the acidity keeps the palate refreshed." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Seafood
+        "Seafood": {
+            "user_label": "🐟 Seafood",
+            "next_prompt": "3. Choose Preparation/Fish Type:",
+            "options": {
+                "Italian Grilled fish": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Simple Grill / Salt: (Simply grilled or baked Branzino)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Pinot Grigio (Alto Adige/Friuli) or Unoaked Chardonnay (Chablis, France)", "rationale": "Simple preparation demands a crisp, unoaked white wine with excellent minerality and refreshing acidity that won't overshadow the fish's delicate flavor. Vermentino is the classic coastal match. Pinot Grigio is the most widely available, reliable neutral choice." },
+                        "High Acid / Citrus: (Heavy lemon, white wine sauce, e.g., Sole Meunière style)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche) or Falanghina (Campania)", "result_general": "Sauvignon Blanc (Sancerre/New Zealand) or Dry Riesling (Austria)", "rationale": "The wine must match the dish's high acidity. The best wines here are bone-dry, very high-acid whites. Verdicchio and Falanghina are superb Italian choices that handle citrus well. Sauvignon Blanc and Dry Riesling are globally available, highly reliable, high-acid pairings." },
+                        "Green Herbs / Pesto: (Basil, parsley, or light pesto seasoning)": { "result_specific": "Gavi (Cortese) (Piedmont) or Soave Classico (Veneto)", "result_general": "Sauvignon Blanc (Sancerre, France) or Verdejo (Spain)", "rationale": "The wine must match the herbaceous/green aromas. Unoaked, crisp whites with subtle savory or herbal notes are ideal. Gavi is known for its clarity and affinity for herbs. Sauvignon Blanc is the global benchmark for complementing herbaceous flavors." },
+                        "Light Tomato / Vegetable: (Simple sauce with capers and olives)": { "result_specific": "Rosato (Rosé) del Salento (Puglia) or Cirò Bianco (Calabria)", "result_general": "Dry Rosé (Provence/Bandol) or Albariño (Rías Baixas, Spain)", "rationale": "The presence of tomato and savory olives/capers requires a slightly more structured white or a savory rosé to bridge the acidity and the umami. Italian Rosato is a perfect savory choice. Albariño is a great white alternative, as its high acid and slight bitterness work well with olives." },
+                        "Fry / Battered: (Fritto Misto style or lightly fried fish)": { "result_specific": "Prosecco (Brut) (Veneto) or Franciacorta Brut (Lombardy)", "result_general": "Dry Sparkling Wine (Cava or Méthode Traditionnelle) or Pinot Grigio (General)", "rationale": "Fried food demands a high-acid, highly refreshing wine—ideally with bubbles—to cut through the oiliness and cleanse the palate. Prosecco is the classic regional choice. Any dry, high-quality sparkling wine is a fantastic alternative for fried items." }
+                    }
+                },
+                "Rich / Meaty Fish (Tuna, Swordfish)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Rich Oil / Garlic: (Heavy garlic, chili, or strong olive oil base)": { "result_specific": "Fiano di Avellino (Campania) or Verdicchio dei Castelli di Jesi Riserva (Marche)", "result_general": "Oaked Chardonnay (California/Macon, France) or White Rioja (Spain)", "rationale": "The high oil, garlic, and savory intensity require a full-bodied white with structure and texture to match the richness. Fiano and Verdicchio Riserva offer the necessary weight. Oaked Chardonnay provides complementary savory notes and a fuller body to stand up to the strong flavor base." },
+                        "Seared / Tuna Steak: (Cooked rare, focus on the meaty texture)": { "result_specific": "Etna Rosso (Sicily, Nerello Mascalese) or Rosso di Montalcino (Tuscany)", "result_general": "Pinot Noir (Oregon or Burgundy) or Cru Beaujolais (France, Gamay)", "rationale": "The meaty texture of seared tuna is one of the few fish dishes that can handle a light red wine. We need a high-acid, savory, low-tannin red. Etna Rosso is perfect—structured, savory, and served slightly cool. Pinot Noir is the ideal global alternative for its light body and savory complexity." },
+                        "Tomato / Red Wine Base: (Heavy sauce or base, e.g., tuna stew)": { "result_specific": "Etna Rosso (Sicily, Nerello Mascalese) or Aglianico del Vulture (Basilicata)", "result_general": "Pinot Noir (Any region) or Structured Dry Rosé (Bandol, France)", "rationale": "The tomato/red wine base introduces significant acidity. This demands a high-acid, savory, low-tannin red or a very full-bodied rosé. Etna Rosso again excels at bridging fish savoriness with tomato acidity. Structured Rosé offers the body and acidity needed without the metallic risk of strong red wine tannins." },
+                        "Herb Crust / Savory: (Pistachio or heavy herb crust, e.g., swordfish)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Sauvignon Blanc (Sancerre, France) or Pinot Gris (Alsace)", "rationale": "The herbaceous/nutty crust demands a wine with pronounced aromatic intensity and high acidity. Vermentino and Gavi are crisp and aromatic. Sauvignon Blanc is excellent for the herbs, while a slightly richer Pinot Gris works well with a nutty, textured crust." },
+                        "Simple Grill / Roast: (Simple cooking, focus on the fish flavor)": { "result_specific": "Lugana (Veneto/Lombardy, Turbiana) or Greco di Tufo (Campania)", "result_general": "Unoaked Chardonnay (Chablis, France) or Pinot Grigio (Friuli/Alto Adige)", "rationale": "The simple preparation demands a wine that enhances the fish's natural flavor without overpowering it. Lugana and Greco di Tufo are full-flavored, high-acid Italian whites. Unoaked Chardonnay provides the perfect medium body, clarity, and structure to match the quality of the simply prepared fish." }
+                    }
+                },
+                "Small / Oily Fish (Anchovy, Sardine)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Grill / Charred: (Intense smoky flavor from grilling)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Etna Bianco (Sicily, Carricante)", "result_general": "Sauvignon Blanc (Sancerre, France) or Albariño (Rías Baixas, Spain)", "rationale": "The smoke and high oil content demand a bone-dry, very high-acid white with strong minerality to cut through the fat. Vermentino is a coastal, high-acid option. Sauvignon Blanc and Albariño provide the crisp, often smoky/herbaceous contrast needed to handle the grill flavor." },
+                        "Heavy Tomato / Spice: (Cooked in a rich, spicy red sauce)": { "result_specific": "Rosato (Rosé) del Salento (Puglia) or Cirò Rosso (Calabria, Gaglioppo)", "result_general": "Pinot Noir (Any region) or Structured Dry Rosé (Bandol/Tavel, France)", "rationale": "The combination of oil, tomato acidity, and spice is best met by a robust, savory rosé or a very light red. Italian Rosato has the body and savory profile. Pinot Noir is a good alternative—low in tannin and high in acid—to handle the acidity and the rich oil without clashing with the spice." },
+                        "High Acidity / Vinegar: (Served with pickled vegetables or a strong vinegar dressing)": { "result_specific": "Verdicchio dei Castelli di Jesi (Marche) or Falanghina (Campania)", "result_general": "Dry Riesling (Austria or Alsace) or Sauvignon Blanc (Chile)", "rationale": "The wine must match the vinegar's acidity. This requires a white wine with extremely high natural acidity. Verdicchio and Falanghina are superb Italian high-acid whites. Dry Riesling is the global benchmark for pairing with high acidity and strong flavor contrasts." },
+                        "Simple Fry / Light Batter: (Fried anchovies or sardines)": { "result_specific": "Prosecco (Brut) (Veneto) or Franciacorta Brut (Lombardy)", "result_general": "Dry Sparkling Wine (Cava or Méthode Traditionnelle) or Pinot Grigio (General)", "rationale": "Fried food requires bubbles and high acid to slice through the oiliness. Prosecco is the classic, regional, refreshing pairing. Any high-quality Dry Sparkling Wine provides the necessary acidity and effervescence to cleanse the palate." },
+                        "Served Raw / Cured: (Anchovies/Sardines cured in oil, served raw)": { "result_specific": "Dry Sherry (Fino/Manzanilla) (Spain) or Vermentino di Sardegna (Sardinia)", "result_general": "Albariño (Rías Baixas, Spain) or Fino Sherry (Any available brand)", "rationale": "The intense salt and umami of cured fish are perfectly matched by the nutty, savory, dry, and highly saline profile of Fino Sherry (a common pairing in Southern Spain, and excellent with cured fish). Vermentino and Albariño are great white wine alternatives that offer high salinity and minerality to handle the salt." }
+                    }
+                },
+                "Shellfish (Vongole, Mussels, Shrimp)": {
+                    "next_prompt": "4. Choose Detail:",
+                    "options": {
+                        "Simple Steam / Raw: (Oysters, simple steamed mussels/clams)": { "result_specific": "Vermentino di Sardegna (Sardinia) or Gavi (Cortese) (Piedmont)", "result_general": "Muscadet Sèvre et Maine (Loire Valley, France) or Albariño (Rías Baixas, Spain)", "rationale": "Raw/Steamed shellfish is the purest expression of the sea, demanding a bone-dry, razor-sharp white with intense minerality and salinity. Vermentino is the ideal high-acid Italian coastal white. Muscadet is the traditional, classic pairing for oysters due to its neutrality and mineral quality." },
+                        "Garlic / Chili Oil: (Sautéed in a strong garlic and chili oil base)": { "result_specific": "Falanghina (Campania) or Verdicchio dei Castelli di Jesi (Marche)", "result_general": "Sauvignon Blanc (New Zealand/Chile) or Off-Dry Riesling (Germany/Alsace)", "rationale": "The high heat from chili and strong garlic requires a wine with high acidity and good aromatic intensity, ideally with low tannin. Falanghina and Verdicchio have the necessary structure. Off-Dry Riesling is the best alternative for chili, as its slight sweetness expertly soothes the heat." },
+                        "Tomato / Wine Broth: (Mussels/clams in a light red/white wine broth)": { "result_specific": "Rosato (Rosé) del Salento (Puglia) or Grechetto (Umbria)", "result_general": "Dry Rosé (Provence/Bandol) or Albariño (Rías Baixas, Spain)", "rationale": "The tomato broth introduces acidity, which is difficult for delicate white wines. A structured, savory Italian Rosato is the perfect bridge, offering the body of a light red and the acidity of a white. Albariño is an excellent white alternative, with enough body and high acid to handle the tomato." },
+                        "Cream / Rich Base: (Mussels in a light cream sauce)": { "result_specific": "Lugana (Veneto/Lombardy, Turbiana) or Oaked Chardonnay (Alto Adige)", "result_general": "Oaked Chardonnay (Burgundy or California) or Viognier (Rhône Valley)", "rationale": "The light cream sauce needs a white wine with more body and texture to match the richness, but still enough acidity to cleanse the palate. Lugana provides good structure. Oaked Chardonnay is the reliable, globally available choice, offering the necessary weight and savory complexity." },
+                        "Simple Grill / Skewers: (Grilled prawns/shrimp, scampi style)": { "result_specific": "Greco di Tufo (Campania) or Vermentino di Sardegna (Sardinia)", "result_general": "Sauvignon Blanc (Sancerre, France) or Pinot Gris (Alsace)", "rationale": "Grilled shellfish has a smoky element and a firm texture. It needs a crisp white with good structure and aromatic complexity. Greco di Tufo is a complex, flavorful Southern Italian white. Sauvignon Blanc and Pinot Gris are reliable alternatives, offering the body and flavor needed to complement the grilling process." }
+                    }
+                }
+            }
+        },
+        // LEVEL 1: Appetizers & Pizza
         "Appetizers & Pizza": {
             "user_label": "🍕 Appetizers & Pizza",
             "next_prompt": "3. Choose Preparation/Focus:",
@@ -1537,22 +1321,42 @@
         }
 
         // --- Helper for Emoji ---
-        function getEmoji(key) {
-            if (key.includes("Pasta")) return "🍝";
-            if (key.includes("Risotto")) return "🍚";
-            if (key.includes("Meat") || key.includes("Beef")) return "🥩";
-            if (key.includes("Fish") || key.includes("Seafood")) return "🐟";
-            if (key.includes("Pizza")) return "🍕";
-            if (key.includes("Vegetarian")) return "🥕";
-            if (key.includes("Cheese")) return "🧀";
-            if (key.includes("Spread")) return "🦃";
-            if (key.includes("Turkey")) return "🍗";
-            if (key.includes("Course")) return "🍽️";
-            if (key.includes("Amuse")) return "🥂";
-            if (key.includes("Heavy") || key.includes("Roasted")) return "🔥";
-            if (key.includes("Light") || key.includes("Fresh")) return "🍃";
-            return "🍷";
+const emojiMap = {
+    // Proteins & Mains
+    "beef": "🥩", "venison": "🦌", "boar": "🐗", "lamb": "🐑", "duck": "🦆", "goose": "🪿",
+    "turkey": "🦃", "chicken": "🐔", "pork": "🐷", "ham": "🍖", "veal": "🐄",
+    "fish": "🐟", "tuna": "🍣", "salmon": "🍣", "oysters": "🦪", "mussels": "🐚", "lobster": "🦞",
+    "foie gras": "🦆", "offal": "🧠", "liver": "🍷", "sausage": "🌭",
+
+    // French & Specific Dishes
+    "wellington": "🥐🥩", "pâté": "🍞", "terrine": "🍞", "cassoulet": "🥘", "pot-au-feu": "🍲",
+    "quiche": "🥧", "soufflé": "☁️", "bisque": "🥣", "bouillabaisse": "🥘", "gratin": "🧀",
+
+    // Flavor Profiles & Sauces
+    "tomato": "🍅", "cream": "🥛", "butter": "🧈", "truffle": "🥜🍄", "mushroom": "🍄",
+    "wine": "🍷", "port": "🍷", "citrus": "🍋", "lemon": "🍋",
+    "spicy": "🔥", "chili": "🌶️", "honey": "🍯", "maple": "🍁", "cranberry": "🍒",
+    "herb": "🌿", "garlic": "🧄", "smoked": "💨", "acidity": "⚡🍋", "vinegar": "🏺🍋",
+    "nut": "🥜", "saffron": "🌼", "ink": "🦑",
+
+    // Methods & Texture
+    "grill": "🔥", "roast": "🔥", "stew": "🍲", "fried": "🍳", "raw": "❄️", "steamed": "💨",
+    "pastry": "🥐", "stuffing": "🍞🥘", "cheese": "🧀", "pasta": "🍝", "risotto": "🍚"
+};
+
+function getEmoji(text) {
+    // Convert text to lowercase so "Beef" matches "beef"
+    const lowerText = text.toLowerCase();
+    
+    // Look for a matching keyword in our map
+    for (const [keyword, emoji] of Object.entries(emojiMap)) {
+        if (lowerText.includes(keyword)) {
+            return emoji;
         }
+    }
+    // Default emoji if no keyword is found
+    return "🍽️"; 
+}
 
         // Start
         init();
