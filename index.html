@@ -132,7 +132,28 @@
         .emoji-button.selected span.emoji {
             filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
         }
+	/* --- Advanced Button Styling --- */
+	.advanced-btn {
+ 	   display: inline-block;
+ 	   padding: 12px 30px;
+ 	   background-color: transparent;
+	    color: #8a032d;
+	    border: 2px solid #8a032d;
+	    border-radius: 30px;
+	    text-decoration: none;
+	    font-weight: bold;
+	    font-size: 1em;
+	    transition: all 0.3s ease;
+	    text-transform: uppercase;
+	    letter-spacing: 1px;
+	}
 
+	.advanced-btn:hover {
+    		background-color: #8a032d;
+   		 color: #ffffff;
+   		 box-shadow: 0 5px 15px rgba(138, 3, 45, 0.3);
+   		 transform: translateY(-2px);
+	}
 
         /* --- Result Area --- */
         .result-title {
@@ -214,7 +235,12 @@
         <div id="result">
             Please make one selection in all three categories above.
         </div>
-
+	<div style="text-align: center; margin-top: 40px;">
+  	  <p style="color: #777; font-size: 0.9em; margin-bottom: 15px;">Seeking something more specific?</p>
+   	 <a href="Advanced.html" class="advanced-btn">
+     	   Try our Advanced Pairing Guide
+    </a>
+</div>
     </div>
 
     <script>
