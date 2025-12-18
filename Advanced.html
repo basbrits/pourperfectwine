@@ -1537,21 +1537,42 @@
         }
 
         // --- Helper for Emoji ---
-        function getEmoji(key) {
-            if (key.includes("Pasta")) return "🍝";
-            if (key.includes("Risotto")) return "🍚";
-            if (key.includes("Meat") || key.includes("Beef")) return "🥩";
-            if (key.includes("Fish") || key.includes("Seafood")) return "🐟";
-            if (key.includes("Pizza")) return "🍕";
-            if (key.includes("Vegetarian")) return "🥕";
-            if (key.includes("Cheese")) return "🧀";
-            if (key.includes("Spread")) return "🦃";
-            if (key.includes("Turkey")) return "🍗";
-            if (key.includes("Course")) return "🍽️";
-            if (key.includes("Amuse")) return "🥂";
-            if (key.includes("Heavy") || key.includes("Roasted")) return "🔥";
-            if (key.includes("Light") || key.includes("Fresh")) return "🍃";
-            return "🍷";
+const emojiMap = {
+    // Proteins & Mains
+    "beef": "🥩", "venison": "🦌", "boar": "🐗", "lamb": "🐑", "duck": "🦆", "goose": "🪿",
+    "turkey": "🦃", "chicken": "🐔", "pork": "🐷", "ham": "🍖", "veal": "🐄",
+    "fish": "🐟", "tuna": "🍣", "salmon": "🍣", "oysters": "🦪", "mussels": "🐚", "lobster": "🦞",
+    "foie gras": "🦆", "offal": "🧠", "liver": "🍷", "sausage": "🌭", "poultry": "🐔🪿", "shellfish": "🐚", "Vegetarian": "🥕🥦", "red meat": "🥩", "egg": "🥚", "bean": "🫘",
+
+    // French & Specific Dishes
+    "wellington": "🥐🥩", "pâté": "🍞", "terrine": "🍞", "cassoulet": "🥘", "pot-au-feu": "🍲",
+    "quiche": "🥧", "soufflé": "☁️", "bisque": "🥣", "bouillabaisse": "🥘", "gratin": "🧀",
+
+    // Flavor Profiles & Sauces
+    "tomato": "🍅", "cream": "🥛", "butter": "🧈", "truffle": "🥜🍄", "mushroom": "🍄",
+    "wine": "🍷", "port": "🍷", "citrus": "🍋", "lemon": "🍋",
+    "spicy": "🔥", "chili": "🌶️", "honey": "🍯", "maple": "🍁", "cranberry": "🍒",
+    "herb": "🌿", "garlic": "🧄", "smoked": "💨", "acidity": "⚡🍋", "vinegar": "🏺🍋",
+    "nut": "🥜", "saffron": "🌼", "ink": "🦑",
+
+    // Methods & Texture
+    "grill": "🔥", "roast": "🔥", "stew": "🍲", "fried": "🍳", "raw": "❄️", "steamed": "💨",
+    "pastry": "🥐", "stuffing": "🍞🥘", "cheese": "🧀", "pasta": "🍝", "risotto": "🍚"
+};
+
+function getEmoji(text) {
+    // Convert text to lowercase so "Beef" matches "beef"
+    const lowerText = text.toLowerCase();
+    
+    // Look for a matching keyword in our map
+    for (const [keyword, emoji] of Object.entries(emojiMap)) {
+        if (lowerText.includes(keyword)) {
+            return emoji;
+        }
+    }
+    // Default emoji if no keyword is found
+    return "🍽️"; 
+}
         }
 
         // Start
