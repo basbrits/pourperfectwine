@@ -45,30 +45,44 @@
             margin-bottom: 20px;
         }
 
-        /* --- Updated Smaller Advanced Button --- */
-        .advanced-btn-container {
-            text-align: right; /* Aligned to the right for a clean look */
-            margin-bottom: 15px;
+        /* --- New Path Selector Section --- */
+        .path-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            background-color: #fcf4f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px dashed #8a032d;
+        }
+
+        .path-text {
+            font-size: 0.95em;
+            color: #555;
+            margin: 0;
         }
 
         .advanced-btn {
             display: inline-block;
-            padding: 6px 15px; /* Smaller padding */
-            background-color: transparent;
-            color: #8a032d;
-            border: 1.5px solid #8a032d;
+            padding: 8px 20px;
+            background-color: #8a032d;
+            color: #ffffff;
+            border: none;
             border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.85em; /* Smaller font */
+            font-size: 0.85em;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .advanced-btn:hover {
-            background-color: #8a032d;
-            color: #ffffff;
+            background-color: #b3003b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(138, 3, 45, 0.2);
         }
 
         hr {
@@ -80,12 +94,13 @@
         
         .intro-text {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             color: #777;
             font-style: italic;
             font-size: 0.95em;
         }
 
+        /* --- Selection Controls --- */
         .control-group label {
             display: block;
             margin-bottom: 8px;
@@ -103,7 +118,6 @@
             color: #333;
             box-sizing: border-box;
             font-size: 1em;
-            cursor: pointer;
         }
 
         .button-group {
@@ -142,7 +156,6 @@
             background-color: #8a032d;
             color: #ffffff;
             border-color: #8a032d;
-            box-shadow: 0 4px 8px rgba(138, 3, 45, 0.4);
         }
 
         .result-title {
@@ -161,25 +174,23 @@
             background-color: #fcf4f5;
             text-align: center;
             font-size: 1.2em;
-            color: #333;
         }
-
-        #result strong { color: #8a032d; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="advanced-btn-container">
-            <a href="Advanced.html" class="advanced-btn">Advanced Guide →</a>
-        </div>
-
         <h1>🍷 The Perfect Pour</h1>
         <h2>Instantly Match Wine to Your Meal</h2>
         
         <p class="intro-text">
-            Tap the emojis to describe your meal for an expert recommendation.
+            Use the quick tool below or dive deeper with our expert guide.
         </p>
+
+        <div class="path-selector">
+            <p class="path-text">Make a quick pairing below or</p>
+            <a href="Advanced.html" class="advanced-btn">Advanced Guide</a>
+        </div>
         
         <hr>
 
@@ -229,6 +240,7 @@
     </div>
 
     <script>
+        // Logic for handling emoji button selections
         function setupButtonSelection(groupId, inputElementId) {
             const group = document.getElementById(groupId);
             group.querySelectorAll('.emoji-button').forEach(button => {
@@ -241,73 +253,48 @@
             });
         }
 
+        // Logic for wine pairing results
         function getWinePairing(cuisine, protein, flavor_note) {
             if (!cuisine || !protein || !flavor_note || protein === "default") {
                 return "Please make one selection in all three categories above.";
             }
 
-            let pairing = "A versatile choice: ";
+            let pairing = "";
             let prep_sauce = flavor_note;
 
             if (protein === "Beef/Lamb") {
                 if (prep_sauce === "Acidic" && cuisine === "Italian") {
-                    pairing = "Classic **Chianti Classico** or **Barbera** (medium-bodied Italian red).";
+                    pairing = "Classic **Chianti Classico** or **Barbera**.";
                 } else if (prep_sauce === "Rich" || prep_sauce === "Earthy") {
-                    pairing = "Bold **Cabernet Sauvignon**, **Left Bank Bordeaux**, or **Syrah/Shiraz**.";
+                    pairing = "Bold **Cabernet Sauvignon** or **Syrah/Shiraz**.";
                 } else if (cuisine === "American") {
-                    pairing = "Powerful **Napa Cabernet Sauvignon** or peppery **Zinfandel**.";
+                    pairing = "Powerful **Napa Cabernet** or **Zinfandel**.";
                 } else {
                     pairing = "Smooth **Merlot** or earthy **Malbec**.";
                 }
-            }
-            else if (protein === "Pork/Veal" || protein === "Poultry") {
+            } else if (protein === "Pork/Veal" || protein === "Poultry") {
                 if (prep_sauce === "Spicy") {
                     pairing = "**Off-dry Riesling** or aromatic **Gewürztraminer**.";
                 } else if (prep_sauce === "Rich" || cuisine === "French") {
-                    pairing = "Rich, oaked **Chardonnay** (White Burgundy) or light-bodied **Pinot Noir**.";
-                } else if (prep_sauce === "Acidic" || cuisine === "Italian") {
-                    pairing = "Medium-bodied **Sangiovese** (unoaked) or a high-acid **Rosé**.";
+                    pairing = "Oaked **Chardonnay** or light-bodied **Pinot Noir**.";
                 } else {
-                    pairing = "Versatile **Pinot Noir** or medium-bodied **Viognier**.";
+                    pairing = "Versatile **Pinot Noir** or **Viognier**.";
                 }
-            }
-            else if (protein.startsWith("Fish")) {
+            } else if (protein.startsWith("Fish")) {
                 if (prep_sauce === "Rich") {
-                    pairing = "Full-bodied **Oaked Chardonnay** or traditional **White Rioja**.";
-                } else if (prep_sauce === "Acidic" || protein === "Fish_Lean" || prep_sauce === "Herbal") {
-                    if (cuisine === "Spanish") {
-                         pairing = "Crisp **Albariño** or refreshing **Cava** (Spanish Sparkling).";
-                    } else {
-                         pairing = "Zesty **Sauvignon Blanc** (Sancerre/NZ) or bone-dry **Muscadet**.";
-                    }
+                    pairing = "Full-bodied **Oaked Chardonnay**.";
                 } else {
-                    pairing = "Crisp **Pinot Grigio** or dry **Rosé**.";
+                    pairing = "Zesty **Sauvignon Blanc** or crisp **Pinot Grigio**.";
                 }
-            }
-            else if (protein === "Vegetarian") {
-                if (prep_sauce === "Spicy") {
-                    pairing = "**Off-dry Riesling** or bright **Grüner Veltliner**.";
-                } else if (prep_sauce === "Earthy") {
-                    pairing = "Earthy **Pinot Noir** or textural **Nebbiolo**.";
+            } else if (protein === "Vegetarian") {
+                if (prep_sauce === "Earthy") {
+                    pairing = "Earthy **Pinot Noir** or **Nebbiolo**.";
                 } else {
-                    pairing = "Herbaceous **Sauvignon Blanc** or light **Gamay** (Beaujolais).";
+                    pairing = "Herbaceous **Sauvignon Blanc** or light **Gamay**.";
                 }
             }
             
-            let refinement = "";
-            if (flavor_note === "Spicy") {
-                refinement = " *Hint: Slight sweetness or lower alcohol balances heat.*";
-            } else if (flavor_note === "Herbal") {
-                refinement = " *Hint: Match green notes with Sauvignon Blanc or Cabernet Franc.*";
-            } else if (flavor_note === "Acidic") {
-                 refinement = " *Hint: High-acid varieties prevent the wine from tasting 'flabby'.*";
-            } else if (flavor_note === "Rich") {
-                 refinement = " *Hint: Full-bodied wines with oak/texture match rich sauces.*";
-            } else if (flavor_note === "Earthy") {
-                 refinement = " *Hint: Savory reds or textural, mushroom-friendly whites are best.*";
-            }
-            
-            return pairing + refinement;
+            return pairing || "A balanced **Dry Rosé** or **Sparkling Wine**.";
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -331,12 +318,10 @@
                 const cuisine = document.getElementById('cuisine_val').value;
                 const protein = proteinSelect.value;
                 const flavor = document.getElementById('flavor_val').value;
-                const pairing = getWinePairing(cuisine, protein, flavor);
-                resultDiv.innerHTML = pairing;
+                resultDiv.innerHTML = getWinePairing(cuisine, protein, flavor);
             }
 
             proteinSelect.addEventListener('change', updatePairing);
-            updatePairing();
         });
     </script>
 </body>
