@@ -11,7 +11,7 @@
             font-family: 'Georgia', serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f7f4; /* Very light, warm background */
+            background-color: #f8f7f4; 
             color: #333;
             display: flex;
             justify-content: center;
@@ -19,23 +19,21 @@
             min-height: 100vh;
         }
 
-        /* --- Container & Card Design --- */
         .container {
             max-width: 750px;
             margin: 40px auto;
             padding: 40px;
             background-color: #ffffff;
             border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* Soft, deep shadow */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
-        /* --- Headings and Typography --- */
         h1 {
-            color: #8a032d; /* Primary Wine Red */
+            color: #8a032d;
             text-align: center;
             font-family: 'Playfair Display', serif;
-            margin-bottom: 10px;
-            font-size: 2.8em;
+            margin-bottom: 5px;
+            font-size: 2.5em;
         }
 
         h2 {
@@ -43,25 +41,51 @@
             text-align: center;
             margin-top: 5px;
             font-weight: 300;
-            font-size: 1.2em;
+            font-size: 1.1em;
+            margin-bottom: 20px;
         }
 
-        /* --- Separator Line --- */
+        /* --- Updated Smaller Advanced Button --- */
+        .advanced-btn-container {
+            text-align: right; /* Aligned to the right for a clean look */
+            margin-bottom: 15px;
+        }
+
+        .advanced-btn {
+            display: inline-block;
+            padding: 6px 15px; /* Smaller padding */
+            background-color: transparent;
+            color: #8a032d;
+            border: 1.5px solid #8a032d;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85em; /* Smaller font */
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .advanced-btn:hover {
+            background-color: #8a032d;
+            color: #ffffff;
+        }
+
         hr {
             border: 0;
             height: 1px;
             background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #8a032d, rgba(0, 0, 0, 0));
-            margin: 25px 0;
+            margin: 20px 0;
         }
         
         .intro-text {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             color: #777;
             font-style: italic;
+            font-size: 0.95em;
         }
 
-        /* --- Dropdown Controls (Standard) --- */
         .control-group label {
             display: block;
             margin-bottom: 8px;
@@ -80,15 +104,8 @@
             box-sizing: border-box;
             font-size: 1em;
             cursor: pointer;
-            transition: border-color 0.3s;
         }
 
-        .control-group select:focus {
-            outline: none;
-            border-color: #8a032d;
-        }
-
-        /* --- Button Group (Emoji Selector) Styling --- */
         .button-group {
             display: flex;
             flex-wrap: wrap;
@@ -103,18 +120,17 @@
             border-radius: 10px;
             background-color: #fff;
             color: #333;
-            font-size: 1.1em;
+            font-size: 1em;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
-            line-height: 1.4;
-            min-width: 100px;
+            min-width: 110px;
         }
         
         .emoji-button span.emoji {
-            font-size: 1.5em;
+            font-size: 1.4em;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .emoji-button:hover {
@@ -128,40 +144,12 @@
             border-color: #8a032d;
             box-shadow: 0 4px 8px rgba(138, 3, 45, 0.4);
         }
-        
-        .emoji-button.selected span.emoji {
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-        }
-	/* --- Advanced Button Styling --- */
-	.advanced-btn {
- 	   display: inline-block;
- 	   padding: 12px 30px;
- 	   background-color: transparent;
-	    color: #8a032d;
-	    border: 2px solid #8a032d;
-	    border-radius: 30px;
-	    text-decoration: none;
-	    font-weight: bold;
-	    font-size: 1em;
-	    transition: all 0.3s ease;
-	    text-transform: uppercase;
-	    letter-spacing: 1px;
-	}
 
-	.advanced-btn:hover {
-    		background-color: #8a032d;
-   		 color: #ffffff;
-   		 box-shadow: 0 5px 15px rgba(138, 3, 45, 0.3);
-   		 transform: translateY(-2px);
-	}
-
-        /* --- Result Area --- */
         .result-title {
             color: #8a032d;
             text-align: center;
             font-size: 1.5em;
             margin-top: 30px;
-            margin-bottom: 10px;
             font-weight: bold;
         }
 
@@ -170,28 +158,29 @@
             padding: 25px;
             border: 2px solid #8a032d;
             border-radius: 10px;
-            background-color: #fcf4f5; /* Very light pink background */
+            background-color: #fcf4f5;
             text-align: center;
-            font-size: 1.3em;
-            min-height: 60px;
+            font-size: 1.2em;
             color: #333;
-            transition: all 0.5s ease-in-out;
         }
 
-        #result strong {
-            color: #8a032d; /* Primary color for wine name emphasis */
-        }
-
+        #result strong { color: #8a032d; }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <div class="advanced-btn-container">
+            <a href="Advanced.html" class="advanced-btn">Advanced Guide →</a>
+        </div>
+
         <h1>🍷 The Perfect Pour</h1>
         <h2>Instantly Match Wine to Your Meal</h2>
+        
         <p class="intro-text">
-            Tap the emojis to describe your dish's cuisine and dominant flavor, then select your main ingredient for an expert recommendation.
+            Tap the emojis to describe your meal for an expert recommendation.
         </p>
+        
         <hr>
 
         <div class="control-group">
@@ -200,10 +189,10 @@
                 <button class="emoji-button" data-value="Italian"><span class="emoji">🇮🇹</span> Italian</button>
                 <button class="emoji-button" data-value="French"><span class="emoji">🇫🇷</span> French</button>
                 <button class="emoji-button" data-value="Spanish"><span class="emoji">🇪🇸</span> Spanish</button>
-                <button class="emoji-button" data-value="Asian"><span class="emoji">🇹🇭</span> Asian</button>
                 <button class="emoji-button" data-value="American"><span class="emoji">🇺🇸</span> American</button>
             </div>
         </div>
+        
         <hr>
 
         <div class="control-group">
@@ -218,6 +207,7 @@
                 <option value="Vegetarian">Vegetarian/Vegan</option>
             </select>
         </div>
+        
         <hr>
         
         <div class="control-group">
@@ -235,44 +225,30 @@
         <div id="result">
             Please make one selection in all three categories above.
         </div>
-	<div style="text-align: center; margin-top: 40px;">
-  	  <p style="color: #777; font-size: 0.9em; margin-bottom: 15px;">Seeking something more specific?</p>
-   	 <a href="Advanced.html" class="advanced-btn">
-     	   Try our Advanced Pairing Guide
-    </a>
-</div>
+
     </div>
 
     <script>
-        // --- JavaScript Logic ---
-        
-        // Helper function to handle button selection
         function setupButtonSelection(groupId, inputElementId) {
             const group = document.getElementById(groupId);
             group.querySelectorAll('.emoji-button').forEach(button => {
                 button.addEventListener('click', function() {
-                    // Deselect all others in the group
                     group.querySelectorAll('.emoji-button').forEach(btn => btn.classList.remove('selected'));
-                    // Select this button
                     this.classList.add('selected');
-                    // Store the value for pairing logic
                     document.getElementById(inputElementId).value = this.dataset.value;
                     updatePairing();
                 });
             });
         }
 
-        // --- Wine Pairing Core Function ---
         function getWinePairing(cuisine, protein, flavor_note) {
-            
             if (!cuisine || !protein || !flavor_note || protein === "default") {
                 return "Please make one selection in all three categories above.";
             }
 
             let pairing = "A versatile choice: ";
-            let prep_sauce = flavor_note; // Use flavor_note to substitute for prep/sauce in the logic
+            let prep_sauce = flavor_note;
 
-            // --- Base Pairing Logic (Protein & Sauce/Flavor) ---
             if (protein === "Beef/Lamb") {
                 if (prep_sauce === "Acidic" && cuisine === "Italian") {
                     pairing = "Classic **Chianti Classico** or **Barbera** (medium-bodied Italian red).";
@@ -285,10 +261,10 @@
                 }
             }
             else if (protein === "Pork/Veal" || protein === "Poultry") {
-                if (prep_sauce === "Spicy" || cuisine === "Asian") {
-                    pairing = "**Off-dry Riesling** (German or Alsatian) or aromatic **Gewürztraminer**.";
+                if (prep_sauce === "Spicy") {
+                    pairing = "**Off-dry Riesling** or aromatic **Gewürztraminer**.";
                 } else if (prep_sauce === "Rich" || cuisine === "French") {
-                    pairing = "Rich, oaked **Chardonnay** (White Burgundy) or light-bodied, earthy **Pinot Noir**.";
+                    pairing = "Rich, oaked **Chardonnay** (White Burgundy) or light-bodied **Pinot Noir**.";
                 } else if (prep_sauce === "Acidic" || cuisine === "Italian") {
                     pairing = "Medium-bodied **Sangiovese** (unoaked) or a high-acid **Rosé**.";
                 } else {
@@ -309,36 +285,32 @@
                 }
             }
             else if (protein === "Vegetarian") {
-                if (prep_sauce === "Spicy" || cuisine === "Asian") {
+                if (prep_sauce === "Spicy") {
                     pairing = "**Off-dry Riesling** or bright **Grüner Veltliner**.";
                 } else if (prep_sauce === "Earthy") {
-                    pairing = "Earthy **Pinot Noir** or textural **Nebbiolo** (lightly aged).";
+                    pairing = "Earthy **Pinot Noir** or textural **Nebbiolo**.";
                 } else {
                     pairing = "Herbaceous **Sauvignon Blanc** or light **Gamay** (Beaujolais).";
                 }
             }
             
-            // --- Final Refinement based on Dominant Flavor Note ---
             let refinement = "";
-
             if (flavor_note === "Spicy") {
-                refinement = " *Hint: Look for a wine with a slight sweetness or lower alcohol to balance the heat, like a German Riesling.*";
+                refinement = " *Hint: Slight sweetness or lower alcohol balances heat.*";
             } else if (flavor_note === "Herbal") {
-                refinement = " *Hint: Pair with a wine that has similar green notes, such as Sauvignon Blanc or Cabernet Franc.*";
+                refinement = " *Hint: Match green notes with Sauvignon Blanc or Cabernet Franc.*";
             } else if (flavor_note === "Acidic") {
-                 refinement = " *Hint: The wine must be as acidic as the food, otherwise it will taste flabby. Go for high-acid varieties.*";
+                 refinement = " *Hint: High-acid varieties prevent the wine from tasting 'flabby'.*";
             } else if (flavor_note === "Rich") {
-                 refinement = " *Hint: Choose a full-bodied wine with richness (oak/texture) to match the fat content of the sauce.*";
+                 refinement = " *Hint: Full-bodied wines with oak/texture match rich sauces.*";
             } else if (flavor_note === "Earthy") {
-                 refinement = " *Hint: An old-world, savory red or a textural, mushroom-friendly white will be best.*";
+                 refinement = " *Hint: Savory reds or textural, mushroom-friendly whites are best.*";
             }
             
             return pairing + refinement;
         }
 
-        // --- Event Listeners and Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Invisible input fields to hold the button selection values
             const cuisineInput = document.createElement('input');
             cuisineInput.type = 'hidden';
             cuisineInput.id = 'cuisine_val';
@@ -349,7 +321,6 @@
             flavorInput.id = 'flavor_val';
             document.body.appendChild(flavorInput);
 
-            // Setup button groups
             setupButtonSelection('cuisine-group', 'cuisine_val');
             setupButtonSelection('flavor-group', 'flavor_val');
 
@@ -360,15 +331,11 @@
                 const cuisine = document.getElementById('cuisine_val').value;
                 const protein = proteinSelect.value;
                 const flavor = document.getElementById('flavor_val').value;
-
                 const pairing = getWinePairing(cuisine, protein, flavor);
                 resultDiv.innerHTML = pairing;
             }
 
-            // Attach updatePairing to the protein dropdown
             proteinSelect.addEventListener('change', updatePairing);
-
-            // Initial call
             updatePairing();
         });
     </script>
