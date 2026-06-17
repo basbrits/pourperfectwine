@@ -1,15 +1,17 @@
 (function () {
   "use strict";
 
-  var VERSION = "force6-contain-recognizer";
+  var VERSION = "backend-recognition-v1";
+
+  // Replace this with your Render backend base URL.
+  // Example: var BACKEND_URL = "https://rijkslens-recognition-backend.onrender.com";
+  var BACKEND_URL = "https://rijkslens-recognition-backend.onrender.com/";
+
   var artworks = [];
-  var DATA_FILE = "./artworks-v2.js";
 
   var state = {
     activeArtwork: null,
     activeCategory: "history",
-    referenceFingerprints: {},
-    referenceReady: false,
     stream: null,
     editMode: window.location.search.indexOf("edit") !== -1
   };
@@ -28,45 +30,40 @@
   });
 
   function boot() {
-    setStatus("RijksLens JavaScript loaded. Version: " + VERSION, "info");
-    log("RijksLens JavaScript loaded. Version: " + VERSION);
+    BACKEND_URL = String(BACKEND_URL || "").replace(/\/$/, "");
+
+    setStatus("RijksLens loaded. Backend recognition enabled.", "info");
+    log("Version: " + VERSION);
+    log("Backend URL: " + BACKEND_URL);
     log("Secure context: " + String(window.isSecureContext));
 
     artworks = window.RIJKSLENS_ARTWORKS || [];
 
     if (artworks.length > 0) {
-      startWithData();
+      log("Artwork records loaded: " + artworks.length);
       return;
     }
 
-    log("No artwork data found on first load. Trying to load " + DATA_FILE + " automatically.");
+    log("No artwork data found. Trying to auto-load artworks-v2.js.");
 
     var script = document.createElement("script");
-    script.src = DATA_FILE + "?auto=" + Date.now();
+    script.src = "./artworks-v2.js?auto=" + Date.now();
 
     script.onload = function () {
       artworks = window.RIJKSLENS_ARTWORKS || [];
       log("Auto-loaded artwork data. Artwork records loaded: " + artworks.length);
-      startWithData();
+
+      if (!artworks.length) {
+        setStatus("No artwork data found in artworks-v2.js.", "error");
+      }
     };
 
     script.onerror = function () {
-      setStatus("Could not load artwork data. Check that artworks-v2.js exists in the repo root.", "error");
-      log("FAILED to auto-load " + DATA_FILE);
+      setStatus("Could not load artwork data. Check artworks-v2.js.", "error");
+      log("FAILED to auto-load artworks-v2.js.");
     };
 
     document.head.appendChild(script);
-  }
-
-  function startWithData() {
-    log("Artwork records loaded: " + artworks.length);
-
-    if (!artworks.length) {
-      setStatus("No artwork records found. Check artworks-v2.js.", "error");
-      return;
-    }
-
-    loadReferenceImages();
   }
 
   function cacheElements() {
@@ -140,57 +137,6 @@
     }
   }
 
-  function loadReferenceImages() {
-    var remaining = artworks.length;
-    var loaded = 0;
-
-    state.referenceFingerprints = {};
-    state.referenceReady = false;
-
-    setStatus("Loading reference images...", "info");
-
-    for (var i = 0; i < artworks.length; i += 1) {
-      loadReferenceImage(artworks[i]);
-    }
-
-    function loadReferenceImage(artwork) {
-      var img = new Image();
-
-      img.onload = function () {
-        try {
-          state.referenceFingerprints[artwork.id] = makeFingerprintFromImage(img);
-          loaded += 1;
-          log("Loaded reference image: " + artwork.title + " from " + artwork.image);
-        } catch (err) {
-          log("Could not fingerprint " + artwork.title + ": " + err.message);
-        }
-
-        remaining -= 1;
-        finishIfDone();
-      };
-
-      img.onerror = function () {
-        log("FAILED to load reference image for " + artwork.title + ": " + artwork.image);
-        remaining -= 1;
-        finishIfDone();
-      };
-
-      img.src = artwork.image + "?v=" + encodeURIComponent(VERSION);
-    }
-
-    function finishIfDone() {
-      if (remaining === 0) {
-        state.referenceReady = loaded > 0;
-
-        if (state.referenceReady) {
-          setStatus("Ready. Loaded " + loaded + " reference image(s).", "success");
-        } else {
-          setStatus("No reference images loaded. Check the assets folder.", "error");
-        }
-      }
-    }
-  }
-
   function startCamera() {
     log("Start camera tapped.");
 
@@ -243,13 +189,20 @@
     }
 
     var canvas = document.createElement("canvas");
-    canvas.width = 640;
-    canvas.height = 640;
+    canvas.width = 1000;
+    canvas.height = 1000;
 
     var ctx = canvas.getContext("2d");
     drawContain(els.camera, ctx, canvas.width, canvas.height);
 
-    evaluateFingerprint(makeFingerprintFromCanvas(canvas), "camera");
+    canvasToBlob(canvas, function (blob) {
+      if (!blob) {
+        setStatus("Could not prepare camera image.", "error");
+        return;
+      }
+
+      recognizeBlob(blob, "camera.jpg", "camera");
+    });
   }
 
   function handleUpload(event) {
@@ -262,245 +215,180 @@
       return;
     }
 
-    log("Uploaded file name: " + file.name);
-
-    var reader = new FileReader();
-
-    reader.onload = function (loadEvent) {
-      var img = new Image();
-
-      img.onload = function () {
-        var canvas = document.createElement("canvas");
-        canvas.width = 640;
-        canvas.height = 640;
-
-        var ctx = canvas.getContext("2d");
-        drawContain(img, ctx, canvas.width, canvas.height);
-
-        evaluateFingerprint(makeFingerprintFromCanvas(canvas), "uploaded photo");
-      };
-
-      img.onerror = function () {
-        setStatus("Could not read the uploaded image.", "error");
-      };
-
-      img.src = loadEvent.target.result;
-    };
-
-    reader.onerror = function () {
-      setStatus("Could not open the selected file.", "error");
-    };
-
-    reader.readAsDataURL(file);
+    log("Uploaded file: " + file.name + " / " + file.type + " / " + file.size + " bytes");
+    recognizeBlob(file, file.name || "upload.jpg", "uploaded photo");
   }
 
-  function evaluateFingerprint(fingerprint, sourceLabel) {
-    if (!state.referenceReady) {
-      setStatus("Recognition is not ready. Reference images are still missing or loading.", "error");
-      log("Recognition stopped because referenceReady=false.");
+  function recognizeBlob(blob, filename, sourceLabel) {
+    if (!BACKEND_URL || BACKEND_URL.indexOf("PASTE_") === 0) {
+      setStatus("Backend URL is not set in app.js.", "error");
+      log("Set BACKEND_URL at the top of app.js.");
       return;
     }
 
-    var ranked = [];
-
-    for (var i = 0; i < artworks.length; i += 1) {
-      var artwork = artworks[i];
-      var reference = state.referenceFingerprints[artwork.id];
-
-      if (!reference) {
-        log("Missing reference fingerprint for: " + artwork.title);
-        continue;
-      }
-
-      ranked.push({
-        artwork: artwork,
-        score: compareFingerprints(fingerprint, reference)
-      });
-    }
-
-    ranked.sort(function (a, b) {
-      return b.score - a.score;
-    });
-
-    log("--- Recognition scores from " + sourceLabel + " ---");
-
-    for (i = 0; i < ranked.length; i += 1) {
-      log(ranked[i].artwork.title + ": " + Math.round(ranked[i].score * 100) + "%");
-    }
-
-    if (!ranked.length) {
-      setStatus("No loaded reference images to compare against.", "error");
+    if (!artworks.length) {
+      setStatus("Artwork data is not loaded yet. Check artworks-v2.js.", "error");
       return;
     }
 
-    var best = ranked[0];
-    var second = ranked.length > 1 ? ranked[1] : null;
+    setStatus("Sending image to recognition backend...", "info");
+    log("POST " + BACKEND_URL + "/recognize");
 
-    var threshold =
-      typeof best.artwork.recognitionThreshold === "number"
-        ? best.artwork.recognitionThreshold
-        : 0.92;
+    var formData = new FormData();
+    formData.append("file", blob, filename);
 
-    var marginRequired = 0.03;
-    var margin = second ? best.score - second.score : 1;
-
-    var percent = Math.round(best.score * 100);
-    var thresholdPercent = Math.round(threshold * 100);
-    var marginPercent = Math.round(margin * 100);
-
-    if (best.score >= threshold && margin >= marginRequired) {
-      setStatus("Recognized: " + best.artwork.title + " (" + percent + "%).", "success");
-
-      window.setTimeout(function () {
-        openArtwork(best.artwork, "Recognized from " + sourceLabel + ".");
-      }, 250);
-    } else {
-      setStatus(
-        "Not recognized confidently. Best match: " +
-          best.artwork.title +
-          " at " +
-          percent +
-          "%. Required: " +
-          thresholdPercent +
-          "% and clear lead. Margin: " +
-          marginPercent +
-          "%.",
-        "error"
-      );
-    }
-  }
-
-  function makeFingerprintFromImage(img) {
-    var canvas = document.createElement("canvas");
-    canvas.width = 640;
-    canvas.height = 640;
-
-    var ctx = canvas.getContext("2d");
-    drawContain(img, ctx, canvas.width, canvas.height);
-
-    return makeFingerprintFromCanvas(canvas);
-  }
-
-  function makeFingerprintFromCanvas(sourceCanvas) {
-    var size = 64;
-    var canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(sourceCanvas, 0, 0, size, size);
-
-    var pixels = ctx.getImageData(0, 0, size, size).data;
-
-    var lumas = [];
-    var i;
-
-    for (i = 0; i < pixels.length; i += 4) {
-      var r = pixels[i];
-      var g = pixels[i + 1];
-      var b = pixels[i + 2];
-      var luma = 0.299 * r + 0.587 * g + 0.114 * b;
-      lumas.push(luma);
-    }
-
-    var avg = 0;
-    for (i = 0; i < lumas.length; i += 1) {
-      avg += lumas[i];
-    }
-    avg = avg / lumas.length;
-
-    var averageHash = [];
-    for (i = 0; i < lumas.length; i += 1) {
-      averageHash.push(lumas[i] >= avg ? 1 : 0);
-    }
-
-    var differenceHash = [];
-    for (var y = 0; y < size; y += 1) {
-      for (var x = 0; x < size - 1; x += 1) {
-        differenceHash.push(lumas[y * size + x] > lumas[y * size + x + 1] ? 1 : 0);
-      }
-    }
-
-    var gridSize = 8;
-    var cellSize = size / gridSize;
-    var colorGrid = [];
-    var lumaGrid = [];
-
-    for (var gy = 0; gy < gridSize; gy += 1) {
-      for (var gx = 0; gx < gridSize; gx += 1) {
-        var sumR = 0;
-        var sumG = 0;
-        var sumB = 0;
-        var sumLuma = 0;
-        var count = 0;
-
-        for (var py = Math.floor(gy * cellSize); py < Math.floor((gy + 1) * cellSize); py += 1) {
-          for (var px = Math.floor(gx * cellSize); px < Math.floor((gx + 1) * cellSize); px += 1) {
-            var index = (py * size + px) * 4;
-            sumR += pixels[index] / 255;
-            sumG += pixels[index + 1] / 255;
-            sumB += pixels[index + 2] / 255;
-            sumLuma += lumas[py * size + px] / 255;
-            count += 1;
-          }
+    fetch(BACKEND_URL + "/recognize", {
+      method: "POST",
+      body: formData
+    })
+      .then(function (response) {
+        return response.json().then(function (data) {
+          return {
+            ok: response.ok,
+            status: response.status,
+            data: data
+          };
+        });
+      })
+      .then(function (result) {
+        if (!result.ok) {
+          var detail = result.data && result.data.detail ? result.data.detail : "Recognition request failed.";
+          setStatus("Backend error: " + detail, "error");
+          log("Backend error " + result.status + ": " + detail);
+          return;
         }
 
-        colorGrid.push(sumR / count);
-        colorGrid.push(sumG / count);
-        colorGrid.push(sumB / count);
-        lumaGrid.push(sumLuma / count);
-      }
-    }
-
-    return {
-      averageHash: averageHash,
-      differenceHash: differenceHash,
-      colorGrid: colorGrid,
-      lumaGrid: lumaGrid
-    };
+        handleRecognitionResult(result.data, sourceLabel);
+      })
+      .catch(function (err) {
+        setStatus("Could not reach backend: " + err.message, "error");
+        log("Fetch error: " + err.message);
+      });
   }
 
-  function compareFingerprints(a, b) {
-    if (!a || !b) {
-      return 0;
+  function handleRecognitionResult(result, sourceLabel) {
+    log("--- Backend recognition result from " + sourceLabel + " ---");
+    log("Accepted: " + String(result.accepted));
+    log("Message: " + (result.message || ""));
+
+    if (result.bestCandidate) {
+      log(
+        "Best: " +
+          result.bestCandidate.title +
+          " / inliers: " +
+          result.bestCandidate.inliers +
+          " / good matches: " +
+          result.bestCandidate.goodMatches +
+          " / confidence: " +
+          result.bestCandidate.confidence
+      );
     }
 
-    var i;
+    if (result.secondCandidate) {
+      log(
+        "Second: " +
+          result.secondCandidate.title +
+          " / inliers: " +
+          result.secondCandidate.inliers +
+          " / good matches: " +
+          result.secondCandidate.goodMatches +
+          " / confidence: " +
+          result.secondCandidate.confidence
+      );
+    }
 
-    var sameAverage = 0;
-    for (i = 0; i < a.averageHash.length; i += 1) {
-      if (a.averageHash[i] === b.averageHash[i]) {
-        sameAverage += 1;
+    if (result.candidates && result.candidates.length) {
+      for (var i = 0; i < result.candidates.length; i += 1) {
+        var candidate = result.candidates[i];
+        log(
+          "Candidate " +
+            (i + 1) +
+            ": " +
+            candidate.title +
+            " / inliers " +
+            candidate.inliers +
+            " / matches " +
+            candidate.goodMatches +
+            " / ratio " +
+            candidate.inlierRatio
+        );
       }
     }
-    var averageSimilarity = sameAverage / a.averageHash.length;
 
-    var sameDifference = 0;
-    for (i = 0; i < a.differenceHash.length; i += 1) {
-      if (a.differenceHash[i] === b.differenceHash[i]) {
-        sameDifference += 1;
+    if (!result.accepted || !result.artworkId) {
+      setStatus(result.message || "Painting not recognized confidently.", "error");
+      return;
+    }
+
+    var artwork = findArtworkById(result.artworkId);
+
+    if (!artwork) {
+      setStatus(
+        "Backend recognized '" +
+          result.artworkId +
+          "', but this artwork ID is missing from artworks-v2.js.",
+        "error"
+      );
+      log("Missing frontend artwork id: " + result.artworkId);
+      return;
+    }
+
+    setStatus("Recognized: " + artwork.title, "success");
+
+    window.setTimeout(function () {
+      openArtwork(artwork, result.message || "Recognized by backend.");
+    }, 250);
+  }
+
+  function findArtworkById(id) {
+    for (var i = 0; i < artworks.length; i += 1) {
+      if (artworks[i].id === id) {
+        return artworks[i];
       }
     }
-    var differenceSimilarity = sameDifference / a.differenceHash.length;
 
-    var colorDistance = 0;
-    for (i = 0; i < a.colorGrid.length; i += 1) {
-      colorDistance += Math.abs(a.colorGrid[i] - b.colorGrid[i]);
+    return null;
+  }
+
+  function runDiagnostics() {
+    log("--- Diagnostics ---");
+    log("Version: " + VERSION);
+    log("URL: " + window.location.href);
+    log("Backend URL: " + BACKEND_URL);
+    log("Secure context: " + String(window.isSecureContext));
+    log("Has getUserMedia: " + String(!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)));
+    log("Artwork records loaded: " + artworks.length);
+
+    for (var i = 0; i < artworks.length; i += 1) {
+      log("Artwork " + (i + 1) + ": " + artworks[i].id + " / " + artworks[i].title);
     }
-    var colorSimilarity = Math.max(0, 1 - colorDistance / a.colorGrid.length);
 
-    var lumaDistance = 0;
-    for (i = 0; i < a.lumaGrid.length; i += 1) {
-      lumaDistance += Math.abs(a.lumaGrid[i] - b.lumaGrid[i]);
+    if (!BACKEND_URL || BACKEND_URL.indexOf("PASTE_") === 0) {
+      setStatus("Backend URL is not set in app.js.", "error");
+      return;
     }
-    var lumaSimilarity = Math.max(0, 1 - lumaDistance / a.lumaGrid.length);
 
-    return (
-      0.25 * averageSimilarity +
-      0.30 * differenceSimilarity +
-      0.25 * colorSimilarity +
-      0.20 * lumaSimilarity
-    );
+    setStatus("Checking backend health...", "info");
+
+    fetch(BACKEND_URL + "/health")
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        log("Backend health: " + JSON.stringify(data));
+        setStatus(
+          "Backend health: " +
+            data.referenceCount +
+            " reference image(s), detector " +
+            data.detector +
+            ".",
+          data.ok ? "success" : "error"
+        );
+      })
+      .catch(function (err) {
+        setStatus("Could not reach backend health endpoint: " + err.message, "error");
+        log("Health check error: " + err.message);
+      });
   }
 
   function drawContain(source, ctx, targetWidth, targetHeight) {
@@ -517,21 +405,41 @@
     var scale = Math.min(targetWidth / sourceWidth, targetHeight / sourceHeight);
     var drawWidth = sourceWidth * scale;
     var drawHeight = sourceHeight * scale;
-
     var dx = (targetWidth - drawWidth) / 2;
     var dy = (targetHeight - drawHeight) / 2;
 
-    ctx.drawImage(
-      source,
-      0,
-      0,
-      sourceWidth,
-      sourceHeight,
-      dx,
-      dy,
-      drawWidth,
-      drawHeight
-    );
+    ctx.drawImage(source, 0, 0, sourceWidth, sourceHeight, dx, dy, drawWidth, drawHeight);
+  }
+
+  function canvasToBlob(canvas, callback) {
+    if (canvas.toBlob) {
+      canvas.toBlob(
+        function (blob) {
+          callback(blob);
+        },
+        "image/jpeg",
+        0.9
+      );
+      return;
+    }
+
+    var dataUrl = canvas.toDataURL("image/jpeg", 0.9);
+    callback(dataUrlToBlob(dataUrl));
+  }
+
+  function dataUrlToBlob(dataUrl) {
+    var parts = dataUrl.split(",");
+    var mimeMatch = parts[0].match(/:(.*?);/);
+    var mime = mimeMatch ? mimeMatch[1] : "image/jpeg";
+    var binary = atob(parts[1]);
+    var length = binary.length;
+    var array = new Uint8Array(length);
+
+    for (var i = 0; i < length; i += 1) {
+      array[i] = binary.charCodeAt(i);
+    }
+
+    return new Blob([array], { type: mime });
   }
 
   function openArtwork(artwork, reason) {
@@ -553,7 +461,7 @@
     els.artworkMeta.textContent = artwork.artist + " · " + artwork.date + " · " + artwork.objectNumber;
     els.artworkTitle.textContent = artwork.title;
     els.artworkSubtitle.textContent = artwork.museum + ". " + reason;
-    els.artworkImage.src = artwork.image + "?v=" + encodeURIComponent(VERSION);
+    els.artworkImage.src = artwork.image;
     els.artworkImage.alt = artwork.title + " by " + artwork.artist;
 
     setCategory("history");
@@ -638,25 +546,6 @@
     }
 
     setStatus("Ready to scan again.", "info");
-  }
-
-  function runDiagnostics() {
-    log("--- Diagnostics ---");
-    log("Version: " + VERSION);
-    log("URL: " + window.location.href);
-    log("Secure context: " + String(window.isSecureContext));
-    log("Has getUserMedia: " + String(!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)));
-    log("Artwork records loaded: " + artworks.length);
-    log("Reference ready: " + String(state.referenceReady));
-
-    for (var i = 0; i < artworks.length; i += 1) {
-      log("Artwork " + (i + 1) + ": " + artworks[i].title + " / " + artworks[i].image);
-      if (!state.referenceFingerprints[artworks[i].id]) {
-        log("  Missing fingerprint for: " + artworks[i].title);
-      }
-    }
-
-    setStatus("Diagnostics printed below.", "info");
   }
 
   function showCoordinate(event) {
