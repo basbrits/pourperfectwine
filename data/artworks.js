@@ -28,9 +28,9 @@ window.RIJKSLENS_ARTWORKS = [
     image: "./assets/milkmaid.jpg",
 
     // Higher = stricter.
-    // If random things still open Milkmaid, raise to 0.92 or 0.94.
-    // If the real Milkmaid no longer recognizes, lower to 0.86 or 0.84.
-    recognitionThreshold: 0.90,
+    // If random things still open a painting, raise this to 0.94 or 0.96.
+    // If the real painting no longer recognizes, lower this to 0.86 or 0.84.
+    recognitionThreshold: 0.92,
 
     categories: {
       history: {
@@ -38,7 +38,7 @@ window.RIJKSLENS_ARTWORKS = [
         intro: "Historical stories and context about this artwork.",
         bubbles: [
           {
-            id: "history-ordinary-task",
+            id: "milkmaid-history-ordinary-task",
             x: 47,
             y: 48,
             title: "An ordinary task becomes monumental",
@@ -47,7 +47,7 @@ window.RIJKSLENS_ARTWORKS = [
             source: "Optional source note or URL."
           },
           {
-            id: "history-gallery-of-honour",
+            id: "milkmaid-history-gallery-of-honour",
             x: 50,
             y: 9,
             title: "Why this hangs with masterpieces",
@@ -63,7 +63,7 @@ window.RIJKSLENS_ARTWORKS = [
         intro: "Painting methods, colour, light, brushwork, and composition.",
         bubbles: [
           {
-            id: "technique-light-dots",
+            id: "milkmaid-technique-light-dots",
             x: 34,
             y: 70,
             title: "Dots of light on the bread",
@@ -72,7 +72,7 @@ window.RIJKSLENS_ARTWORKS = [
             source: "Optional source note or URL."
           },
           {
-            id: "technique-milk-stream",
+            id: "milkmaid-technique-milk-stream",
             x: 42,
             y: 55,
             title: "The thin stream of milk",
@@ -88,7 +88,7 @@ window.RIJKSLENS_ARTWORKS = [
         intro: "Objects and details that may carry meaning.",
         bubbles: [
           {
-            id: "symbolism-foot-warmer",
+            id: "milkmaid-symbolism-foot-warmer",
             x: 82,
             y: 82,
             title: "The foot warmer",
@@ -97,12 +97,103 @@ window.RIJKSLENS_ARTWORKS = [
             source: "Optional source note or URL."
           },
           {
-            id: "symbolism-tiles",
+            id: "milkmaid-symbolism-tiles",
             x: 88,
             y: 77,
             title: "Tiny tiles near the floor",
             shortText: "Replace this with your short symbolism explanation.",
             detailText: "Longer symbolism text goes here. You can describe what is visible, what scholars suggest, and where interpretation is uncertain.",
+            source: "Optional source note or URL."
+          }
+        ]
+      }
+    }
+  },
+
+  {
+    id: "little-street",
+    title: "The Little Street",
+    artist: "Johannes Vermeer",
+    date: "c. 1658",
+    museum: "Rijksmuseum, Amsterdam",
+    objectNumber: "SK-A-2860",
+
+    // This image file must exist in: assets/little-street.jpg
+    image: "./assets/little-street.jpg",
+
+    recognitionThreshold: 0.92,
+
+    categories: {
+      history: {
+        label: "History",
+        intro: "Historical stories and context about this artwork.",
+        bubbles: [
+          {
+            id: "little-street-history-houses",
+            x: 48,
+            y: 35,
+            title: "A street becomes a portrait",
+            shortText: "Replace this with your short history explanation.",
+            detailText: "Longer history text goes here. Example angle: this is not a grand biblical or mythological scene, but a quiet view of ordinary houses in Delft.",
+            source: "Optional source note or URL."
+          },
+          {
+            id: "little-street-history-daily-life",
+            x: 50,
+            y: 74,
+            title: "Everyday Delft",
+            shortText: "Replace this with your short history explanation.",
+            detailText: "Longer history text goes here. You can explain how Dutch painters made daily life, domestic spaces, streets, and courtyards into serious artistic subjects.",
+            source: "Optional source note or URL."
+          }
+        ]
+      },
+
+      technique: {
+        label: "Technique",
+        intro: "Painting methods, colour, light, brushwork, and composition.",
+        bubbles: [
+          {
+            id: "little-street-technique-brickwork",
+            x: 44,
+            y: 42,
+            title: "The brickwork",
+            shortText: "Replace this with your short technique explanation.",
+            detailText: "Longer technique text goes here. Example angle: describe how Vermeer creates the feeling of old brick, mortar, and weathered surfaces.",
+            source: "Optional source note or URL."
+          },
+          {
+            id: "little-street-technique-composition",
+            x: 51,
+            y: 17,
+            title: "The calm composition",
+            shortText: "Replace this with your short technique explanation.",
+            detailText: "Longer technique text goes here. Example angle: the painting feels balanced because of the strong verticals, rectangles, doorway shapes, and quiet rhythm of the facade.",
+            source: "Optional source note or URL."
+          }
+        ]
+      },
+
+      symbolism: {
+        label: "Symbolism",
+        intro: "Objects and details that may carry meaning.",
+        bubbles: [
+          {
+            id: "little-street-symbolism-doorway",
+            x: 58,
+            y: 67,
+            title: "The open doorway",
+            shortText: "Replace this with your short symbolism explanation.",
+            detailText: "Longer symbolism text goes here. Keep it careful: rather than claiming one fixed meaning, you can discuss how thresholds, doorways, and courtyards invite the viewer to imagine private life beyond the street.",
+            source: "Optional source note or URL."
+          },
+          {
+            id: "little-street-symbolism-domestic-work",
+            x: 32,
+            y: 77,
+            title: "Domestic work",
+            shortText: "Replace this with your short symbolism explanation.",
+            detailText: "Longer symbolism text goes here. Example angle: visible domestic activity can suggest order, household virtue, labour, or everyday life, depending on interpretation.",
             source: "Optional source note or URL."
           }
         ]
