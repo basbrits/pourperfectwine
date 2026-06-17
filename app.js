@@ -1,8 +1,9 @@
 (function () {
   "use strict";
 
-  var VERSION = "force3-non-module";
-  var artworks = window.RIJKSLENS_ARTWORKS || [];
+  var VERSION = "force6-contain-recognizer";
+  var artworks = [];
+  var DATA_FILE = "./artworks-v2.js";
 
   var state = {
     activeArtwork: null,
@@ -18,13 +19,55 @@
   document.addEventListener("DOMContentLoaded", function () {
     cacheElements();
     bindEvents();
-    init();
+    boot();
   });
 
   window.addEventListener("error", function (event) {
     log("JavaScript error: " + event.message);
     setStatusSafe("JavaScript error: " + event.message, "error");
   });
+
+  function boot() {
+    setStatus("RijksLens JavaScript loaded. Version: " + VERSION, "info");
+    log("RijksLens JavaScript loaded. Version: " + VERSION);
+    log("Secure context: " + String(window.isSecureContext));
+
+    artworks = window.RIJKSLENS_ARTWORKS || [];
+
+    if (artworks.length > 0) {
+      startWithData();
+      return;
+    }
+
+    log("No artwork data found on first load. Trying to load " + DATA_FILE + " automatically.");
+
+    var script = document.createElement("script");
+    script.src = DATA_FILE + "?auto=" + Date.now();
+
+    script.onload = function () {
+      artworks = window.RIJKSLENS_ARTWORKS || [];
+      log("Auto-loaded artwork data. Artwork records loaded: " + artworks.length);
+      startWithData();
+    };
+
+    script.onerror = function () {
+      setStatus("Could not load artwork data. Check that artworks-v2.js exists in the repo root.", "error");
+      log("FAILED to auto-load " + DATA_FILE);
+    };
+
+    document.head.appendChild(script);
+  }
+
+  function startWithData() {
+    log("Artwork records loaded: " + artworks.length);
+
+    if (!artworks.length) {
+      setStatus("No artwork records found. Check artworks-v2.js.", "error");
+      return;
+    }
+
+    loadReferenceImages();
+  }
 
   function cacheElements() {
     els.scannerScreen = document.getElementById("scannerScreen");
@@ -97,51 +140,42 @@
     }
   }
 
-  function init() {
-    setStatus("RijksLens JavaScript loaded. Version: " + VERSION, "info");
-    log("RijksLens JavaScript loaded. Version: " + VERSION);
-    log("Secure context: " + String(window.isSecureContext));
-    log("Artwork records loaded: " + artworks.length);
-
-    if (!artworks.length) {
-      setStatus("No artwork records found. Check artworks-v2.js.", "error");
-      return;
-    }
-
-    loadReferenceImages();
-  }
-
   function loadReferenceImages() {
     var remaining = artworks.length;
     var loaded = 0;
 
+    state.referenceFingerprints = {};
+    state.referenceReady = false;
+
     setStatus("Loading reference images...", "info");
 
     for (var i = 0; i < artworks.length; i += 1) {
-      (function (artwork) {
-        var img = new Image();
+      loadReferenceImage(artworks[i]);
+    }
 
-        img.onload = function () {
-          try {
-            state.referenceFingerprints[artwork.id] = makeFingerprintFromImage(img);
-            loaded += 1;
-            log("Loaded reference image: " + artwork.title + " from " + artwork.image);
-          } catch (err) {
-            log("Could not fingerprint " + artwork.title + ": " + err.message);
-          }
+    function loadReferenceImage(artwork) {
+      var img = new Image();
 
-          remaining -= 1;
-          finishIfDone();
-        };
+      img.onload = function () {
+        try {
+          state.referenceFingerprints[artwork.id] = makeFingerprintFromImage(img);
+          loaded += 1;
+          log("Loaded reference image: " + artwork.title + " from " + artwork.image);
+        } catch (err) {
+          log("Could not fingerprint " + artwork.title + ": " + err.message);
+        }
 
-        img.onerror = function () {
-          log("FAILED to load reference image for " + artwork.title + ": " + artwork.image);
-          remaining -= 1;
-          finishIfDone();
-        };
+        remaining -= 1;
+        finishIfDone();
+      };
 
-        img.src = artwork.image + "?v=force3";
-      })(artworks[i]);
+      img.onerror = function () {
+        log("FAILED to load reference image for " + artwork.title + ": " + artwork.image);
+        remaining -= 1;
+        finishIfDone();
+      };
+
+      img.src = artwork.image + "?v=" + encodeURIComponent(VERSION);
     }
 
     function finishIfDone() {
@@ -211,9 +245,10 @@
     var canvas = document.createElement("canvas");
     canvas.width = 640;
     canvas.height = 640;
-    var ctx = canvas.getContext("2d");
 
-    drawCover(els.camera, ctx, canvas.width, canvas.height);
+    var ctx = canvas.getContext("2d");
+    drawContain(els.camera, ctx, canvas.width, canvas.height);
+
     evaluateFingerprint(makeFingerprintFromCanvas(canvas), "camera");
   }
 
@@ -227,6 +262,8 @@
       return;
     }
 
+    log("Uploaded file name: " + file.name);
+
     var reader = new FileReader();
 
     reader.onload = function (loadEvent) {
@@ -236,9 +273,10 @@
         var canvas = document.createElement("canvas");
         canvas.width = 640;
         canvas.height = 640;
-        var ctx = canvas.getContext("2d");
 
-        drawCover(img, ctx, canvas.width, canvas.height);
+        var ctx = canvas.getContext("2d");
+        drawContain(img, ctx, canvas.width, canvas.height);
+
         evaluateFingerprint(makeFingerprintFromCanvas(canvas), "uploaded photo");
       };
 
@@ -297,8 +335,13 @@
 
     var best = ranked[0];
     var second = ranked.length > 1 ? ranked[1] : null;
-    var threshold = typeof best.artwork.recognitionThreshold === "number" ? best.artwork.recognitionThreshold : 0.92;
-    var marginRequired = 0.04;
+
+    var threshold =
+      typeof best.artwork.recognitionThreshold === "number"
+        ? best.artwork.recognitionThreshold
+        : 0.92;
+
+    var marginRequired = 0.03;
     var margin = second ? best.score - second.score : 1;
 
     var percent = Math.round(best.score * 100);
@@ -331,14 +374,15 @@
     var canvas = document.createElement("canvas");
     canvas.width = 640;
     canvas.height = 640;
-    var ctx = canvas.getContext("2d");
 
-    drawCover(img, ctx, canvas.width, canvas.height);
+    var ctx = canvas.getContext("2d");
+    drawContain(img, ctx, canvas.width, canvas.height);
+
     return makeFingerprintFromCanvas(canvas);
   }
 
   function makeFingerprintFromCanvas(sourceCanvas) {
-    var size = 48;
+    var size = 64;
     var canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
@@ -347,8 +391,8 @@
     ctx.drawImage(sourceCanvas, 0, 0, size, size);
 
     var pixels = ctx.getImageData(0, 0, size, size).data;
+
     var lumas = [];
-    var colorGrid = [];
     var i;
 
     for (i = 0; i < pixels.length; i += 4) {
@@ -379,12 +423,15 @@
 
     var gridSize = 8;
     var cellSize = size / gridSize;
+    var colorGrid = [];
+    var lumaGrid = [];
 
     for (var gy = 0; gy < gridSize; gy += 1) {
       for (var gx = 0; gx < gridSize; gx += 1) {
         var sumR = 0;
         var sumG = 0;
         var sumB = 0;
+        var sumLuma = 0;
         var count = 0;
 
         for (var py = Math.floor(gy * cellSize); py < Math.floor((gy + 1) * cellSize); py += 1) {
@@ -393,6 +440,7 @@
             sumR += pixels[index] / 255;
             sumG += pixels[index + 1] / 255;
             sumB += pixels[index + 2] / 255;
+            sumLuma += lumas[py * size + px] / 255;
             count += 1;
           }
         }
@@ -400,88 +448,112 @@
         colorGrid.push(sumR / count);
         colorGrid.push(sumG / count);
         colorGrid.push(sumB / count);
+        lumaGrid.push(sumLuma / count);
       }
     }
 
     return {
       averageHash: averageHash,
       differenceHash: differenceHash,
-      colorGrid: colorGrid
+      colorGrid: colorGrid,
+      lumaGrid: lumaGrid
     };
   }
 
   function compareFingerprints(a, b) {
-    if (!a || !b) return 0;
+    if (!a || !b) {
+      return 0;
+    }
 
     var i;
-    var sameAverage = 0;
 
+    var sameAverage = 0;
     for (i = 0; i < a.averageHash.length; i += 1) {
       if (a.averageHash[i] === b.averageHash[i]) {
         sameAverage += 1;
       }
     }
+    var averageSimilarity = sameAverage / a.averageHash.length;
 
     var sameDifference = 0;
-
     for (i = 0; i < a.differenceHash.length; i += 1) {
       if (a.differenceHash[i] === b.differenceHash[i]) {
         sameDifference += 1;
       }
     }
+    var differenceSimilarity = sameDifference / a.differenceHash.length;
 
     var colorDistance = 0;
-
     for (i = 0; i < a.colorGrid.length; i += 1) {
       colorDistance += Math.abs(a.colorGrid[i] - b.colorGrid[i]);
     }
-
-    var averageSimilarity = sameAverage / a.averageHash.length;
-    var differenceSimilarity = sameDifference / a.differenceHash.length;
     var colorSimilarity = Math.max(0, 1 - colorDistance / a.colorGrid.length);
 
-    return 0.3 * averageSimilarity + 0.35 * differenceSimilarity + 0.35 * colorSimilarity;
+    var lumaDistance = 0;
+    for (i = 0; i < a.lumaGrid.length; i += 1) {
+      lumaDistance += Math.abs(a.lumaGrid[i] - b.lumaGrid[i]);
+    }
+    var lumaSimilarity = Math.max(0, 1 - lumaDistance / a.lumaGrid.length);
+
+    return (
+      0.25 * averageSimilarity +
+      0.30 * differenceSimilarity +
+      0.25 * colorSimilarity +
+      0.20 * lumaSimilarity
+    );
   }
 
-  function drawCover(source, ctx, targetWidth, targetHeight) {
+  function drawContain(source, ctx, targetWidth, targetHeight) {
     var sourceWidth = source.videoWidth || source.naturalWidth || source.width;
     var sourceHeight = source.videoHeight || source.naturalHeight || source.height;
 
-    var sourceRatio = sourceWidth / sourceHeight;
-    var targetRatio = targetWidth / targetHeight;
-
-    var drawWidth;
-    var drawHeight;
-    var sx;
-    var sy;
-
-    if (sourceRatio > targetRatio) {
-      drawHeight = sourceHeight;
-      drawWidth = sourceHeight * targetRatio;
-      sx = (sourceWidth - drawWidth) / 2;
-      sy = 0;
-    } else {
-      drawWidth = sourceWidth;
-      drawHeight = sourceWidth / targetRatio;
-      sx = 0;
-      sy = (sourceHeight - drawHeight) / 2;
+    if (!sourceWidth || !sourceHeight) {
+      return;
     }
 
-    ctx.drawImage(source, sx, sy, drawWidth, drawHeight, 0, 0, targetWidth, targetHeight);
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(0, 0, targetWidth, targetHeight);
+
+    var scale = Math.min(targetWidth / sourceWidth, targetHeight / sourceHeight);
+    var drawWidth = sourceWidth * scale;
+    var drawHeight = sourceHeight * scale;
+
+    var dx = (targetWidth - drawWidth) / 2;
+    var dy = (targetHeight - drawHeight) / 2;
+
+    ctx.drawImage(
+      source,
+      0,
+      0,
+      sourceWidth,
+      sourceHeight,
+      dx,
+      dy,
+      drawWidth,
+      drawHeight
+    );
   }
 
   function openArtwork(artwork, reason) {
     state.activeArtwork = artwork;
     state.activeCategory = "history";
 
-    if (els.scannerScreen) els.scannerScreen.classList.add("hidden");
-    if (els.artworkScreen) els.artworkScreen.classList.remove("hidden");
-    if (els.resetButton) els.resetButton.classList.remove("hidden");
+    if (els.scannerScreen) {
+      els.scannerScreen.classList.add("hidden");
+    }
+
+    if (els.artworkScreen) {
+      els.artworkScreen.classList.remove("hidden");
+    }
+
+    if (els.resetButton) {
+      els.resetButton.classList.remove("hidden");
+    }
 
     els.artworkMeta.textContent = artwork.artist + " · " + artwork.date + " · " + artwork.objectNumber;
     els.artworkTitle.textContent = artwork.title;
     els.artworkSubtitle.textContent = artwork.museum + ". " + reason;
-    els.artworkImage.src = artwork.image + "?v=force3";
+    els.artworkImage.src = artwork.image + "?v=" + encodeURIComponent(VERSION);
     els.artworkImage.alt = artwork.title + " by " + artwork.artist;
 
     setCategory("history");
@@ -512,31 +584,37 @@
   }
 
   function renderHotspots() {
-    if (!state.activeArtwork || !els.hotspotLayer) return;
+    if (!state.activeArtwork || !els.hotspotLayer) {
+      return;
+    }
 
     els.hotspotLayer.innerHTML = "";
 
     var category = state.activeArtwork.categories[state.activeCategory];
 
-    if (!category || !category.bubbles) return;
+    if (!category || !category.bubbles) {
+      return;
+    }
 
     for (var i = 0; i < category.bubbles.length; i += 1) {
-      (function (bubble) {
-        var button = document.createElement("button");
-        button.className = "hotspot";
-        button.type = "button";
-        button.style.left = bubble.x + "%";
-        button.style.top = bubble.y + "%";
-        button.setAttribute("aria-label", bubble.title);
-        button.textContent = "i";
-
-        button.addEventListener("click", function () {
-          selectBubble(bubble);
-        });
-
-        els.hotspotLayer.appendChild(button);
-      })(category.bubbles[i]);
+      createHotspot(category.bubbles[i]);
     }
+  }
+
+  function createHotspot(bubble) {
+    var button = document.createElement("button");
+    button.className = "hotspot";
+    button.type = "button";
+    button.style.left = bubble.x + "%";
+    button.style.top = bubble.y + "%";
+    button.setAttribute("aria-label", bubble.title);
+    button.textContent = "i";
+
+    button.addEventListener("click", function () {
+      selectBubble(bubble);
+    });
+
+    els.hotspotLayer.appendChild(button);
   }
 
   function selectBubble(bubble) {
@@ -547,9 +625,18 @@
   }
 
   function resetToScanner() {
-    if (els.artworkScreen) els.artworkScreen.classList.add("hidden");
-    if (els.scannerScreen) els.scannerScreen.classList.remove("hidden");
-    if (els.resetButton) els.resetButton.classList.add("hidden");
+    if (els.artworkScreen) {
+      els.artworkScreen.classList.add("hidden");
+    }
+
+    if (els.scannerScreen) {
+      els.scannerScreen.classList.remove("hidden");
+    }
+
+    if (els.resetButton) {
+      els.resetButton.classList.add("hidden");
+    }
+
     setStatus("Ready to scan again.", "info");
   }
 
@@ -564,6 +651,9 @@
 
     for (var i = 0; i < artworks.length; i += 1) {
       log("Artwork " + (i + 1) + ": " + artworks[i].title + " / " + artworks[i].image);
+      if (!state.referenceFingerprints[artworks[i].id]) {
+        log("  Missing fingerprint for: " + artworks[i].title);
+      }
     }
 
     setStatus("Diagnostics printed below.", "info");
@@ -583,24 +673,33 @@
   }
 
   function setStatus(message, type) {
-    if (!els.scanStatus) return;
+    if (!els.scanStatus) {
+      return;
+    }
+
     els.scanStatus.textContent = message;
     els.scanStatus.className = "scan-status " + (type || "info");
   }
 
   function setStatusSafe(message, type) {
     var el = document.getElementById("scanStatus");
-    if (!el) return;
+
+    if (!el) {
+      return;
+    }
+
     el.textContent = message;
     el.className = "scan-status " + (type || "info");
   }
 
   function log(message) {
-    if (!els.debugLog) {
+    var el = els.debugLog || document.getElementById("debugLog");
+
+    if (!el) {
       return;
     }
 
     var time = new Date().toLocaleTimeString();
-    els.debugLog.textContent += "[" + time + "] " + message + "\n";
+    el.textContent += "[" + time + "] " + message + "\n";
   }
 })();
