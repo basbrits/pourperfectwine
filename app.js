@@ -1,6 +1,6 @@
 // RijksLens artwork data
 // -----------------------------------------------------------------------------
-// THIS IS THE MAIN FILE YOU EDIT LATER.
+// THIS IS THE MAIN FILE YOU EDIT LATER. 
 //
 // To add or change the text shown in the app:
 // 1. Find the artwork below.
