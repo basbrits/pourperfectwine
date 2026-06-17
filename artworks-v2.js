@@ -1,93 +1,119 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#111111" />
-    <title>RijksLens Prototype</title>
-    <link rel="stylesheet" href="./styles.css?v=debug3" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">RijksLens prototype</p>
-          <h1>Point. Recognize. Explore.</h1>
-        </div>
-        <button id="resetButton" class="ghost-button hidden" type="button">Scan again</button>
-      </header>
+window.RIJKSLENS_ARTWORKS = [
+  {
+    id: "milkmaid",
+    title: "The Milkmaid",
+    artist: "Johannes Vermeer",
+    date: "c. 1660",
+    museum: "Rijksmuseum, Amsterdam",
+    objectNumber: "SK-A-2344",
+    image: "./assets/milkmaid.jpg",
+    recognitionThreshold: 0.92,
 
-      <main>
-        <section id="scannerScreen" class="screen scanner-screen">
-          <div class="scanner-card">
-            <div class="camera-wrap">
-              <video id="camera" playsinline webkit-playsinline muted autoplay></video>
-              <canvas id="scanCanvas" class="hidden"></canvas>
-              <div class="scan-frame" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div id="cameraPlaceholder" class="camera-placeholder">
-                <strong>Camera preview</strong>
-                <span>Start the camera, then center the painting in the frame.</span>
-              </div>
-            </div>
+    categories: {
+      history: {
+        label: "History",
+        intro: "Historical stories and context about this artwork.",
+        bubbles: [
+          {
+            id: "milkmaid-history-1",
+            x: 47,
+            y: 48,
+            title: "An ordinary task becomes monumental",
+            shortText: "Replace this with your short history explanation.",
+            detailText: "Longer history text goes here.",
+            source: "Optional source note or URL."
+          }
+        ]
+      },
+      technique: {
+        label: "Technique",
+        intro: "Painting methods, colour, light, brushwork, and composition.",
+        bubbles: [
+          {
+            id: "milkmaid-technique-1",
+            x: 42,
+            y: 55,
+            title: "The thin stream of milk",
+            shortText: "Replace this with your short technique explanation.",
+            detailText: "Longer technique text goes here.",
+            source: "Optional source note or URL."
+          }
+        ]
+      },
+      symbolism: {
+        label: "Symbolism",
+        intro: "Objects and details that may carry meaning.",
+        bubbles: [
+          {
+            id: "milkmaid-symbolism-1",
+            x: 82,
+            y: 82,
+            title: "The foot warmer",
+            shortText: "Replace this with your short symbolism explanation.",
+            detailText: "Longer symbolism text goes here.",
+            source: "Optional source note or URL."
+          }
+        ]
+      }
+    }
+  },
 
-            <div class="scanner-actions">
-              <button id="startCameraButton" class="primary-button" type="button">Start camera</button>
-              <button id="scanButton" class="secondary-button" type="button" disabled>Recognize painting</button>
-              <label class="upload-button">
-                Upload test photo
-                <input id="uploadInput" type="file" accept="image/*" />
-              </label>
-              <button id="diagnosticsButton" class="secondary-button" type="button">Run diagnostics</button>
-            </div>
+  {
+    id: "little-street",
+    title: "The Little Street",
+    artist: "Johannes Vermeer",
+    date: "c. 1658",
+    museum: "Rijksmuseum, Amsterdam",
+    objectNumber: "SK-A-2860",
+    image: "./assets/little-street.jpg",
+    recognitionThreshold: 0.92,
 
-            <div id="scanStatus" class="scan-status" role="status">
-              Loading JavaScript...
-            </div>
-
-            <pre id="debugLog" class="debug-log" aria-live="polite"></pre>
-
-            <button id="demoButton" class="text-button" type="button">Skip recognition and open demo artwork</button>
-          </div>
-        </section>
-
-        <section id="artworkScreen" class="screen artwork-screen hidden">
-          <div class="artwork-info">
-            <p class="eyebrow" id="artworkMeta"></p>
-            <h2 id="artworkTitle"></h2>
-            <p id="artworkSubtitle"></p>
-          </div>
-
-          <div class="category-tabs" role="tablist" aria-label="Artwork categories">
-            <button class="category-tab active" data-category="history" role="tab" type="button">History</button>
-            <button class="category-tab" data-category="technique" role="tab" type="button">Technique</button>
-            <button class="category-tab" data-category="symbolism" role="tab" type="button">Symbolism</button>
-          </div>
-
-          <div class="viewer-layout">
-            <div class="painting-stage">
-              <img id="artworkImage" alt="" />
-              <div id="hotspotLayer" class="hotspot-layer"></div>
-              <div id="coordinateReadout" class="coordinate-readout hidden"></div>
-            </div>
-
-            <aside class="story-panel" aria-live="polite">
-              <p class="eyebrow" id="categoryLabel">History</p>
-              <h3 id="storyTitle">Choose a bubble</h3>
-              <p id="storyText">Tap a bubble on the painting to read the explanation. Use the three buttons above to switch between history, technique, and symbolism.</p>
-              <p id="storyDetail"></p>
-              <p id="storySource" class="source-note"></p>
-            </aside>
-          </div>
-        </section>
-      </main>
-    </div>
-
-<script src="./artworks-v2.js?v=force2"></script>
-<script src="./app.js?v=force2"></script>
-  </body>
-</html>
+    categories: {
+      history: {
+        label: "History",
+        intro: "Historical stories and context about this artwork.",
+        bubbles: [
+          {
+            id: "little-street-history-1",
+            x: 48,
+            y: 35,
+            title: "A street becomes a portrait",
+            shortText: "Replace this with your short history explanation.",
+            detailText: "Longer history text goes here.",
+            source: "Optional source note or URL."
+          }
+        ]
+      },
+      technique: {
+        label: "Technique",
+        intro: "Painting methods, colour, light, brushwork, and composition.",
+        bubbles: [
+          {
+            id: "little-street-technique-1",
+            x: 44,
+            y: 42,
+            title: "The brickwork",
+            shortText: "Replace this with your short technique explanation.",
+            detailText: "Longer technique text goes here.",
+            source: "Optional source note or URL."
+          }
+        ]
+      },
+      symbolism: {
+        label: "Symbolism",
+        intro: "Objects and details that may carry meaning.",
+        bubbles: [
+          {
+            id: "little-street-symbolism-1",
+            x: 58,
+            y: 67,
+            title: "The open doorway",
+            shortText: "Replace this with your short symbolism explanation.",
+            detailText: "Longer symbolism text goes here.",
+            source: "Optional source note or URL."
+          }
+        ]
+      }
+    }
+  }
+];
