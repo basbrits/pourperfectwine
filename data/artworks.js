@@ -27,7 +27,10 @@ window.RIJKSLENS_ARTWORKS = [
     // This image file must exist in: assets/milkmaid.jpg
     image: "./assets/milkmaid.jpg",
 
-    recognitionThreshold: 0.68,
+    // Higher = stricter.
+    // If random things still open Milkmaid, raise to 0.92 or 0.94.
+    // If the real Milkmaid no longer recognizes, lower to 0.86 or 0.84.
+    recognitionThreshold: 0.90,
 
     categories: {
       history: {
